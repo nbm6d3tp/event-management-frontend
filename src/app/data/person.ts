@@ -1,10 +1,10 @@
-type TPerson = {
+export type TPerson = {
   id: string;
   name: string;
   email: string;
 };
 
-const people: TPerson[] = [
+export const people: TPerson[] = [
   {
     id: 'person1',
     name: 'Alice Johnson',
