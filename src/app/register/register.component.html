@@ -1,1 +1,82 @@
-<p>register works!</p>
+<div class="card mt-5 w-50 mx-auto border-1">
+  <div class="card-body">
+    <form [formGroup]="form" class="needs-validation" autocomplete="off">
+      <div>
+        <label>Email :</label>
+        <input
+          #titleFormControl
+          (focus)="onFocus(titleFormControl)"
+          type="text"
+          class="form-control"
+          formControlName="email"
+          [class.is-invalid]="email.invalid && email.touched"
+          [class.is-valid]="email.valid && email.touched"
+        />
+        <div
+          *ngIf="email?.invalid && email.touched"
+          class="invalid-feedback text-danger"
+        >
+          <div *ngIf="email?.errors?.['required']">This field is required!</div>
+          <div *ngIf="email?.errors?.['email']">Not correct form of email</div>
+        </div>
+      </div>
+      <div class="mt-3">
+        <label>Password :</label>
+        <input
+          #passwordFormControl
+          (focus)="onFocus(passwordFormControl)"
+          type="password"
+          class="form-control"
+          formControlName="password"
+          [class.is-invalid]="password.invalid && password.touched"
+          [class.is-valid]="password.valid && password.touched"
+        />
+        <div
+          *ngIf="password?.invalid && password.touched"
+          class="invalid-feedback text-danger"
+        >
+          <div *ngIf="password?.errors?.['required']">
+            This field is required!
+          </div>
+          <div *ngIf="password?.errors?.['minlength']">Min length of 8</div>
+        </div>
+      </div>
+      <div class="mt-3">
+        <label>Confirm password :</label>
+        <input
+          #passwordFormControl
+          (focus)="onFocus(passwordFormControl)"
+          type="password"
+          class="form-control"
+          formControlName="confirmPassword"
+          [class.is-invalid]="
+            confirmPassword.invalid && confirmPassword.touched
+          "
+          [class.is-valid]="confirmPassword.valid && confirmPassword.touched"
+        />
+        <div
+          *ngIf="confirmPassword?.invalid && confirmPassword.touched"
+          class="invalid-feedback text-danger"
+        >
+          <div *ngIf="confirmPassword?.errors?.['required']">
+            This field is required!
+          </div>
+          <div *ngIf="confirmPassword?.errors?.['minlength']">
+            Min length of 8
+          </div>
+          <div *ngIf="confirmPassword?.errors?.['passwordMismatch']">
+            Password mismatch
+          </div>
+        </div>
+      </div>
+      <div
+        style="display: flex; justify-content: flex-end; gap: 10px"
+        class="mt-4 pt-2"
+      >
+        <button type="submit" class="btn btn-primary" (click)="onSubmit()">
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
