@@ -1,12 +1,3 @@
 {
-	"editor.formatOnSave": true,
-
-	"[typescript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[typescriptreact]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"prettier.requireConfig": true,
-	"prettier.ignorePath": ".gitignore"
+  "editor.formatOnSave": true
 }
