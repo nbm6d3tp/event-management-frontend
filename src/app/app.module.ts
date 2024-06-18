@@ -17,6 +17,11 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
+import { ModalDetailEventComponent } from './components/modal-detail-event/modal-detail-event.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { CardEventComponent } from './components/card-event/card-event.component';
+import { TruncateNamePipe } from './pipes/truncate-name.pipe';
 
 @NgModule({
   declarations: [
@@ -29,6 +34,9 @@ import { LoadingInterceptor } from './interceptors/loading.interceptor';
     HeaderComponent,
     FooterComponent,
     SpinnerComponent,
+    ModalDetailEventComponent,
+    CardEventComponent,
+    TruncateNamePipe,
   ],
   imports: [
     BrowserModule,
@@ -39,6 +47,8 @@ import { LoadingInterceptor } from './interceptors/loading.interceptor';
       provide: DateAdapter,
       useFactory: adapterFactory,
     }),
+    MatDialogModule,
+    MatButtonModule,
   ],
   providers: [
     provideAnimationsAsync(),

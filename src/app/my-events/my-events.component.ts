@@ -1,21 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   CalendarEvent,
   CalendarEventAction,
   CalendarEventTimesChangedEvent,
   CalendarView,
 } from 'angular-calendar';
-import {
-  addDays,
-  addHours,
-  endOfMonth,
-  isSameDay,
-  isSameMonth,
-  startOfDay,
-  subDays,
-} from 'date-fns';
+import { isSameDay, isSameMonth } from 'date-fns';
 import { Subject } from 'rxjs';
 import { MyEventsService } from '../services/my-events.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ModalDetailEventComponent } from '../components/modal-detail-event/modal-detail-event.component';
 
 const colors = {
   red: {
@@ -44,6 +39,21 @@ export class MyEventsComponent {
   activeDayIsOpen: boolean = true;
   events: CalendarEvent[] = [];
 
+  readonly dialog = inject(MatDialog);
+
+  onClick(event: CalendarEvent) {
+    const eventID = event.meta;
+    const dialogRef = this.dialog.open(ModalDetailEventComponent, {
+      data: eventID,
+      height: '80%',
+      width: '40%',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log({ result });
+    });
+  }
+
   constructor(myEventsService: MyEventsService) {
     myEventsService.getAll().subscribe((events) => {
       this.events = events.map((event) => {
@@ -57,6 +67,7 @@ export class MyEventsComponent {
             beforeStart: true,
             afterEnd: true,
           },
+          meta: event.id,
         };
       });
     });
@@ -64,18 +75,19 @@ export class MyEventsComponent {
 
   actions: CalendarEventAction[] = [
     {
-      label: '<i class="fas fa-fw fa-pencil-alt"></i>',
+      label: '<i class="mx-1 bi bi-pencil"></i>',
       a11yLabel: 'Edit',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
+        console.log('Edit event', event);
       },
     },
     {
-      label: '<i class="fas fa-fw fa-trash-alt"></i>',
+      label: '<i class="bi bi-trash"></i>',
       a11yLabel: 'Delete',
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.events = this.events.filter((iEvent) => iEvent !== event);
-        this.handleEvent('Deleted', event);
+        this.activeDayIsOpen = false;
+        console.log('Delete event', event);
       },
     },
   ];
@@ -109,10 +121,5 @@ export class MyEventsComponent {
       }
       return iEvent;
     });
-    this.handleEvent('Dropped or resized', event);
-  }
-
-  handleEvent(action: string, event: CalendarEvent): void {
-    console.log('Event action:', action, event);
   }
 }

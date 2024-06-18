@@ -33,12 +33,13 @@
 <br />
 <div>
   <mwl-calendar-month-view
+    style="border-color: black; border-width: 2"
     [viewDate]="viewDate"
     [events]="events"
     [refresh]="refresh"
     [activeDayIsOpen]="activeDayIsOpen"
     (dayClicked)="dayClicked($event.day)"
-    (eventClicked)="handleEvent('Clicked', $event.event)"
+    (eventClicked)="onClick($event.event)"
     (eventTimesChanged)="eventTimesChanged($event)"
   >
   </mwl-calendar-month-view>

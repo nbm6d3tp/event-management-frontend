@@ -1,0 +1,81 @@
+<mat-dialog-content class="mat-typography mh-100 p-0 container bg-primary">
+  @if (data.isError) {
+  <div
+    class="d-flex justify-content-center align-items-center min-vh-100 w-100 bg-light"
+  >
+    There is an error!
+  </div>
+  } @else {
+  <div class="row justify-content-center">
+    <div style="height: 300px; width: 90%">
+      <img
+        [src]="data.event.image"
+        handleImgError
+        class="img-fluid bg-gradient"
+        alt="Event image"
+      />
+    </div>
+
+    <div class="card-body">
+      <h3 class="card-title">{{ data.event.title }}</h3>
+      <p class="card-text">{{ data.event.description }}</p>
+      <p class="card-text">
+        <strong>Start:</strong> {{ data.event.start | date : "medium" }}<br />
+        <strong>End:</strong> {{ data.event.end | date : "medium" }}
+      </p>
+      <p class="card-text">
+        <strong>Type:</strong> {{ data.event.type }}<br />
+        <strong>Location:</strong>
+        {{
+          data.event.typeLocation === "Remote" ? "Remote" : data.event.location
+        }}
+      </p>
+      <p class="card-text">
+        <strong>Organizer:</strong><br />
+        <img
+          [src]="data.event.organizer.avatar"
+          alt="Organizer avatar"
+          class="rounded-circle"
+          width="50"
+        />
+        {{ data.event.organizer.name }} ({{ data.event.organizer.email }})
+      </p>
+      <p class="card-text">
+        <strong>Participants:</strong>
+      </p>
+
+      <ul>
+        <li *ngFor="let person of data.event.participations">
+          <img
+            [src]="person.avatar"
+            alt="Participant avatar"
+            class="rounded-circle"
+            width="30"
+          />
+          {{ person.name }} ({{ person.email }})
+        </li>
+      </ul>
+      <div *ngIf="data.event.reviews">
+        <h5>Reviews:</h5>
+        <div
+          *ngFor="let review of data.event.reviews"
+          class="border rounded p-2 my-2"
+        >
+          <p>
+            <img
+              [src]="review.person.avatar"
+              alt="Reviewer avatar"
+              class="rounded-circle"
+              width="30"
+            />
+            {{ review.person.name }}:
+          </p>
+          <p>{{ review.comment }}</p>
+          <p><strong>Rating:</strong> {{ review.rating }} / 5</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  }
+</mat-dialog-content>

@@ -1,6 +1,7 @@
 import { addDays, addHours, startOfDay, subDays, subHours } from 'date-fns';
 import { TPerson, people } from './person';
 import { TReview } from './review';
+import { TCity, cities } from './city';
 
 export type TEvent =
   | {
@@ -11,10 +12,11 @@ export type TEvent =
       end: Date;
       type: TTypeEvent;
       typeLocation: 'On-site' | 'Hybrid';
-      location: string;
+      location: TCity;
       organizer: TPerson;
       participations: TPerson[];
       reviews: TReview[] | null;
+      image: string;
     }
   | {
       id: string;
@@ -28,6 +30,7 @@ export type TEvent =
       organizer: TPerson;
       participations: TPerson[];
       reviews: TReview[] | null;
+      image: string;
     };
 
 type TTypeEvent = 'Meetups' | 'Conferences' | 'Workshops';
@@ -37,11 +40,11 @@ export const eventData: TEvent[] = [
     id: 'event1',
     title: 'Tech Meetup',
     description:
-      'A meetup for tech enthusiasts to discuss the latest trends in technology.',
+      'A meetup for tech enthusiasts to discuss the latest trends in technology. A meetup for tech enthusiasts to discuss the latest trends in technology.',
     start: subDays(startOfDay(new Date()), 30),
     end: subDays(startOfDay(new Date()), 29),
     type: 'Meetups',
-    location: 'Tech Park, City Center',
+    location: cities[0],
     typeLocation: 'On-site',
     organizer: people[0],
     participations: [people[0], people[1]],
@@ -53,16 +56,17 @@ export const eventData: TEvent[] = [
         rating: 5,
       },
     ],
+    image: 'assets/event-images/event1.jpg',
   },
   {
     id: 'event2',
     title: 'AI Conference 2024',
     description:
       'An annual conference on artificial intelligence and its applications.',
-    start: addHours(subDays(startOfDay(new Date()), 2), 2),
-    end: subDays(startOfDay(new Date()), 2),
+    start: subDays(startOfDay(new Date()), 2),
+    end: addHours(subDays(startOfDay(new Date()), 2), 2),
     type: 'Conferences',
-    location: 'Convention Center, Downtown',
+    location: cities[1],
     typeLocation: 'Hybrid',
     organizer: people[1],
     participations: [people[1], people[2]],
@@ -74,6 +78,7 @@ export const eventData: TEvent[] = [
         rating: 4,
       },
     ],
+    image: 'assets/event-images/event2.jpg',
   },
   {
     id: 'event3',
@@ -82,7 +87,7 @@ export const eventData: TEvent[] = [
     start: subHours(subDays(startOfDay(new Date()), 4), 6),
     end: subDays(startOfDay(new Date()), 4),
     type: 'Workshops',
-    location: 'Tech Hub, Silicon Valley',
+    location: cities[2],
     typeLocation: 'On-site',
     organizer: people[2],
     participations: [people[2], people[3], people[4]],
@@ -94,6 +99,7 @@ export const eventData: TEvent[] = [
         rating: 5,
       },
     ],
+    image: 'assets/event-images/event3.jpg',
   },
   {
     id: 'event4',
@@ -114,6 +120,7 @@ export const eventData: TEvent[] = [
         rating: 4,
       },
     ],
+    image: 'assets/event-images/event4.jpg',
   },
   {
     id: 'event5',
@@ -122,7 +129,7 @@ export const eventData: TEvent[] = [
     start: subHours(new Date(), 4),
     end: new Date(),
     type: 'Meetups',
-    location: 'Startup Incubator, Tech City',
+    location: cities[3],
     typeLocation: 'On-site',
     organizer: people[3],
     participations: [people[3], people[4]],
@@ -134,6 +141,7 @@ export const eventData: TEvent[] = [
         rating: 5,
       },
     ],
+    image: 'assets/event-images/event5.jpg',
   },
   {
     id: 'event6',
@@ -142,11 +150,12 @@ export const eventData: TEvent[] = [
     start: addDays(new Date(), 4),
     end: addDays(new Date(), 5),
     type: 'Workshops',
-    location: 'Data Hub, University Campus',
+    location: cities[4],
     typeLocation: 'On-site',
     organizer: people[4],
     participations: [people[4], people[0]],
     reviews: null,
+    image: 'assets/event-images/event6.jpg',
   },
   {
     id: 'event7',
@@ -155,16 +164,11 @@ export const eventData: TEvent[] = [
     start: addDays(new Date(), 6),
     end: addHours(addDays(new Date(), 6), 2),
     type: 'Conferences',
-    location: 'Leadership Center, Capital City',
+    location: cities[5],
     typeLocation: 'Hybrid',
     organizer: people[0],
-    participations: [
-      {
-        id: 'person7',
-        name: 'Grace Kim',
-        email: 'grace.kim@example.com',
-      },
-    ],
+    participations: [people[0], people[1], people[2]],
+    image: 'assets/event-images/event7.jpg',
     reviews: null,
   },
   {
@@ -176,10 +180,11 @@ export const eventData: TEvent[] = [
     end: addHours(addDays(new Date(), 2), 2),
     type: 'Workshops',
     typeLocation: 'On-site',
-    location: 'Cyber Center, Tech Valley',
+    location: cities[6],
     organizer: people[2],
     participations: [people[2], people[3], people[4], people[0], people[1]],
     reviews: null,
+    image: 'assets/event-images/event8.jpg',
   },
   {
     id: 'event9',
@@ -193,6 +198,7 @@ export const eventData: TEvent[] = [
     organizer: people[4],
     participations: [people[4], people[0], people[1]],
     reviews: null,
+    image: 'assets/event-images/event1.jpg',
   },
   {
     id: 'event10',
@@ -202,10 +208,11 @@ export const eventData: TEvent[] = [
     start: addDays(new Date(), 30),
     end: addHours(addDays(new Date(), 31), 2),
     type: 'Workshops',
-    location: 'Business Center, Tech City',
+    location: cities[7],
     organizer: people[0],
     participations: [people[0], people[4]],
     typeLocation: 'Hybrid',
     reviews: null,
+    image: 'assets/event-images/event2.jpg',
   },
 ];

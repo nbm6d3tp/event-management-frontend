@@ -1,1 +1,7 @@
-<p>all-events works!</p>
+<div class="row mt-4 gy-3">
+  @for (event of events; track event.id) {
+  <div class="col-4">
+    <app-card-event [event]="event" />
+  </div>
+  }
+</div>
