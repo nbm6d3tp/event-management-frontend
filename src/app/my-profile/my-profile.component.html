@@ -1,1 +1,30 @@
-<p>my-profile works!</p>
+<div class="container mt-5">
+  <!-- My Events Section -->
+  <div class="row">
+    <div class="col-12">
+      <h2>My Events</h2>
+      <!-- Your events data goes here -->
+    </div>
+  </div>
+
+  <!-- My Profile Section -->
+  <div class="row mt-5">
+    <div class="col-12">
+      <h2>My Profile</h2>
+      <div class="card" style="width: 18rem">
+        <img
+          src="{{ user?.avatar }}"
+          class="card-img-top"
+          alt="Profile Picture"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ user?.name }}</h5>
+          <p class="card-text">{{ user?.email }}</p>
+          <button class="btn btn-primary" (click)="onClickLogout()">
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

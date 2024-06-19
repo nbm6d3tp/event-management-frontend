@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { MyEventsComponent } from './my-events/my-events.component';
 import { AllEventsComponent } from './all-events/all-events.component';
-import { MyProfileComponent } from './my-profile/my-profile.component';
 import { RegisterComponent } from './register/register.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { HeaderComponent } from './components/header/header.component';
@@ -22,6 +21,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { CardEventComponent } from './components/card-event/card-event.component';
 import { TruncateNamePipe } from './pipes/truncate-name.pipe';
+import { MyProfileComponent } from './my-profile/my-profile.component';
+import { NgOptimizedImage, provideImgixLoader } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -29,16 +30,17 @@ import { TruncateNamePipe } from './pipes/truncate-name.pipe';
     LoginComponent,
     MyEventsComponent,
     AllEventsComponent,
-    MyProfileComponent,
     RegisterComponent,
     HeaderComponent,
     FooterComponent,
     SpinnerComponent,
     ModalDetailEventComponent,
+    MyProfileComponent,
     CardEventComponent,
     TruncateNamePipe,
   ],
   imports: [
+    NgOptimizedImage,
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
@@ -57,6 +59,7 @@ import { TruncateNamePipe } from './pipes/truncate-name.pipe';
       useClass: LoadingInterceptor,
       multi: true,
     },
+    provideImgixLoader('https://placehold.co/600x400'),
   ],
   bootstrap: [AppComponent],
 })

@@ -47,7 +47,7 @@ export const eventData: TEvent[] = [
     location: cities[0],
     typeLocation: 'On-site',
     organizer: people[0],
-    participations: [people[0], people[1]],
+    participations: [people[1]],
     reviews: [
       {
         id: 'review1',
@@ -69,7 +69,7 @@ export const eventData: TEvent[] = [
     location: cities[1],
     typeLocation: 'Hybrid',
     organizer: people[1],
-    participations: [people[1], people[2]],
+    participations: [people[2]],
     reviews: [
       {
         id: 'review2',
@@ -90,7 +90,7 @@ export const eventData: TEvent[] = [
     location: cities[2],
     typeLocation: 'On-site',
     organizer: people[2],
-    participations: [people[2], people[3], people[4]],
+    participations: [people[3], people[4]],
     reviews: [
       {
         id: 'review3',
@@ -111,7 +111,7 @@ export const eventData: TEvent[] = [
     type: 'Meetups',
     typeLocation: 'Remote',
     organizer: people[2],
-    participations: [people[2], people[3]],
+    participations: [people[3]],
     reviews: [
       {
         id: 'review4',
@@ -132,7 +132,7 @@ export const eventData: TEvent[] = [
     location: cities[3],
     typeLocation: 'On-site',
     organizer: people[3],
-    participations: [people[3], people[4]],
+    participations: [people[4]],
     reviews: [
       {
         id: 'review5',
@@ -153,7 +153,7 @@ export const eventData: TEvent[] = [
     location: cities[4],
     typeLocation: 'On-site',
     organizer: people[4],
-    participations: [people[4], people[0]],
+    participations: [people[0]],
     reviews: null,
     image: 'assets/event-images/event6.jpg',
   },
@@ -167,7 +167,7 @@ export const eventData: TEvent[] = [
     location: cities[5],
     typeLocation: 'Hybrid',
     organizer: people[0],
-    participations: [people[0], people[1], people[2]],
+    participations: [people[1], people[2]],
     image: 'assets/event-images/event7.jpg',
     reviews: null,
   },
@@ -182,7 +182,7 @@ export const eventData: TEvent[] = [
     typeLocation: 'On-site',
     location: cities[6],
     organizer: people[2],
-    participations: [people[2], people[3], people[4], people[0], people[1]],
+    participations: [people[3], people[4], people[0], people[1]],
     reviews: null,
     image: 'assets/event-images/event8.jpg',
   },
@@ -196,7 +196,7 @@ export const eventData: TEvent[] = [
     type: 'Meetups',
     typeLocation: 'Remote',
     organizer: people[4],
-    participations: [people[4], people[0], people[1]],
+    participations: [people[0], people[1]],
     reviews: null,
     image: 'assets/event-images/event1.jpg',
   },
@@ -210,7 +210,7 @@ export const eventData: TEvent[] = [
     type: 'Workshops',
     location: cities[7],
     organizer: people[0],
-    participations: [people[0], people[4]],
+    participations: [people[4]],
     typeLocation: 'Hybrid',
     reviews: null,
     image: 'assets/event-images/event2.jpg',

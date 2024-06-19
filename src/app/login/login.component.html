@@ -41,6 +41,9 @@
           <div *ngIf="password?.errors?.['minlength']">Min length of 8</div>
         </div>
       </div>
+      <div *ngIf="errorAuthenticating" class="text-danger mt-2">
+        Email or password is incorrect
+      </div>
       <div
         style="display: flex; justify-content: flex-end; gap: 10px"
         class="mt-4 pt-2"

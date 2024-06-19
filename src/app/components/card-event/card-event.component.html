@@ -1,5 +1,5 @@
-<div class="card shadow" style="width: 20rem">
-  <div class="card-img-top" style="position: relative">
+<div (click)="onClick()" onclick="" class="card shadow" style="cursor: pointer">
+  <div class="card-img-top" style="position: relative; height: 210px">
     <h2
       class="card-title h2"
       style="
@@ -25,6 +25,7 @@
         padding: 0;
         z-index: 10;
       "
+      priority
     />
     <div
       style="
@@ -54,7 +55,13 @@
     >
       {{ event.location.name }}
     </div>
-    <img class="card-img-top" [src]="event.image" alt="Card Event" />
+    <img
+      style="height: 100%; width: 100%"
+      [src]="event.image"
+      alt="Card Event"
+      fill
+      priority
+    />
   </div>
   <div class="card-body">
     <p class="card-text">
