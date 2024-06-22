@@ -10,10 +10,10 @@
         z-index: 10;
       "
     >
-      {{ event.title }}
+      {{ event().title }}
     </h2>
     <img
-      [src]="event.organizer.avatar"
+      [src]="event().organizer.avatar"
       style="
         height: 50px;
         width: 50px;
@@ -60,10 +60,10 @@
           text-align: center;
         "
       >
-        {{ event.typeLocation }}
+        {{ event().typeLocation }}
       </div>
       <div
-        *ngIf="event.location"
+        *ngIf="event().location"
         style="
           background-color: #007bff;
           color: #fff;
@@ -72,13 +72,13 @@
           font-size: 12px;
         "
       >
-        {{ event.location.name }}
+        {{ event().location?.name }}
       </div>
     </div>
 
     <img
       style="height: 100%; width: 100%"
-      [src]="event.image"
+      [src]="event().image"
       alt="Card Event"
       fill
       priority
@@ -86,7 +86,7 @@
   </div>
   <div class="card-body">
     <p class="card-text">
-      {{ event.description | truncateName : 80 : "..." }}
+      {{ event().description | truncateName : 80 : "..." }}
     </p>
   </div>
 </div>

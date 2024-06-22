@@ -1,10 +1,42 @@
 import { Component, inject, isDevMode } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
-import { TCityGroup } from '../../data/location';
 import { TTypeEvent } from '../../data/event';
-import { TCity } from '../../data/city';
+import { SupabaseClient, createClient } from '@supabase/supabase-js';
+import { supabaseKey, supabaseUrl } from '../../data/supabase';
+
+// toFormData(this.signup.value);
+
+function toFormData<T extends { [key: string]: any }>(formValue: T) {
+  const formData = new FormData();
+
+  for (const key of Object.keys(formValue)) {
+    const value = formValue[key];
+    formData.append(key, value);
+  }
+
+  return formData;
+}
+
+function requiredFileType(types: string[]) {
+  return function (control: FormControl) {
+    const file = control.value;
+    if (file) {
+      const extension = file.name.split('.')[1].toLowerCase();
+      if (
+        !types
+          .map((type) => type.toLowerCase())
+          .includes(extension.toLowerCase())
+      ) {
+        return {
+          requiredFileType: true,
+        };
+      }
+      return null;
+    }
+    return null;
+  };
+}
 
 @Component({
   selector: 'app-modal-add-event',
@@ -13,23 +45,22 @@ import { TCity } from '../../data/city';
 })
 export class ModalAddEventComponent {
   readonly dialogRef = inject(MatDialogRef<ModalAddEventComponent>);
-  startDay = new Date();
-  endDay = new Date();
-  startHour = new Date();
-  endHour = new Date();
-
-  cityGroupOptions: Observable<TCityGroup[]> | undefined;
-
-  typeEventList: TTypeEvent[] = ['Meetups', 'Conferences', 'Workshops'];
-  eventTypes = new FormControl('');
-
-  location: TCity | undefined;
+  selectedStartDay = new Date();
+  selectedEndDay = new Date();
+  selectedStartHour = new Date();
+  selectedEndHour = new Date();
+  selectedEventTypes: TTypeEvent[] = [];
+  selectedCities: string[] = [];
+  selectedLocationTypes: string[] = [];
+  private supabase: SupabaseClient;
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) {
+    this.supabase = createClient(supabaseUrl, supabaseKey);
+  }
   errorAuthenticating = false;
   form = this.fb.group({
     title: [
@@ -46,50 +77,62 @@ export class ModalAddEventComponent {
         validators: [Validators.required, Validators.maxLength(2500)],
       },
     ],
-    password: [
-      isDevMode() ? '12345678' : '',
+    image: [
+      null,
       {
-        validators: [Validators.required, Validators.minLength(8)],
+        validators: [
+          Validators.required,
+          requiredFileType(['png', 'jpeg', 'jpg']),
+        ],
       },
     ],
   });
 
-  // onFocus(input: HTMLElement) {
-  //   this.errorAuthenticating = false;
-  //   const formControlName = input.getAttribute('formControlName') as
-  //     | 'email'
-  //     | 'password'
-  //     | null;
-  //   if (formControlName) this.form.controls[formControlName].markAsUntouched();
-  // }
+  onFocus(input: HTMLElement) {
+    this.errorAuthenticating = false;
+    const formControlName = input.getAttribute('formControlName') as
+      | 'title'
+      | 'description'
+      | 'image'
+      | null;
+    if (formControlName) this.form.controls[formControlName].markAsUntouched();
+  }
 
-  // onSubmit() {
-  //   this.form.markAllAsTouched();
-  //   if (this.form.valid && this.email.value && this.password.value) {
-  //     this.authenticationService
-  //       .login(this.email.value, this.password.value)
-  //       .pipe(first())
-  //       .subscribe({
-  //         next: () => {
-  //           // get return url from route parameters or default to '/'
-  //           const returnUrl =
-  //             this.route.snapshot.queryParams['returnUrl'] || '/';
-  //           console.log({ returnUrl });
-  //           this.router.navigate([returnUrl]);
-  //         },
-  //         error: () => {
-  //           this.errorAuthenticating = true;
-  //         },
-  //       });
-  //     // this.router.navigate(['/my-events']);
-  //   }
-  // }
+  async onSubmit() {
+    this.form.markAllAsTouched();
+    const avatarFile = '';
+    const { data, error } = await this.supabase.storage
+      .from('Images')
+      .upload('avatars/avatar1.png', avatarFile);
+    // if (this.form.valid && this.email.value && this.password.value) {
+    //   this.authenticationService
+    //     .login(this.email.value, this.password.value)
+    //     .pipe(first())
+    //     .subscribe({
+    //       next: () => {
+    //         // get return url from route parameters or default to '/'
+    //         const returnUrl =
+    //           this.route.snapshot.queryParams['returnUrl'] || '/';
+    //         console.log({ returnUrl });
+    //         this.router.navigate([returnUrl]);
+    //       },
+    //       error: () => {
+    //         this.errorAuthenticating = true;
+    //       },
+    //     });
+    //   // this.router.navigate(['/my-events']);
+    // }
+  }
 
-  // get email() {
-  //   return this.form.controls['email'];
-  // }
+  get title() {
+    return this.form.controls['title'];
+  }
 
-  // get password() {
-  //   return this.form.controls['password'];
-  // }
+  get description() {
+    return this.form.controls['description'];
+  }
+
+  get image() {
+    return this.form.controls['image'];
+  }
 }

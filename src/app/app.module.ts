@@ -10,7 +10,7 @@ import { RegisterComponent } from './register/register.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
@@ -39,6 +39,7 @@ import { SelectEventTypesComponent } from './components/select-event-types/selec
 import { SelectLocationTypesComponent } from './components/select-location-types/select-location-types.component';
 import { SelectDateRangeComponent } from './components/select-date-range/select-date-range.component';
 import { SelectCitiesComponent } from './components/select-cities/select-cities.component';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { SelectCitiesComponent } from './components/select-cities/select-cities.
     SelectLocationTypesComponent,
     SelectDateRangeComponent,
     SelectCitiesComponent,
+    FileUploadComponent,
   ],
   imports: [
     MatFormFieldModule,
@@ -92,6 +94,11 @@ import { SelectCitiesComponent } from './components/select-cities/select-cities.
     },
     provideImgixLoader('https://placehold.co/600x400'),
     provideNativeDateAdapter(),
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: FileUploadComponent,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })
