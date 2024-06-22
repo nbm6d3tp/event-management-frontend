@@ -11,6 +11,7 @@ import { MyEventsService } from '../services/my-events.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ModalDetailEventComponent } from '../components/modal-detail-event/modal-detail-event.component';
+import { ModalAddEventComponent } from '../components/modal-add-event/modal-add-event.component';
 
 const colors = {
   red: {
@@ -41,7 +42,17 @@ export class MyEventsComponent {
 
   readonly dialog = inject(MatDialog);
 
-  onClick(event: CalendarEvent) {
+  onClickAddEvent() {
+    const dialogRef = this.dialog.open(ModalAddEventComponent, {
+      height: '80%',
+      width: '40%',
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log({ result });
+    });
+  }
+
+  onClickEvent(event: CalendarEvent) {
     const eventID = event.meta;
     const dialogRef = this.dialog.open(ModalDetailEventComponent, {
       data: eventID,

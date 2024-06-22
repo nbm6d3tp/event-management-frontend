@@ -17,6 +17,7 @@ export class RegisterComponent {
   constructor(private fb: FormBuilder, private router: Router) {}
 
   form = this.fb.group({
+    name: ['', { validators: [Validators.required] }],
     email: ['', { validators: [Validators.required, Validators.email] }],
     password: [
       '',
@@ -45,6 +46,7 @@ export class RegisterComponent {
 
   onFocus(input: HTMLElement) {
     const formControlName = input.getAttribute('formControlName') as
+      | 'name'
       | 'email'
       | 'password'
       | 'confirmPassword'
@@ -56,7 +58,6 @@ export class RegisterComponent {
     return (controls) => {
       if (!controls.parent) return null;
       const parent = controls.parent as FormGroup<{
-        email: FormControl<string | null>;
         password: FormControl<string | null>;
         confirmPassword: FormControl<string | null>;
       }>;
@@ -67,6 +68,10 @@ export class RegisterComponent {
       }
       return null;
     };
+  }
+
+  get name() {
+    return this.form.controls['name'];
   }
 
   get email() {

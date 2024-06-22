@@ -1,46 +1,58 @@
-<div class="row text-center mt-5">
-  <div class="col-md-4">
-    <div class="btn-group">
-      <div
-        class="btn btn-primary"
-        mwlCalendarPreviousView
-        view="month"
-        [(viewDate)]="viewDate"
-      >
-        Previous
-      </div>
-      <div
-        class="btn btn-outline-secondary"
-        mwlCalendarToday
-        [(viewDate)]="viewDate"
-      >
-        Today
-      </div>
-      <div
-        class="btn btn-primary"
-        mwlCalendarNextView
-        view="month"
-        [(viewDate)]="viewDate"
-      >
-        Next
+<div class="container">
+  <div class="row text-center mt-4 d-flex align-items-center">
+    <div class="col-md-4">
+      <div class="btn-group">
+        <div
+          class="btn btn-primary"
+          mwlCalendarPreviousView
+          view="month"
+          [(viewDate)]="viewDate"
+        >
+          Previous
+        </div>
+        <div
+          class="btn btn-outline-secondary"
+          mwlCalendarToday
+          [(viewDate)]="viewDate"
+        >
+          Today
+        </div>
+        <div
+          class="btn btn-primary"
+          mwlCalendarNextView
+          view="month"
+          [(viewDate)]="viewDate"
+        >
+          Next
+        </div>
       </div>
     </div>
+    <div class="col-md-4">
+      <h1>
+        {{ viewDate | calendarDate : "month" + "ViewTitle" : "en" }}
+      </h1>
+    </div>
+    <div class="col-md-4">
+      <button
+        (click)="onClickAddEvent()"
+        class="btn btn-primary btn-circle btn-lg"
+      >
+        <i class="bi bi-plus-lg"></i>
+      </button>
+    </div>
   </div>
-  <div class="col-md-4">
-    <h3>{{ viewDate | calendarDate : "month" + "ViewTitle" : "en" }}</h3>
+  <br />
+  <div>
+    <mwl-calendar-month-view
+      style="border-color: black; border-width: 2"
+      [viewDate]="viewDate"
+      [events]="events"
+      [refresh]="refresh"
+      [activeDayIsOpen]="activeDayIsOpen"
+      (dayClicked)="dayClicked($event.day)"
+      (eventClicked)="onClickEvent($event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)"
+    >
+    </mwl-calendar-month-view>
   </div>
-</div>
-<br />
-<div>
-  <mwl-calendar-month-view
-    style="border-color: black; border-width: 2"
-    [viewDate]="viewDate"
-    [events]="events"
-    [refresh]="refresh"
-    [activeDayIsOpen]="activeDayIsOpen"
-    (dayClicked)="dayClicked($event.day)"
-    (eventClicked)="onClick($event.event)"
-    (eventTimesChanged)="eventTimesChanged($event)"
-  >
-  </mwl-calendar-month-view>
 </div>

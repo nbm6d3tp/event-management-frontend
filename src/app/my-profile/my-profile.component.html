@@ -1,28 +1,74 @@
 <div class="container mt-5">
-  <!-- My Events Section -->
-  <div class="row">
-    <div class="col-12">
-      <h2>My Events</h2>
-      <!-- Your events data goes here -->
+  <div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header m-0">
+        <button
+          class="accordion-button"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseOne"
+          aria-expanded="true"
+          aria-controls="collapseOne"
+        >
+          My Profile
+        </button>
+      </h2>
+      <div
+        id="collapseOne"
+        class="accordion-collapse collapse show"
+        data-bs-parent="#accordionExample"
+      >
+        <div class="accordion-body container">
+          <div class="row">
+            <div class="col-8 bg-black">
+              <div>
+                <div>Name : {{ user?.name }}</div>
+                <div>Email : {{ user?.email }}</div>
+              </div>
+              <button
+                class="btn btn-primary align-self-end"
+                (click)="onClickLogout()"
+              >
+                Logout
+              </button>
+            </div>
+            <div class="col-4">
+              <img
+                src="{{ user?.avatar }}"
+                class="img-fluid rounded-circle"
+                alt="Profile Picture"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-
-  <!-- My Profile Section -->
-  <div class="row mt-5">
-    <div class="col-12">
-      <h2>My Profile</h2>
-      <div class="card" style="width: 18rem">
-        <img
-          src="{{ user?.avatar }}"
-          class="card-img-top"
-          alt="Profile Picture"
-        />
-        <div class="card-body">
-          <h5 class="card-title">{{ user?.name }}</h5>
-          <p class="card-text">{{ user?.email }}</p>
-          <button class="btn btn-primary" (click)="onClickLogout()">
-            Logout
-          </button>
+    <div class="accordion-item">
+      <h2 class="accordion-header m-0">
+        <button
+          class="accordion-button"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseTwo"
+          aria-expanded="true"
+          aria-controls="collapseTwo"
+        >
+          My Events
+        </button>
+      </h2>
+      <div
+        id="collapseTwo"
+        class="accordion-collapse collapse"
+        data-bs-parent="#accordionExample"
+      >
+        <div class="accordion-body">
+          <div class="row g-4">
+            @for (event of myEvents; track event.id) {
+            <div class="col-4">
+              <app-card-event [event]="event"></app-card-event>
+            </div>
+            }
+          </div>
         </div>
       </div>
     </div>

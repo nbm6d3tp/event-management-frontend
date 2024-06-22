@@ -41,20 +41,41 @@
       class="gradient-filter"
     ></div>
     <div
-      *ngIf="event.location"
       style="
-        background-color: #007bff;
-        color: #fff;
-        padding: 5px 10px;
-        border-radius: 12px;
-        font-size: 12px;
         position: absolute;
         top: 10px;
         right: 10px;
+        flex-direction: column;
+        display: flex;
       "
     >
-      {{ event.location.name }}
+      <div
+        style="
+          background-color: #4bf059;
+          color: #fff;
+          padding: 5px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+          margin-bottom: 2px;
+          text-align: center;
+        "
+      >
+        {{ event.typeLocation }}
+      </div>
+      <div
+        *ngIf="event.location"
+        style="
+          background-color: #007bff;
+          color: #fff;
+          padding: 5px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+        "
+      >
+        {{ event.location.name }}
+      </div>
     </div>
+
     <img
       style="height: 100%; width: 100%"
       [src]="event.image"

@@ -3,6 +3,8 @@ import { TPerson, people } from './person';
 import { TReview } from './review';
 import { TCity, cities } from './city';
 
+export type TCreateEvent = Omit<TEvent, 'id' | 'reviews'>;
+
 export type TEvent =
   | {
       id: string;
@@ -33,7 +35,7 @@ export type TEvent =
       image: string;
     };
 
-type TTypeEvent = 'Meetups' | 'Conferences' | 'Workshops';
+export type TTypeEvent = 'Meetups' | 'Conferences' | 'Workshops';
 
 export const eventData: TEvent[] = [
   {
@@ -54,9 +56,11 @@ export const eventData: TEvent[] = [
         person: people[1],
         comment: 'Great event, very informative!',
         rating: 5,
+        date: subDays(new Date(), 1),
       },
     ],
-    image: 'assets/event-images/event1.jpg',
+    image:
+      'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/events/event1.jpg',
   },
   {
     id: 'event2',
@@ -76,6 +80,7 @@ export const eventData: TEvent[] = [
         person: people[2],
         comment: 'Very insightful sessions on AI.',
         rating: 4,
+        date: subDays(new Date(), 1),
       },
     ],
     image: 'assets/event-images/event2.jpg',
@@ -97,6 +102,7 @@ export const eventData: TEvent[] = [
         person: people[3],
         comment: 'Learned a lot about the latest web technologies.',
         rating: 5,
+        date: subDays(new Date(), 1),
       },
     ],
     image: 'assets/event-images/event3.jpg',
@@ -118,6 +124,7 @@ export const eventData: TEvent[] = [
         person: people[3],
         comment: 'Engaging activities and great interaction.',
         rating: 4,
+        date: subDays(new Date(), 1),
       },
     ],
     image: 'assets/event-images/event4.jpg',
@@ -139,6 +146,7 @@ export const eventData: TEvent[] = [
         person: people[4],
         comment: 'Amazing pitches and networking opportunities.',
         rating: 5,
+        date: subDays(new Date(), 1),
       },
     ],
     image: 'assets/event-images/event5.jpg',

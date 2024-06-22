@@ -23,6 +23,19 @@ import { CardEventComponent } from './components/card-event/card-event.component
 import { TruncateNamePipe } from './pipes/truncate-name.pipe';
 import { MyProfileComponent } from './my-profile/my-profile.component';
 import { NgOptimizedImage, provideImgixLoader } from '@angular/common';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { AsyncPipe } from '@angular/common';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { ModalAddEventComponent } from './components/modal-add-event/modal-add-event.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { SelectEventTypesComponent } from './components/select-event-types/select-event-types.component';
 
 @NgModule({
   declarations: [
@@ -38,8 +51,20 @@ import { NgOptimizedImage, provideImgixLoader } from '@angular/common';
     MyProfileComponent,
     CardEventComponent,
     TruncateNamePipe,
+    ModalAddEventComponent,
+    SelectEventTypesComponent,
   ],
   imports: [
+    MatFormFieldModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    AsyncPipe,
+    MatChipsModule,
+    MatButtonToggleModule,
+    MatDatepickerModule,
+    MatSelectModule,
     NgOptimizedImage,
     BrowserModule,
     AppRoutingModule,
@@ -60,6 +85,7 @@ import { NgOptimizedImage, provideImgixLoader } from '@angular/common';
       multi: true,
     },
     provideImgixLoader('https://placehold.co/600x400'),
+    provideNativeDateAdapter(),
   ],
   bootstrap: [AppComponent],
 })
