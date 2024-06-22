@@ -36,6 +36,9 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SelectEventTypesComponent } from './components/select-event-types/select-event-types.component';
+import { SelectLocationTypesComponent } from './components/select-location-types/select-location-types.component';
+import { SelectDateRangeComponent } from './components/select-date-range/select-date-range.component';
+import { SelectCitiesComponent } from './components/select-cities/select-cities.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +56,9 @@ import { SelectEventTypesComponent } from './components/select-event-types/selec
     TruncateNamePipe,
     ModalAddEventComponent,
     SelectEventTypesComponent,
+    SelectLocationTypesComponent,
+    SelectDateRangeComponent,
+    SelectCitiesComponent,
   ],
   imports: [
     MatFormFieldModule,

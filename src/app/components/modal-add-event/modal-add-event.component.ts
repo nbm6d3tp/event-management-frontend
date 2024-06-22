@@ -21,7 +21,7 @@ export class ModalAddEventComponent {
   cityGroupOptions: Observable<TCityGroup[]> | undefined;
 
   typeEventList: TTypeEvent[] = ['Meetups', 'Conferences', 'Workshops'];
-  typeEvents = new FormControl('');
+  eventTypes = new FormControl('');
 
   location: TCity | undefined;
 

@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, Input, inject, input } from '@angular/core';
 import { TEvent } from '../../data/event';
 import { TruncateNamePipe } from '../../pipes/truncate-name.pipe';
 import { Router } from '@angular/router';
@@ -11,7 +11,7 @@ import { ModalDetailEventComponent } from '../modal-detail-event/modal-detail-ev
   styleUrl: './card-event.component.css',
 })
 export class CardEventComponent {
-  @Input() event!: TEvent;
+  event = input.required<TEvent>();
   readonly dialog = inject(MatDialog);
 
   constructor() {}
@@ -19,7 +19,7 @@ export class CardEventComponent {
   onClick() {
     console.log('click');
     const dialogRef = this.dialog.open(ModalDetailEventComponent, {
-      data: this.event.id,
+      data: this.event().id,
       height: '80%',
       width: '40%',
     });

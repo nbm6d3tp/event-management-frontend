@@ -1,64 +1,13 @@
 <div class="container">
   <div class="row mx-2 my-4 justify-content-between">
-    <mat-form-field class="col-4">
-      <mat-label>Event types</mat-label>
-      <mat-select [formControl]="typeEvents" multiple>
-        @for (typeEvent of typeEventList; track typeEvent) {
-        <mat-option [value]="typeEvent">{{ typeEvent }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field class="col-4">
-      <mat-label>Date range</mat-label>
-      <mat-date-range-input [formGroup]="dateRange" [rangePicker]="picker">
-        <input matStartDate formControlName="start" placeholder="Start date" />
-        <input matEndDate formControlName="end" placeholder="End date" />
-      </mat-date-range-input>
-      <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-      <mat-datepicker-toggle
-        matIconSuffix
-        [for]="picker"
-      ></mat-datepicker-toggle>
-      <mat-date-range-picker #picker></mat-date-range-picker>
-
-      @if (dateRange.controls.start.hasError('matStartDateInvalid')) {
-      <mat-error>Invalid start date</mat-error>
-      } @if (dateRange.controls.end.hasError('matEndDateInvalid')) {
-      <mat-error>Invalid end date</mat-error>
-      }
-    </mat-form-field>
     <div class="col-4">
-      <form [formGroup]="cityForm">
-        <mat-form-field class="w-100">
-          <mat-label>Cities</mat-label>
-          <input
-            type="text"
-            matInput
-            formControlName="cityGroup"
-            [matAutocomplete]="autoGroup"
-            [placeholder]="placeholder"
-          />
-          <mat-autocomplete #autoGroup="matAutocomplete">
-            @for (group of filteredData | async; track group) {
-            <mat-optgroup [label]="group.letter">
-              @for (data of group.names; track data.item) {
-              <mat-option>
-                <div (click)="optionClicked($event, data)">
-                  <mat-checkbox
-                    [checked]="data.selected"
-                    (change)="toggleSelection(data)"
-                    (click)="$event.stopPropagation()"
-                  >
-                    {{ data.item }}
-                  </mat-checkbox>
-                </div></mat-option
-              >
-              }
-            </mat-optgroup>
-            }
-          </mat-autocomplete>
-        </mat-form-field>
-      </form>
+      <app-select-event-types [(selectedEventTypes)]="selectedEventTypes" />
+    </div>
+    <div class="col-4">
+      <app-select-date-range [(selectedDateRange)]="selectedDateRange" />
+    </div>
+    <div class="col-4">
+      <app-select-cities [(selectedCities)]="selectedCities" />
     </div>
   </div>
   <div class="row mx-2 justify-content-between">
@@ -73,17 +22,9 @@
     <div
       class="col-sm-6 col-lg-6 d-flex justify-content-end align-items-baseline"
     >
-      <mat-button-toggle-group
-        [formControl]="typesLocation"
-        name="typesLocation"
-        aria-label="Types Location"
-        [hideMultipleSelectionIndicator]="hideMultipleSelectionIndicator()"
-        multiple
-      >
-        <mat-button-toggle value="On-site">On-site</mat-button-toggle>
-        <mat-button-toggle value="Hybri">Hybrid</mat-button-toggle>
-        <mat-button-toggle value="Remot">Remote</mat-button-toggle>
-      </mat-button-toggle-group>
+      <app-select-location-types
+        [(selectedLocationTypes)]="selectedLocationTypes"
+      />
     </div>
   </div>
 </div>

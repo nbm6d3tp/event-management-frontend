@@ -1,0 +1,12 @@
+<mat-button-toggle-group
+  class="w-100 h-100"
+  [formControl]="locationTypesForm"
+  name="locationTypes"
+  aria-label="Types Location"
+  [hideMultipleSelectionIndicator]="hideMultipleSelectionIndicator()"
+  multiple
+>
+  <mat-button-toggle value="On-site">On-site</mat-button-toggle>
+  <mat-button-toggle value="Hybrid">Hybrid</mat-button-toggle>
+  <mat-button-toggle value="Remote">Remote</mat-button-toggle>
+</mat-button-toggle-group>

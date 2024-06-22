@@ -36,6 +36,11 @@ export type TEvent =
     };
 
 export type TTypeEvent = 'Meetups' | 'Conferences' | 'Workshops';
+export const typeEventList: TTypeEvent[] = [
+  'Meetups',
+  'Conferences',
+  'Workshops',
+];
 
 export const eventData: TEvent[] = [
   {
@@ -59,8 +64,7 @@ export const eventData: TEvent[] = [
         date: subDays(new Date(), 1),
       },
     ],
-    image:
-      'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/events/event1.jpg',
+    image: 'assets/event-images/event1.jpg',
   },
   {
     id: 'event2',

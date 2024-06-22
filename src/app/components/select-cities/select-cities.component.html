@@ -1,0 +1,32 @@
+<form class="w-100 h-100" [formGroup]="cities">
+  <mat-form-field class="w-100">
+    <mat-label>Cities</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="cityGroup"
+      [matAutocomplete]="autoGroup"
+      placeholder="Cities"
+      [value]="placeholder"
+    />
+    <mat-autocomplete #autoGroup="matAutocomplete">
+      @for (group of filteredData | async; track group) {
+      <mat-optgroup [label]="group.letter">
+        @for (data of group.names; track data.item) {
+        <mat-option>
+          <div (click)="optionClicked($event, data)">
+            <mat-checkbox
+              [checked]="data.selected"
+              (change)="toggleSelection(data)"
+              (click)="$event.stopPropagation()"
+            >
+              {{ data.item }}
+            </mat-checkbox>
+          </div></mat-option
+        >
+        }
+      </mat-optgroup>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+</form>
