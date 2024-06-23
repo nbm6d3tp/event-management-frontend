@@ -12,8 +12,8 @@ export class SelectDateRangeComponent implements OnInit {
     end: Date | null;
   }>();
   dateRangeForm = new FormGroup({
-    start: new FormControl<Date | null>(this.selectedDateRange().start),
-    end: new FormControl<Date | null>(this.selectedDateRange().end),
+    start: new FormControl<Date | null>(null),
+    end: new FormControl<Date | null>(null),
   });
 
   ngOnInit() {
