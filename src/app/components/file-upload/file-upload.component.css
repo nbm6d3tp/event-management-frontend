@@ -37,7 +37,7 @@
   vertical-align: middle;
 }
 
-.file-input {
+#file-input {
   position: absolute;
   left: 0;
   top: 0;
@@ -47,6 +47,6 @@
   opacity: 0;
 }
 
-.file-input:focus {
+#file-input:focus {
   outline: none;
 }

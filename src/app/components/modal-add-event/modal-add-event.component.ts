@@ -1,66 +1,120 @@
-import { Component, inject, isDevMode } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Component, OnInit, inject, isDevMode, signal } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { TTypeEvent } from '../../data/event';
-import { SupabaseClient, createClient } from '@supabase/supabase-js';
-import { supabaseKey, supabaseUrl } from '../../data/supabase';
+import { TTypeEvent, typeEventList } from '../../data/event';
+import { SupabaseService } from '../../services/supabase.service';
+import { Observable, map, startWith } from 'rxjs';
+import { TCityGroup, cityGroups, locationTypes } from '../../data/location';
 
-// toFormData(this.signup.value);
+const _filter = (opt: string[], value: string): string[] => {
+  const filterValue = value.toLowerCase();
 
-function toFormData<T extends { [key: string]: any }>(formValue: T) {
-  const formData = new FormData();
-
-  for (const key of Object.keys(formValue)) {
-    const value = formValue[key];
-    formData.append(key, value);
-  }
-
-  return formData;
-}
-
-function requiredFileType(types: string[]) {
-  return function (control: FormControl) {
-    const file = control.value;
-    if (file) {
-      const extension = file.name.split('.')[1].toLowerCase();
-      if (
-        !types
-          .map((type) => type.toLowerCase())
-          .includes(extension.toLowerCase())
-      ) {
-        return {
-          requiredFileType: true,
-        };
-      }
-      return null;
-    }
-    return null;
-  };
-}
+  return opt.filter((item) => item.toLowerCase().includes(filterValue));
+};
 
 @Component({
   selector: 'app-modal-add-event',
   templateUrl: './modal-add-event.component.html',
   styleUrl: './modal-add-event.component.css',
 })
-export class ModalAddEventComponent {
+export class ModalAddEventComponent implements OnInit {
+  typeEventList = typeEventList;
+  locationTypes = locationTypes;
+
+  startDayForm = new FormGroup({
+    date: new FormControl<Date | null>(null),
+  });
+  endDayForm = new FormGroup({
+    date: new FormControl<Date | null>(null),
+  });
+
+  startTimeForm = new FormGroup({
+    time: new FormControl<Date | null>(null),
+  });
+  endTimeForm = new FormGroup({
+    time: new FormControl<Date | null>(null),
+  });
+
   readonly dialogRef = inject(MatDialogRef<ModalAddEventComponent>);
-  selectedStartDay = new Date();
-  selectedEndDay = new Date();
-  selectedStartHour = new Date();
-  selectedEndHour = new Date();
-  selectedEventTypes: TTypeEvent[] = [];
-  selectedCities: string[] = [];
-  selectedLocationTypes: string[] = [];
-  private supabase: SupabaseClient;
+
+  selectedEventType: undefined | TTypeEvent;
+  selectedImage: undefined | File;
+
+  isStartDayError = false;
+  isEndDayError = false;
+  isStartTimeError = false;
+  isEndTimeError = false;
+  isEventTypesError = false;
+  isCitiesError = false;
+  isLocationTypesError = false;
+
+  isDaysError = signal(false);
+  isTimeError = signal(false);
+
+  cityForm = this.fb.group({
+    cityGroup: '',
+  });
+  citiesGroupOptions: Observable<TCityGroup[]> | undefined;
+
+  locationTypeControl = new FormControl('');
+
+  ngOnInit() {
+    this.citiesGroupOptions = this.cityForm.get('cityGroup')!.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filterGroup(value || ''))
+    );
+  }
+
+  private _filterGroup(value: string): TCityGroup[] {
+    if (value) {
+      return cityGroups
+        .map((group) => ({
+          letter: group.letter,
+          names: _filter(group.names, value),
+        }))
+        .filter((group) => group.names.length > 0);
+    }
+    return cityGroups;
+  }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
-  constructor(private fb: FormBuilder) {
-    this.supabase = createClient(supabaseUrl, supabaseKey);
+  private computeErrors(): void {
+    if (!this.startDayForm.value.date || !this.endDayForm.value.date) return;
+    if (this.startDayForm.value.date > this.endDayForm.value.date) {
+      this.isDaysError.set(true);
+      this.isTimeError.set(true);
+    } else {
+      this.isDaysError.set(false);
+      if (
+        this.startDayForm.value.date.getTime() ==
+        this.endDayForm.value.date.getTime()
+      ) {
+        if (!this.startTimeForm.value.time || !this.endTimeForm.value.time)
+          return;
+        if (this.startTimeForm.value.time > this.endTimeForm.value.time) {
+          this.isTimeError.set(true);
+        } else {
+          this.isTimeError.set(false);
+        }
+      } else {
+        this.isTimeError.set(false);
+      }
+    }
   }
+
+  constructor(
+    private fb: FormBuilder,
+    private readonly supabase: SupabaseService
+  ) {}
+
   errorAuthenticating = false;
   form = this.fb.group({
     title: [
@@ -77,15 +131,6 @@ export class ModalAddEventComponent {
         validators: [Validators.required, Validators.maxLength(2500)],
       },
     ],
-    image: [
-      null,
-      {
-        validators: [
-          Validators.required,
-          requiredFileType(['png', 'jpeg', 'jpg']),
-        ],
-      },
-    ],
   });
 
   onFocus(input: HTMLElement) {
@@ -93,17 +138,41 @@ export class ModalAddEventComponent {
     const formControlName = input.getAttribute('formControlName') as
       | 'title'
       | 'description'
-      | 'image'
       | null;
     if (formControlName) this.form.controls[formControlName].markAsUntouched();
   }
 
   async onSubmit() {
     this.form.markAllAsTouched();
-    const avatarFile = '';
-    const { data, error } = await this.supabase.storage
-      .from('Images')
-      .upload('avatars/avatar1.png', avatarFile);
+    this.cityForm.markAllAsTouched();
+    this.locationTypeControl.markAsTouched();
+    this.startDayForm.markAllAsTouched();
+    this.endDayForm.markAllAsTouched();
+    this.startTimeForm.markAllAsTouched();
+    this.endTimeForm.markAllAsTouched();
+
+    console.log('Title and description: ', this.form.value);
+    console.log('Start day: ', this.startDayForm.value.date);
+    console.log('End day: ', this.endDayForm.value.date);
+
+    console.log('Start hour: ', this.startTimeForm.value.time);
+    console.log('End hour: ', this.endTimeForm.value.time);
+
+    console.log('Event types: ', this.selectedEventType);
+    console.log('Cities: ', this.cityForm.value.cityGroup);
+    console.log('Location types: ', this.locationTypeControl.value);
+    console.log('Image: ', this.selectedImage);
+    this.computeErrors();
+    console.log('Errors: ', this.isDaysError(), this.isTimeError());
+
+    const avatarFile: File = new File([''], 'avatar1.png', {
+      type: 'image/png',
+    });
+    const { data, error } = await this.supabase.uploadImage(
+      avatarFile,
+      'avatars/avatar1.png'
+    );
+
     // if (this.form.valid && this.email.value && this.password.value) {
     //   this.authenticationService
     //     .login(this.email.value, this.password.value)
@@ -130,9 +199,5 @@ export class ModalAddEventComponent {
 
   get description() {
     return this.form.controls['description'];
-  }
-
-  get image() {
-    return this.form.controls['image'];
   }
 }

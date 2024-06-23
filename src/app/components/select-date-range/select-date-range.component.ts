@@ -7,10 +7,10 @@ import { FormControl, FormGroup } from '@angular/forms';
   styleUrl: './select-date-range.component.css',
 })
 export class SelectDateRangeComponent implements OnInit {
-  selectedDateRange = model<{ start: Date | null; end: Date | null }>({
-    start: null,
-    end: null,
-  });
+  selectedDateRange = model.required<{
+    start: Date | null;
+    end: Date | null;
+  }>();
   dateRangeForm = new FormGroup({
     start: new FormControl<Date | null>(this.selectedDateRange().start),
     end: new FormControl<Date | null>(this.selectedDateRange().end),

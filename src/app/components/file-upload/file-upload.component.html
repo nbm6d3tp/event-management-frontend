@@ -1,7 +1,23 @@
-<div class="file-drop-area mt-3">
-  <span class="fake-btn">Choose file</span>
-  <span class="file-msg">{{
-    file ? file.name : "or drag and drop file here"
-  }}</span>
-  <input class="file-input" type="file" />
+<div class="mt-3">
+  <form [formGroup]="form" class="needs-validation" autocomplete="off">
+    <label>Image :</label>
+    <div class="file-drop-area mt-3">
+      <span class="fake-btn">Choose file</span>
+      <span class="file-msg">{{
+        file()?.name || "or drag and drop file here"
+      }}</span>
+      <input
+        id="file-input"
+        formControlName="image"
+        type="file"
+        accept=".jpg,.jpeg,.png"
+        [class.is-invalid]="image.errors"
+      />
+    </div>
+    <div *ngIf="image?.errors" class="invalid-feedback text-danger">
+      <div *ngIf="image?.errors?.['requiredFileType']">
+        Only .jpg, .jpeg, .png files are allowed
+      </div>
+    </div>
+  </form>
 </div>

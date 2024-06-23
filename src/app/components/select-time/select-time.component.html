@@ -1,0 +1,15 @@
+<mat-form-field [formGroup]="timeForm()" class="w-100 m-0">
+  <mat-label>{{ label() }}</mat-label>
+  <input
+    required
+    formControlName="time"
+    matInput
+    [format]="24"
+    [ngxMatTimepicker]="picker"
+  />
+  <ngx-mat-timepicker-toggle
+    matIconSuffix
+    [for]="picker"
+  ></ngx-mat-timepicker-toggle>
+</mat-form-field>
+<ngx-mat-timepicker color="accent" #picker></ngx-mat-timepicker>

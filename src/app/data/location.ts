@@ -3,6 +3,12 @@ export type TCityGroup = {
   names: string[];
 };
 
+export const locationTypes: ('On-site' | 'Hybrid' | 'Remote')[] = [
+  'On-site',
+  'Hybrid',
+  'Remote',
+];
+
 export const cityGroups: TCityGroup[] = [
   {
     letter: 'A',

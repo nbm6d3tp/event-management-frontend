@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -40,6 +39,9 @@ import { SelectLocationTypesComponent } from './components/select-location-types
 import { SelectDateRangeComponent } from './components/select-date-range/select-date-range.component';
 import { SelectCitiesComponent } from './components/select-cities/select-cities.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
+import { SelectTimeComponent } from './components/select-time/select-time.component';
+import { SelectDateComponent } from './components/select-date/select-date.component';
+import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 
 @NgModule({
   declarations: [
@@ -61,8 +63,12 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
     SelectDateRangeComponent,
     SelectCitiesComponent,
     FileUploadComponent,
+    SelectTimeComponent,
+    SelectDateComponent,
   ],
   imports: [
+    NgxMatTimepickerModule,
+    MatDatepickerModule,
     MatFormFieldModule,
     MatCheckboxModule,
     MatIconModule,
@@ -71,7 +77,6 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
     AsyncPipe,
     MatChipsModule,
     MatButtonToggleModule,
-    MatDatepickerModule,
     MatSelectModule,
     NgOptimizedImage,
     BrowserModule,
@@ -94,11 +99,6 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
     },
     provideImgixLoader('https://placehold.co/600x400'),
     provideNativeDateAdapter(),
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: FileUploadComponent,
-      multi: true,
-    },
   ],
   bootstrap: [AppComponent],
 })

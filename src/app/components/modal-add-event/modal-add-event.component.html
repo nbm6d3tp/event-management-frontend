@@ -1,61 +1,117 @@
 <mat-dialog-content class="mat-typography mh-100 p-0 container">
-  <form [formGroup]="form" class="needs-validation" autocomplete="off">
-    <div class="mt-3">
-      <label>Title : </label>
-      <div class="input-group">
-        <span class="input-group-text">
-          <i class="bi bi-envelope-fill"></i>
-        </span>
+  <div class="container">
+    <form [formGroup]="form" class="needs-validation" autocomplete="off">
+      <div class="mt-3">
+        <label>Title* : </label>
         <input
           #titleFormControl
           (focus)="onFocus(titleFormControl)"
           type="text"
           class="form-control"
-          formControlName="email"
+          formControlName="title"
           [class.is-invalid]="title.invalid && title.touched"
           [class.is-valid]="title.valid && title.touched"
         />
       </div>
-      <div
-        *ngIf="title?.invalid && title.touched"
-        class="invalid-feedback text-danger"
-      >
-        <div *ngIf="title?.errors?.['required']">This field is required!</div>
-      </div>
-    </div>
-    <div class="mt-3">
-      <label>Description :</label>
-      <textarea
-        #contentFormControl
-        (focus)="onFocus(contentFormControl)"
-        type="text"
-        class="form-control"
-        formControlName="content"
-        [class.is-invalid]="description.invalid && description.touched"
-        [class.is-valid]="description.valid && description.touched"
-      ></textarea>
-      <div
-        *ngIf="description?.invalid && description.touched"
-        class="invalid-feedback text-danger"
-      >
-        <div *ngIf="description?.errors?.['required']">
-          This field is required!
-        </div>
-        <div *ngIf="description?.errors?.['maxlength']">
-          Maximum length is 2500 characters
+      <div class="mt-3">
+        <label>Description* :</label>
+        <textarea
+          #descriptionFormControl
+          (focus)="onFocus(descriptionFormControl)"
+          type="text"
+          class="form-control"
+          formControlName="description"
+          [class.is-invalid]="description.invalid && description.touched"
+          [class.is-valid]="description.valid && description.touched"
+        ></textarea>
+        <div
+          *ngIf="description?.invalid && description.touched"
+          class="invalid-feedback text-danger"
+        >
+          <div *ngIf="description?.errors?.['maxlength']">
+            Maximum length is 2500 characters
+          </div>
         </div>
       </div>
-    </div>
-    <div>
-      <app-file-upload formControlName="image" />
-    </div>
-    <div
-      style="display: flex; justify-content: flex-end; gap: 10px"
-      class="mt-4 pt-2"
-    >
-      <button type="submit" class="btn btn-primary" (click)="onSubmit()">
-        Submit
-      </button>
-    </div>
-  </form>
+      <app-file-upload [(file)]="selectedImage" />
+
+      <div class="row d-flex justify-content-around align-items-center">
+        <div class="col-6">
+          <app-select-date label="Start date" [dateForm]="startDayForm" />
+        </div>
+        <div class="col-6">
+          <app-select-date label="End date" [dateForm]="endDayForm" />
+        </div>
+      </div>
+      <div>
+        <div *ngIf="isDaysError()" class="text-danger">Day invalid</div>
+      </div>
+
+      <div class="row d-flex justify-content-around align-items-center">
+        <div class="col-6">
+          <app-select-time label="Start time" [timeForm]="startTimeForm" />
+        </div>
+        <div class="col-6">
+          <app-select-time label="End time" [timeForm]="endTimeForm" />
+        </div>
+      </div>
+      <div *ngIf="isTimeError()" class="text-danger">Time invalid</div>
+
+      <div class="row d-flex justify-content-around align-items-center">
+        <div class="col-6">
+          <form class="w-100" [formGroup]="cityForm">
+            <mat-form-field class="w-100">
+              <mat-label>City</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="cityGroup"
+                required
+                [matAutocomplete]="autoGroup"
+              />
+              <mat-autocomplete #autoGroup="matAutocomplete">
+                @for (group of citiesGroupOptions | async; track group) {
+                <mat-optgroup [label]="group.letter">
+                  @for (name of group.names; track name) {
+                  <mat-option [value]="name">{{ name }}</mat-option>
+                  }
+                </mat-optgroup>
+                }
+              </mat-autocomplete>
+            </mat-form-field>
+          </form>
+        </div>
+        <div class="col-6">
+          <mat-form-field class="w-100">
+            <mat-label>Event type</mat-label>
+            <mat-select required [(value)]="selectedEventType">
+              @for (typeEvent of typeEventList; track typeEvent) {
+              <mat-option [value]="typeEvent">{{ typeEvent }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <mat-button-toggle-group
+          required
+          [formControl]="locationTypeControl"
+          aria-label="Font Style"
+        >
+          @for (locationType of locationTypes; track locationType) {
+          <mat-button-toggle [value]="locationType">{{
+            locationType
+          }}</mat-button-toggle>
+          }
+        </mat-button-toggle-group>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end" class="my-3">
+        <button type="submit" class="btn btn-primary" (click)="onSubmit()">
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
 </mat-dialog-content>

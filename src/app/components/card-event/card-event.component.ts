@@ -17,7 +17,6 @@ export class CardEventComponent {
   constructor() {}
 
   onClick() {
-    console.log('click');
     const dialogRef = this.dialog.open(ModalDetailEventComponent, {
       data: this.event().id,
       height: '80%',

@@ -7,8 +7,8 @@ import { FormControl } from '@angular/forms';
   styleUrl: './select-location-types.component.css',
 })
 export class SelectLocationTypesComponent {
-  selectedLocationTypes = model<string[]>([]);
-  locationTypesForm = new FormControl(this.selectedLocationTypes());
+  selectedLocationTypes = model<string[]>();
+  locationTypesForm = new FormControl(null);
 
   ngOnInit(): void {
     this.locationTypesForm.valueChanges.subscribe((val) => {

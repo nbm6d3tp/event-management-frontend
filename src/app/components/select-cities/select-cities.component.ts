@@ -1,8 +1,7 @@
-import { Component, EventEmitter, Input, Output, model } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { Component, input, model } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Observable, map, startWith } from 'rxjs';
 import { cityGroups } from '../../data/location';
-import { TCity } from '../../data/city';
 
 interface ItemData {
   item: string;
@@ -29,13 +28,14 @@ const _filter = (
   styleUrl: './select-cities.component.css',
 })
 export class SelectCitiesComponent {
-  selectedCities = model<string[]>([]);
+  required = input<boolean>(false);
+  selectedCities = model<string[]>();
 
-  cities = this._formBuilder.group({
+  citiesForm = this.fb.group({
     cityGroup: '',
   });
 
-  constructor(private _formBuilder: FormBuilder) {}
+  constructor(private fb: FormBuilder) {}
 
   filteredData: Observable<{ letter: string; names: ItemData[] }[]> | undefined;
   rawData: Array<{ letter: string; names: ItemData[] }> = [];
@@ -46,7 +46,7 @@ export class SelectCitiesComponent {
       letter: group.letter,
       names: group.names.map((name) => ({ item: name, selected: false })),
     }));
-    this.filteredData = this.cities.get('cityGroup')!.valueChanges.pipe(
+    this.filteredData = this.citiesForm.get('cityGroup')!.valueChanges.pipe(
       startWith(''),
       map((value) => {
         return this._filterGroup(value || '');
@@ -56,16 +56,6 @@ export class SelectCitiesComponent {
 
   private _filterGroup(value: string): { letter: string; names: ItemData[] }[] {
     if (value) {
-      console.log(this.rawData);
-      console.log(
-        this.rawData
-          .map((group) => ({
-            letter: group.letter,
-            names: _filter(group.names, value),
-          }))
-          .filter((group) => group.names.length > 0)
-      );
-
       return this.rawData
         .map((group) => ({
           letter: group.letter,
@@ -82,14 +72,16 @@ export class SelectCitiesComponent {
   };
 
   toggleSelection = (data: ItemData): void => {
+    const selectedCities = this.selectedCities();
+    if (selectedCities === undefined) return;
     data.selected = !data.selected;
     if (data.selected === true) {
-      this.selectedCities.set([...this.selectedCities(), data.item]);
+      this.selectedCities.set([...selectedCities, data.item]);
     } else {
       this.selectedCities.set(
-        this.selectedCities().filter((city) => city !== data.item)
+        selectedCities.filter((city) => city !== data.item)
       );
     }
-    this.placeholder = this.selectedCities().join(', ');
+    this.placeholder = selectedCities.join(', ');
   };
 }

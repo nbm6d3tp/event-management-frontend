@@ -1,10 +1,25 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  Input,
-  input,
-} from '@angular/core';
+import { Component, HostListener, input, model } from '@angular/core';
+import { FormBuilder, FormControl } from '@angular/forms';
+
+function requiredFileType(types: string[]) {
+  return function (control: FormControl) {
+    const file = control.value;
+    if (file) {
+      const extension = file.split('.')[1].toLowerCase();
+      if (
+        !types
+          .map((type) => type.toLowerCase())
+          .includes(extension.toLowerCase())
+      ) {
+        return {
+          requiredFileType: true,
+        };
+      }
+      return null;
+    }
+    return null;
+  };
+}
 
 @Component({
   selector: 'app-file-upload',
@@ -12,25 +27,26 @@ import {
   styleUrl: './file-upload.component.css',
 })
 export class FileUploadComponent {
-  progress = input();
-  onChange: Function = () => {};
-  file: File | null = null;
+  file = model<File>();
+
+  constructor(private fb: FormBuilder) {}
+  form = this.fb.group({
+    image: [
+      null,
+      {
+        validators: [requiredFileType(['jpg', 'png', 'jpeg'])],
+      },
+    ],
+  });
 
   @HostListener('change', ['$event.target.files']) emitFiles(event: FileList) {
-    const file = event && event.item(0);
-    this.onChange(file);
-    this.file = file;
+    const targetFile = event.item(0);
+    if (targetFile !== null) {
+      this.file.set(targetFile);
+    }
   }
 
-  constructor(private host: ElementRef<HTMLInputElement>) {}
-
-  writeValue(value: null) {
-    // clear file input
-    this.host.nativeElement.value = '';
-    this.file = null;
-  }
-
-  registerOnChange(fn: Function) {
-    this.onChange = fn;
+  get image() {
+    return this.form.controls['image'];
   }
 }
