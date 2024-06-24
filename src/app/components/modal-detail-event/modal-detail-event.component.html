@@ -26,79 +26,67 @@
       "
       class="container h-100 position-absolute bg-white p-4"
     >
-      <h1 class="display-4 fw-bolder text-black">{{ data.event.title }}</h1>
-      <div style="display: flex; align-items: center">
+      <h1 class="display-4 fw-bolder text-black mb-3">
+        {{ data.event.title }}
+      </h1>
+
+      <div class="lead mb-3">
+        {{ data.event.description }}
+      </div>
+
+      <div class="mb-3" style="display: flex; align-items: center">
+        <img
+          [src]="data.event.organizer.avatar"
+          alt="Participant avatar"
+          class="rounded-circle"
+          style="
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+          "
+        />
+        <div style="display: flex; flex-direction: column">
+          <div class="text-secondary">Event organized by</div>
+          <div class="fw-bolder">
+            {{ data.event.organizer.name }}
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3" style="display: flex; align-items: center">
         <i
-          style="font-size: 30px; margin-right: 10px"
+          style="font-size: 20px; margin-right: 10px"
           class="bi bi-calendar2"
         ></i>
         <div class="text-info">
           {{ data.event.start | date : "MMM d, y h:mm a" }}
         </div>
-        <i style="font-size: 30px" class="bi bi-dash"></i>
+        <i style="font-size: 20px" class="bi bi-dash"></i>
         <div class="text-info">
           {{ data.event.end | date : "MMM d, y h:mm a" }}
         </div>
       </div>
-
-      <mat-chip-set aria-label="Fish selection">
-        <mat-chip>{{ data.event.type }}</mat-chip>
-        <mat-chip *ngIf="data.event.location">{{
-          data.event.location
-        }}</mat-chip>
-        <mat-chip>{{ data.event.typeLocation }}</mat-chip>
-        <mat-chip disabled>Four fish</mat-chip>
-      </mat-chip-set>
-      <div class="lead">
-        {{ data.event.description }}
-      </div>
-      <div class="card-body">
-        <p class="card-text">
-          <strong>Organizer:</strong><br />
-          <img
-            [src]="data.event.organizer.avatar"
-            alt="Organizer avatar"
-            class="rounded-circle"
-            width="50"
-            style="top: 20px; left: 20px"
-          />
-          {{ data.event.organizer.name }} ({{ data.event.organizer.email }})
-        </p>
-        <p class="card-text">
-          <strong>Participants:</strong>
-        </p>
-
-        <ul>
-          <li *ngFor="let person of data.event.participations">
-            <img
-              [src]="person.avatar"
-              alt="Participant avatar"
-              class="rounded-circle"
-              width="30"
-            />
-            {{ person.name }} ({{ person.email }})
-          </li>
-        </ul>
-        <div *ngIf="data.event.reviews">
-          <h5>Reviews:</h5>
-          <div
-            *ngFor="let review of data.event.reviews"
-            class="border rounded p-2 my-2"
-          >
-            <p>
-              <img
-                [src]="review.person.avatar"
-                alt="Reviewer avatar"
-                class="rounded-circle"
-                width="30"
-              />
-              {{ review.person.name }}:
-            </p>
-            <p>{{ review.comment }}</p>
-            <p><strong>Rating:</strong> {{ review.rating }} / 5</p>
-          </div>
+      <div
+        *ngIf="data.event.location"
+        class="mb-3"
+        style="display: flex; align-items: center"
+      >
+        <i
+          style="font-size: 20px; margin-right: 10px"
+          class="bi bi-geo-alt"
+        ></i>
+        <div class="fw-bolder">
+          {{ data.event.location.name }}
         </div>
       </div>
+
+      <mat-chip-set aria-label="Selection">
+        <mat-chip>{{ data.event.type }}</mat-chip>
+        <mat-chip>{{ data.event.typeLocation }}</mat-chip>
+      </mat-chip-set>
+
+      <div class="display-4"></div>
     </div>
   </div>
   }
