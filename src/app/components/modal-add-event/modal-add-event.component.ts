@@ -150,6 +150,23 @@ export class ModalAddEventComponent implements OnInit {
     this.endDayForm.markAllAsTouched();
     this.startTimeForm.markAllAsTouched();
     this.endTimeForm.markAllAsTouched();
+    this.computeErrors();
+
+    const { title, description } = this.form.value;
+    const startDay = this.startDayForm.value.date;
+    const startDayInvalid = this.startDayForm.invalid;
+    const endDay = this.endDayForm.value.date;
+    const startTime = this.startTimeForm.value.time;
+    const endTime = this.endTimeForm.value.time;
+    const eventType = this.selectedEventType;
+    const city = this.cityForm.value.cityGroup;
+    const locationType = this.locationTypeControl.value;
+    const image = this.selectedImage;
+
+    // const { data, error } = await this.supabase.uploadImage(
+    //   this.selectedImage,
+    //   'avatars/avatar1.png'
+    // );
 
     console.log('Title and description: ', this.form.value);
     console.log('Start day: ', this.startDayForm.value.date);
@@ -162,16 +179,7 @@ export class ModalAddEventComponent implements OnInit {
     console.log('Cities: ', this.cityForm.value.cityGroup);
     console.log('Location types: ', this.locationTypeControl.value);
     console.log('Image: ', this.selectedImage);
-    this.computeErrors();
     console.log('Errors: ', this.isDaysError(), this.isTimeError());
-
-    const avatarFile: File = new File([''], 'avatar1.png', {
-      type: 'image/png',
-    });
-    const { data, error } = await this.supabase.uploadImage(
-      avatarFile,
-      'avatars/avatar1.png'
-    );
 
     // if (this.form.valid && this.email.value && this.password.value) {
     //   this.authenticationService
