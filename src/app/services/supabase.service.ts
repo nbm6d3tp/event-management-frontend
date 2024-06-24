@@ -3,9 +3,10 @@ import { SupabaseClient, createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://lmapqwxheetscsdyjvsi.supabase.co';
 const supabaseKey =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtYXBxd3hoZWV0c2NzZHlqdnNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTkwNTMxMzcsImV4cCI6MjAzNDYyOTEzN30.ZvYQH89BVLOQT_7bOj75tjCBzlBGqWgfI8ojNS8BuCA';
-const supabaseUrlImages =
-  'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtYXBxd3hoZWV0c2NzZHlqdnNpIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcxOTA1MzEzNywiZXhwIjoyMDM0NjI5MTM3fQ.ZA_bIisWc6iqPUoMbfjn2eAsMmn7hdlzC24BApnFb1s';
+
+export const supabaseUrlPublic =
+  'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,14 @@ export class SupabaseService {
     this.supabase = createClient(supabaseUrl, supabaseKey);
   }
 
-  uploadImage(file: File, path: string) {
-    return this.supabase.storage.from('public').upload(path, file);
+  uploadImage(bucket: 'events' | 'avatars', file: File | undefined) {
+    if (!file)
+      return Promise.resolve({
+        data: null,
+        error: null,
+      });
+    return this.supabase.storage
+      .from(`Images/${bucket}`)
+      .upload(file.name, file);
   }
 }

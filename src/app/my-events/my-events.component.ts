@@ -45,7 +45,7 @@ export class MyEventsComponent {
   onClickAddEvent() {
     const dialogRef = this.dialog.open(ModalAddEventComponent, {
       height: '80%',
-      width: '40%',
+      width: '600px',
     });
     dialogRef.afterClosed().subscribe((result) => {
       console.log({ result });

@@ -10,7 +10,7 @@ export class SelectTimeComponent {
   label = input.required<string>();
   timeForm = input.required<
     FormGroup<{
-      time: FormControl<Date | null>;
+      time: FormControl<string | null>;
     }>
   >();
 }

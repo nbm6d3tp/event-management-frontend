@@ -28,6 +28,7 @@
     "date-fns": "^3.6.0",
     "ngx-mat-timepicker": "^17.1.0",
     "rxjs": "~7.8.0",
+    "sweetalert2": "^11.12.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },

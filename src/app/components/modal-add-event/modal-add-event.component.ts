@@ -7,16 +7,61 @@ import {
 } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { TTypeEvent, typeEventList } from '../../data/event';
-import { SupabaseService } from '../../services/supabase.service';
+import {
+  SupabaseService,
+  supabaseUrlPublic,
+} from '../../services/supabase.service';
 import { Observable, map, startWith } from 'rxjs';
-import { TCityGroup, cityGroups, locationTypes } from '../../data/location';
+import {
+  TCityGroup,
+  TLocationType,
+  cityGroups,
+  locationTypes,
+} from '../../data/location';
+import { MatButtonToggleChange } from '@angular/material/button-toggle';
+import { AuthenticationService } from '../../services/authentication.service';
+import { TPerson } from '../../data/person';
+import Swal from 'sweetalert2';
+
+function combineDateAndTime(dateObj: Date, timeStr: string) {
+  // Extract year, month, and day from the date object
+  const year = dateObj.getFullYear();
+  const month = dateObj.getMonth(); // Note: Months are zero-based (0-11)
+  const day = dateObj.getDate();
+
+  // Extract hours and minutes from the time string
+  const [hours, minutes] = timeStr.split(':').map(Number);
+
+  // Create a new Date object with the combined date and time
+  const combinedDate = new Date(year, month, day, hours, minutes);
+
+  return combinedDate;
+}
 
 const _filter = (opt: string[], value: string): string[] => {
   const filterValue = value.toLowerCase();
 
   return opt.filter((item) => item.toLowerCase().includes(filterValue));
 };
+const _filterGroup = (value: string): TCityGroup[] => {
+  if (value) {
+    return cityGroups
+      .map((group) => ({
+        letter: group.letter,
+        names: _filter(group.names, value),
+      }))
+      .filter((group) => group.names.length > 0);
+  }
+  return cityGroups;
+};
 
+function getTimeAsNumberOfMinutes(time: string) {
+  const timeParts = time.split(':');
+
+  const timeInMinutes = parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]);
+
+  return timeInMinutes;
+}
 @Component({
   selector: 'app-modal-add-event',
   templateUrl: './modal-add-event.component.html',
@@ -27,22 +72,45 @@ export class ModalAddEventComponent implements OnInit {
   locationTypes = locationTypes;
 
   startDayForm = new FormGroup({
-    date: new FormControl<Date | null>(null),
+    date: new FormControl<Date | null>(isDevMode() ? new Date() : null),
   });
   endDayForm = new FormGroup({
-    date: new FormControl<Date | null>(null),
+    date: new FormControl<Date | null>(isDevMode() ? new Date() : null),
   });
 
   startTimeForm = new FormGroup({
-    time: new FormControl<Date | null>(null),
+    time: new FormControl<string | null>(null),
   });
   endTimeForm = new FormGroup({
-    time: new FormControl<Date | null>(null),
+    time: new FormControl<string | null>(null),
   });
+  user?: TPerson | null;
+
+  constructor(
+    private fb: FormBuilder,
+    private readonly supabase: SupabaseService,
+    private authenticationService: AuthenticationService
+  ) {
+    this.authenticationService.user.subscribe((x) => (this.user = x));
+  }
+
+  checkLocationType(event: MatButtonToggleChange) {
+    const value = event.value;
+    const ctrl = this.cityForm.controls['cityGroup'];
+
+    if (event.value !== 'Remote') {
+      ctrl.enable();
+    } else {
+      ctrl.disable();
+      ctrl.setValue(null);
+    }
+  }
 
   readonly dialogRef = inject(MatDialogRef<ModalAddEventComponent>);
 
-  selectedEventType: undefined | TTypeEvent;
+  selectedEventType: undefined | TTypeEvent = isDevMode()
+    ? 'Conferences'
+    : undefined;
   selectedImage: undefined | File;
 
   isStartDayError = false;
@@ -55,31 +123,22 @@ export class ModalAddEventComponent implements OnInit {
 
   isDaysError = signal(false);
   isTimeError = signal(false);
+  errorImage = signal('');
+
+  locationTypeControl = new FormControl<TLocationType | undefined>(
+    isDevMode() ? 'On-site' : undefined
+  );
 
   cityForm = this.fb.group({
     cityGroup: '',
   });
   citiesGroupOptions: Observable<TCityGroup[]> | undefined;
 
-  locationTypeControl = new FormControl('');
-
   ngOnInit() {
     this.citiesGroupOptions = this.cityForm.get('cityGroup')!.valueChanges.pipe(
       startWith(''),
-      map((value) => this._filterGroup(value || ''))
+      map((value) => _filterGroup(value || ''))
     );
-  }
-
-  private _filterGroup(value: string): TCityGroup[] {
-    if (value) {
-      return cityGroups
-        .map((group) => ({
-          letter: group.letter,
-          names: _filter(group.names, value),
-        }))
-        .filter((group) => group.names.length > 0);
-    }
-    return cityGroups;
   }
 
   onNoClick(): void {
@@ -87,33 +146,34 @@ export class ModalAddEventComponent implements OnInit {
   }
 
   private computeErrors(): void {
+    this.isDaysError.set(false);
+    this.isTimeError.set(false);
     if (!this.startDayForm.value.date || !this.endDayForm.value.date) return;
-    if (this.startDayForm.value.date > this.endDayForm.value.date) {
+    if (
+      this.startDayForm.value.date.getTime() >
+      this.endDayForm.value.date.getTime()
+    ) {
       this.isDaysError.set(true);
-      this.isTimeError.set(true);
     } else {
-      this.isDaysError.set(false);
       if (
         this.startDayForm.value.date.getTime() ==
         this.endDayForm.value.date.getTime()
       ) {
         if (!this.startTimeForm.value.time || !this.endTimeForm.value.time)
           return;
-        if (this.startTimeForm.value.time > this.endTimeForm.value.time) {
+        if (
+          getTimeAsNumberOfMinutes(this.startTimeForm.value.time) >
+          getTimeAsNumberOfMinutes(this.endTimeForm.value.time)
+        ) {
           this.isTimeError.set(true);
-        } else {
-          this.isTimeError.set(false);
         }
-      } else {
-        this.isTimeError.set(false);
       }
     }
+    console.log('Errors: ', {
+      isDaysError: this.isDaysError(),
+      isTimeError: this.isTimeError(),
+    });
   }
-
-  constructor(
-    private fb: FormBuilder,
-    private readonly supabase: SupabaseService
-  ) {}
 
   errorAuthenticating = false;
   form = this.fb.group({
@@ -143,6 +203,7 @@ export class ModalAddEventComponent implements OnInit {
   }
 
   async onSubmit() {
+    this.errorImage.set('');
     this.form.markAllAsTouched();
     this.cityForm.markAllAsTouched();
     this.locationTypeControl.markAsTouched();
@@ -152,34 +213,93 @@ export class ModalAddEventComponent implements OnInit {
     this.endTimeForm.markAllAsTouched();
     this.computeErrors();
 
-    const { title, description } = this.form.value;
-    const startDay = this.startDayForm.value.date;
-    const startDayInvalid = this.startDayForm.invalid;
-    const endDay = this.endDayForm.value.date;
-    const startTime = this.startTimeForm.value.time;
-    const endTime = this.endTimeForm.value.time;
-    const eventType = this.selectedEventType;
-    const city = this.cityForm.value.cityGroup;
-    const locationType = this.locationTypeControl.value;
-    const image = this.selectedImage;
-
-    // const { data, error } = await this.supabase.uploadImage(
-    //   this.selectedImage,
-    //   'avatars/avatar1.png'
-    // );
-
     console.log('Title and description: ', this.form.value);
     console.log('Start day: ', this.startDayForm.value.date);
     console.log('End day: ', this.endDayForm.value.date);
-
     console.log('Start hour: ', this.startTimeForm.value.time);
     console.log('End hour: ', this.endTimeForm.value.time);
-
     console.log('Event types: ', this.selectedEventType);
     console.log('Cities: ', this.cityForm.value.cityGroup);
     console.log('Location types: ', this.locationTypeControl.value);
     console.log('Image: ', this.selectedImage);
-    console.log('Errors: ', this.isDaysError(), this.isTimeError());
+
+    const { title, description } = this.form.value;
+
+    const startDay = this.startDayForm.value.date;
+
+    const endDay = this.endDayForm.value.date;
+
+    const startTime = this.startTimeForm.value.time;
+
+    const endTime = this.endTimeForm.value.time;
+
+    const eventType = this.selectedEventType;
+
+    const city = this.cityForm.value.cityGroup;
+
+    const locationType = this.locationTypeControl.value;
+
+    const image = this.selectedImage;
+
+    if (
+      this.isFormInvalid() ||
+      !startDay ||
+      !endDay ||
+      !startTime ||
+      !endTime
+    ) {
+      return;
+    }
+
+    let urlImage = '';
+
+    if (!isDevMode()) {
+      const { data: dataSupabase, error: errorSupabase } =
+        await this.supabase.uploadImage('events', image);
+      if (errorSupabase || dataSupabase === null) {
+        if (errorSupabase?.message === 'The resource already exists') {
+          this.errorImage.set(
+            'The resource already exists. Please choose another image or change its name.'
+          );
+        }
+        return;
+      }
+      urlImage = supabaseUrlPublic + dataSupabase.fullPath;
+    }
+
+    urlImage =
+      urlImage !== ''
+        ? urlImage
+        : 'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/events/event1.jpg';
+
+    console.log('Data to send to the server: ', {
+      title,
+      description,
+      start: combineDateAndTime(startDay, startTime),
+      end: combineDateAndTime(endDay, endTime),
+      eventType,
+      city,
+      locationType,
+      urlImage,
+      organizer: this.user,
+    });
+
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+    });
+    Toast.fire({
+      icon: 'success',
+      title: 'Event created successfully!',
+    });
+    this.dialogRef.close();
 
     // if (this.form.valid && this.email.value && this.password.value) {
     //   this.authenticationService
@@ -199,6 +319,33 @@ export class ModalAddEventComponent implements OnInit {
     //     });
     //   // this.router.navigate(['/my-events']);
     // }
+  }
+
+  isFormInvalid() {
+    const startDayInvalid = this.startDayForm.invalid;
+
+    const endDayInvalid = this.endDayForm.invalid;
+
+    const startTimeInvalid = this.startTimeForm.invalid;
+
+    const endTimeInvalid = this.endTimeForm.invalid;
+
+    const cityInvalid = this.cityForm.invalid;
+
+    const locationTypeInvalid = this.locationTypeControl.invalid;
+
+    return (
+      this.form.invalid ||
+      startDayInvalid ||
+      endDayInvalid ||
+      startTimeInvalid ||
+      endTimeInvalid ||
+      !this.selectedEventType ||
+      cityInvalid ||
+      locationTypeInvalid ||
+      this.isDaysError() ||
+      this.isTimeError()
+    );
   }
 
   get title() {
