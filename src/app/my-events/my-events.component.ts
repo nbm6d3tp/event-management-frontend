@@ -57,7 +57,7 @@ export class MyEventsComponent {
     const dialogRef = this.dialog.open(ModalDetailEventComponent, {
       data: eventID,
       height: '80%',
-      width: '40%',
+      width: '600px',
     });
 
     dialogRef.afterClosed().subscribe((result) => {

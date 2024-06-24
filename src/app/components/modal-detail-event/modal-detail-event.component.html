@@ -6,76 +6,100 @@
     There is an error!
   </div>
   } @else {
-  <div class="row justify-content-center">
-    <div style="height: 300px; width: 90%">
+  <div class="position-relative">
+    <div class="img-fluid">
       <img
         [src]="data.event.image"
         handleImgError
+        style="padding-bottom: -50px"
         class="img-fluid bg-gradient"
         alt="Event image"
       />
     </div>
 
-    <div class="card-body">
-      <h3 class="card-title">{{ data.event.title }}</h3>
-      <p class="card-text">{{ data.event.description }}</p>
-      <p class="card-text">
-        <strong>Start:</strong> {{ data.event.start | date : "medium" }}<br />
-        <strong>End:</strong> {{ data.event.end | date : "medium" }}
-      </p>
-      <p class="card-text">
-        <strong>Type:</strong> {{ data.event.type }}<br />
-        <strong>Location:</strong>
-        {{
-          data.event.typeLocation === "Remote" ? "Remote" : data.event.location
-        }}
-      </p>
-      <p class="card-text">
-        <strong>Organizer:</strong><br />
-        <img
-          [src]="data.event.organizer.avatar"
-          alt="Organizer avatar"
-          class="rounded-circle"
-          width="50"
-        />
-        {{ data.event.organizer.name }} ({{ data.event.organizer.email }})
-      </p>
-      <p class="card-text">
-        <strong>Participants:</strong>
-      </p>
+    <div
+      style="
+        top: 90%;
+        padding-top: 10%;
+        border-top-right-radius: 10%;
+        border-top-left-radius: 10%;
+      "
+      class="container h-100 position-absolute bg-white p-4"
+    >
+      <h1 class="display-4 fw-bolder text-black">{{ data.event.title }}</h1>
+      <div style="display: flex; align-items: center">
+        <i
+          style="font-size: 30px; margin-right: 10px"
+          class="bi bi-calendar2"
+        ></i>
+        <div class="text-info">
+          {{ data.event.start | date : "MMM d, y h:mm a" }}
+        </div>
+        <i style="font-size: 30px" class="bi bi-dash"></i>
+        <div class="text-info">
+          {{ data.event.end | date : "MMM d, y h:mm a" }}
+        </div>
+      </div>
 
-      <ul>
-        <li *ngFor="let person of data.event.participations">
+      <mat-chip-set aria-label="Fish selection">
+        <mat-chip>{{ data.event.type }}</mat-chip>
+        <mat-chip *ngIf="data.event.location">{{
+          data.event.location
+        }}</mat-chip>
+        <mat-chip>{{ data.event.typeLocation }}</mat-chip>
+        <mat-chip disabled>Four fish</mat-chip>
+      </mat-chip-set>
+      <div class="lead">
+        {{ data.event.description }}
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          <strong>Organizer:</strong><br />
           <img
-            [src]="person.avatar"
-            alt="Participant avatar"
+            [src]="data.event.organizer.avatar"
+            alt="Organizer avatar"
             class="rounded-circle"
-            width="30"
+            width="50"
+            style="top: 20px; left: 20px"
           />
-          {{ person.name }} ({{ person.email }})
-        </li>
-      </ul>
-      <div *ngIf="data.event.reviews">
-        <h5>Reviews:</h5>
-        <div
-          *ngFor="let review of data.event.reviews"
-          class="border rounded p-2 my-2"
-        >
-          <p>
+          {{ data.event.organizer.name }} ({{ data.event.organizer.email }})
+        </p>
+        <p class="card-text">
+          <strong>Participants:</strong>
+        </p>
+
+        <ul>
+          <li *ngFor="let person of data.event.participations">
             <img
-              [src]="review.person.avatar"
-              alt="Reviewer avatar"
+              [src]="person.avatar"
+              alt="Participant avatar"
               class="rounded-circle"
               width="30"
             />
-            {{ review.person.name }}:
-          </p>
-          <p>{{ review.comment }}</p>
-          <p><strong>Rating:</strong> {{ review.rating }} / 5</p>
+            {{ person.name }} ({{ person.email }})
+          </li>
+        </ul>
+        <div *ngIf="data.event.reviews">
+          <h5>Reviews:</h5>
+          <div
+            *ngFor="let review of data.event.reviews"
+            class="border rounded p-2 my-2"
+          >
+            <p>
+              <img
+                [src]="review.person.avatar"
+                alt="Reviewer avatar"
+                class="rounded-circle"
+                width="30"
+              />
+              {{ review.person.name }}:
+            </p>
+            <p>{{ review.comment }}</p>
+            <p><strong>Rating:</strong> {{ review.rating }} / 5</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
   }
 </mat-dialog-content>
