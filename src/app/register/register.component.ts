@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, isDevMode, signal } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -6,7 +6,11 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  SupabaseService,
+  supabaseUrlPublic,
+} from '../services/supabase.service';
 
 @Component({
   selector: 'app-register',
@@ -14,10 +18,17 @@ import { Router } from '@angular/router';
   styleUrl: './register.component.css',
 })
 export class RegisterComponent {
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private readonly supabase: SupabaseService
+  ) {}
+  selectedImage: undefined | File;
+  errorImage = signal('');
 
   form = this.fb.group({
-    name: ['', { validators: [Validators.required] }],
+    firstName: ['', { validators: [Validators.required] }],
+    lastName: ['', { validators: [Validators.required] }],
     email: ['', { validators: [Validators.required, Validators.email] }],
     password: [
       '',
@@ -37,16 +48,51 @@ export class RegisterComponent {
     ],
   });
 
-  onSubmit() {
+  async onSubmit() {
+    this.errorImage.set('');
     this.form.markAllAsTouched();
-    if (this.form.valid) {
-      this.router.navigate(['/my-events']);
+
+    if (this.form.valid && this.selectedImage) {
+      let urlImage = '';
+
+      if (!isDevMode()) {
+        const { data: dataSupabase, error: errorSupabase } =
+          await this.supabase.uploadImage('events', this.selectedImage);
+        if (errorSupabase || dataSupabase === null) {
+          if (errorSupabase?.message === 'The resource already exists') {
+            this.errorImage.set(
+              'The resource already exists. Please choose another image or change its name.'
+            );
+          } else {
+            this.errorImage.set(
+              'There was an error uploading the image. Please try again.'
+            );
+          }
+          return;
+        }
+        urlImage = supabaseUrlPublic + dataSupabase.fullPath;
+      }
+
+      urlImage =
+        urlImage !== ''
+          ? urlImage
+          : 'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/events/event1.jpg';
+      console.log('Data: ', {
+        firstName: this.firstName.value,
+        lastName: this.lastName.value,
+        avatar: urlImage,
+        email: this.email.value,
+        password: this.password.value,
+      });
+
+      // this.router.navigate(['/my-events']);
     }
   }
 
   onFocus(input: HTMLElement) {
     const formControlName = input.getAttribute('formControlName') as
-      | 'name'
+      | 'firstName'
+      | 'lastName'
       | 'email'
       | 'password'
       | 'confirmPassword'
@@ -70,8 +116,12 @@ export class RegisterComponent {
     };
   }
 
-  get name() {
-    return this.form.controls['name'];
+  get firstName() {
+    return this.form.controls['firstName'];
+  }
+
+  get lastName() {
+    return this.form.controls['lastName'];
   }
 
   get email() {

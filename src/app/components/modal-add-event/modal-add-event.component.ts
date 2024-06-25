@@ -261,6 +261,10 @@ export class ModalAddEventComponent implements OnInit {
           this.errorImage.set(
             'The resource already exists. Please choose another image or change its name.'
           );
+        } else {
+          this.errorImage.set(
+            'There was an error uploading the image. Please try again.'
+          );
         }
         return;
       }
