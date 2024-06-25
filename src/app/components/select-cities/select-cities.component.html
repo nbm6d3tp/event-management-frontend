@@ -13,15 +13,15 @@
     <mat-autocomplete #autoGroup="matAutocomplete">
       @for (group of filteredData | async; track group) {
       <mat-optgroup [label]="group.letter">
-        @for (data of group.names; track data.item) {
+        @for (data of group.names; track data) {
         <mat-option>
           <div (click)="optionClicked($event, data)">
             <mat-checkbox
-              [checked]="data.selected"
+              [checked]="selectedCities().includes(data)"
               (change)="toggleSelection(data)"
               (click)="$event.stopPropagation()"
             >
-              {{ data.item }}
+              {{ data }}
             </mat-checkbox>
           </div></mat-option
         >

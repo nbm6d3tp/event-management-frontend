@@ -10,21 +10,37 @@
       <app-select-cities [(selectedCities)]="selectedCities" />
     </div>
   </div>
-  <div class="row mx-2 justify-content-between">
+  <div class="row mx-2 d-flex flex-row justify-content-between">
     <mat-form-field class="col-3">
       <mat-label>Order by</mat-label>
       <mat-select [formControl]="orderByCriteria" multiple>
-        @for (criterion of orderByCriteriaList; track criterion) {
-        <mat-option [value]="criterion">{{ criterion }}</mat-option>
-        }
+        <mat-option value="Note">Note</mat-option>
       </mat-select>
     </mat-form-field>
-    <div
-      class="col-sm-6 col-lg-6 d-flex justify-content-end align-items-baseline"
-    >
+
+    <div class="col-5 d-flex justify-content-center align-items-baseline">
       <app-select-location-types
         [(selectedLocationTypes)]="selectedLocationTypes"
       />
+    </div>
+    <div class="col-3 d-flex justify-content-end align-items-baseline">
+      <form [formGroup]="searchForm">
+        <input
+          class="form-control me-2"
+          type="search"
+          placeholder="Search by title"
+          aria-label="Search"
+          formControlName="searchInput"
+        />
+      </form>
+    </div>
+    <div class="col-1 d-flex justify-content-end align-items-baseline">
+      <button
+        (click)="onFilter()"
+        style="width: 40px; height: 40px; border-radius: 50%; border-width: 0"
+      >
+        <i class="bi bi-search"></i>
+      </button>
     </div>
   </div>
 </div>

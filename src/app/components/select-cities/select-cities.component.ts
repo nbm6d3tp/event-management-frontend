@@ -3,23 +3,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Observable, map, startWith } from 'rxjs';
 import { cityGroups } from '../../data/location';
 
-interface ItemData {
-  item: string;
-  selected: boolean;
-}
-
-const _filter = (
-  opt: {
-    item: string;
-    selected: boolean;
-  }[],
-  value: string
-): {
-  item: string;
-  selected: boolean;
-}[] => {
+const _filter = (opt: string[], value: string): string[] => {
   const filterValue = value.toLowerCase();
-  return opt.filter((item) => item.item.toLowerCase().includes(filterValue));
+  return opt.filter((item) => item.toLowerCase().includes(filterValue));
 };
 
 @Component({
@@ -29,7 +15,7 @@ const _filter = (
 })
 export class SelectCitiesComponent {
   required = input<boolean>(false);
-  selectedCities = model<string[]>();
+  selectedCities = model<string[]>([]);
 
   citiesForm = this.fb.group({
     cityGroup: '',
@@ -37,14 +23,14 @@ export class SelectCitiesComponent {
 
   constructor(private fb: FormBuilder) {}
 
-  filteredData: Observable<{ letter: string; names: ItemData[] }[]> | undefined;
-  rawData: Array<{ letter: string; names: ItemData[] }> = [];
+  filteredData: Observable<{ letter: string; names: string[] }[]> | undefined;
+  rawData: Array<{ letter: string; names: string[] }> = [];
   placeholder = 'Cities';
 
   ngOnInit() {
     this.rawData = cityGroups.map((group) => ({
       letter: group.letter,
-      names: group.names.map((name) => ({ item: name, selected: false })),
+      names: group.names,
     }));
     this.filteredData = this.citiesForm.get('cityGroup')!.valueChanges.pipe(
       startWith(''),
@@ -54,7 +40,7 @@ export class SelectCitiesComponent {
     );
   }
 
-  private _filterGroup(value: string): { letter: string; names: ItemData[] }[] {
+  private _filterGroup(value: string): { letter: string; names: string[] }[] {
     if (value) {
       return this.rawData
         .map((group) => ({
@@ -66,22 +52,20 @@ export class SelectCitiesComponent {
     return this.rawData;
   }
 
-  optionClicked = (event: Event, data: ItemData): void => {
+  optionClicked = (event: Event, data: string): void => {
     event.stopPropagation();
     this.toggleSelection(data);
   };
 
-  toggleSelection = (data: ItemData): void => {
-    const selectedCities = this.selectedCities();
-    if (selectedCities === undefined) return;
-    data.selected = !data.selected;
-    if (data.selected === true) {
-      this.selectedCities.set([...selectedCities, data.item]);
+  toggleSelection = (data: string): void => {
+    if (!this.selectedCities().includes(data)) {
+      this.selectedCities.set([...this.selectedCities(), data]);
     } else {
+      console.log(this.selectedCities().filter((city) => city !== data));
       this.selectedCities.set(
-        selectedCities.filter((city) => city !== data.item)
+        this.selectedCities().filter((city) => city !== data)
       );
     }
-    this.placeholder = selectedCities.join(', ');
+    this.placeholder = (this.selectedCities() || []).join(', ');
   };
 }

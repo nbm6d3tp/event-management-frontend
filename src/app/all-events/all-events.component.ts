@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TEvent } from '../data/event';
 import { EventsService } from '../services/events.service';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-all-events',
@@ -20,12 +20,26 @@ export class AllEventsComponent {
     end: null,
   };
 
-  orderByCriteriaList: ('Date' | 'Note')[] = ['Date', 'Note'];
+  searchForm = this.fb.group({
+    searchInput: [''],
+  });
+
   orderByCriteria = new FormControl('');
 
-  constructor(private eventsService: EventsService) {
+  constructor(private eventsService: EventsService, private fb: FormBuilder) {
     eventsService.getAll().subscribe((events) => {
       this.events = events;
+    });
+  }
+
+  onFilter() {
+    console.log('Data filter: ', {
+      selectedCities: this.selectedCities,
+      selectedEventTypes: this.selectedEventTypes,
+      selectedLocationTypes: this.selectedLocationTypes,
+      selectedDateRange: this.selectedDateRange,
+      orderBy: this.orderByCriteria.value,
+      likeTitle: this.searchForm.controls['searchInput'].value,
     });
   }
 }
