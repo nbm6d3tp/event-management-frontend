@@ -143,13 +143,20 @@ export const eventData: TEvent[] = [
     location: cities[3],
     typeLocation: 'On-site',
     organizer: people[3],
-    participations: [people[4]],
+    participations: [people[4], people[2]],
     reviews: [
       {
         id: 'review5',
         person: people[4],
         comment: 'Amazing pitches and networking opportunities.',
         rating: 5,
+        date: subDays(new Date(), 1),
+      },
+      {
+        id: 'review6',
+        person: people[2],
+        comment: 'Amazing pitches and networking opportunities.',
+        rating: 4,
         date: subDays(new Date(), 1),
       },
     ],

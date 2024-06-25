@@ -106,31 +106,29 @@
       <h2 *ngIf="data.event.reviews" class="display-6">Reviews</h2>
       <div *ngIf="data.event.reviews" class="list-group">
         @for (review of data.event.reviews; track review.id) {
-        <div class="list-group-item list-group-item-action d-flex">
-          <img
-            [src]="review.person.avatar"
-            style="
-              height: 50px;
-              width: 50px;
-              border-radius: 50%;
-              margin-right: 15px;
-            "
-          />
+        <div
+          class="list-group-item list-group-item-action d-flex align-items-center justify-content-around"
+        >
           <div
-            href="#"
-            class="list-group-item list-group-item-action flex-column align-items-start active"
+            class="d-flex flex-column me-3 align-items-center justify-content-between"
           >
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">{{ review.person.name }}</h5>
-              <small>{{ review.date | date : "medium" }}</small>
-            </div>
+            <img
+              [src]="review.person.avatar"
+              style="
+                height: 50px;
+                width: 50px;
+                border-radius: 50%;
+                margin-bottom: 5px;
+              "
+            />
+            <h4 class="mb-1 fw-bold">{{ review.person.name }}</h4>
+          </div>
+          <div class="d-flex flex-column align-items-start">
+            <small>{{ review.date | date : "short" }}</small>
             <p class="mb-1">
               {{ review.comment }}
             </p>
-            <star-rating
-              [starType]="'svg'"
-              [rating]="review.rating"
-            ></star-rating>
+            <app-star-rating [readonly]="true" [rating]="review.rating" />
           </div>
         </div>
         }
