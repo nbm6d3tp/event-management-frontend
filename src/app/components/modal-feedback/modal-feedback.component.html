@@ -1,0 +1,52 @@
+<mat-dialog-content class="mat-typography mh-100 p-0 container">
+  <div
+    class="container w-100 h-100 d-flex flex-column align-items-center justify-content-between"
+  >
+    <div class="d-flex w-100 align-items-center justify-content-between">
+      <img
+        [src]="user?.avatar"
+        alt="Avatar"
+        class="rounded-circle"
+        style="
+          height: 50px;
+          width: 50px;
+          border-radius: 50%;
+          margin-right: 15px;
+        "
+      />
+      <form
+        [formGroup]="form"
+        class="needs-validation"
+        style="width: 90%"
+        autocomplete="off"
+      >
+        <div class="mt-3">
+          <textarea
+            required
+            type="text"
+            style="height: 150px"
+            class="form-control"
+            formControlName="comment"
+            [class.is-invalid]="comment.invalid && comment.touched"
+            [class.is-valid]="comment.valid && comment.touched"
+          ></textarea>
+          <div
+            *ngIf="comment?.invalid && comment.touched"
+            class="invalid-feedback text-danger"
+          >
+            <div *ngIf="comment?.errors?.['maxlength']">
+              Maximum length is 2500 characters
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <app-star-rating [(rating)]="rating" />
+    <div class="d-flex justify-content-between align-items-center">
+      <button (click)="onCancel()" class="btn btn-outline-danger">
+        Cancel
+      </button>
+      <button (click)="onSubmit()" class="btn btn-primary">Submit</button>
+    </div>
+  </div>
+</mat-dialog-content>

@@ -1,14 +1,15 @@
+@for (index of [0,1,2,3,4]; track index) {
 <button
   mat-icon-button
   color="accent"
-  *ngFor="let ratingId of ratingArr; index as i"
-  [id]="'star_' + i"
-  (click)="onClick(i + 1)"
-  [matTooltip]="ratingId + 1 + ''"
+  [id]="'star_' + index"
+  (click)="onClick(index + 1)"
+  [matTooltip]="index + 1 + ''"
   matTooltipPosition="above"
   style="margin-left: 0; margin-right: 0"
 >
   <mat-icon>
-    {{ showIcon(i) }}
+    {{ showIcon(index) }}
   </mat-icon>
 </button>
+}

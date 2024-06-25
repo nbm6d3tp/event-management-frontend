@@ -26,9 +26,36 @@
       "
       class="container h-100 position-absolute bg-white p-4"
     >
-      <h1 class="display-4 fw-bolder text-black mb-3">
-        {{ data.event.title }}
-      </h1>
+      <div class="d-flex justify-content-between align-items-center">
+        <h1 class="display-4 fw-bolder text-black mb-3">
+          {{ data.event.title }}
+        </h1>
+        <div>
+          <button
+            *ngIf="user && canDelete(data.event, user)"
+            style="
+              border-radius: 50%;
+              border-width: 0;
+              margin-right: 5px;
+              width: 40px;
+              height: 40px;
+            "
+          >
+            <i class="bi bi-trash text-danger"></i>
+          </button>
+          <button
+            *ngIf="user && canEdit(data.event, user)"
+            style="
+              border-radius: 50%;
+              border-width: 0;
+              width: 40px;
+              height: 40px;
+            "
+          >
+            <i class="bi bi-pencil text-primary"></i>
+          </button>
+        </div>
+      </div>
 
       <div class="lead mb-3">
         {{ data.event.description }}
@@ -133,6 +160,38 @@
         </div>
         }
       </div>
+
+      <div
+        style="display: flex; justify-content: flex-end; margin-top: 20px"
+        class="me-2"
+      >
+        <button
+          *ngIf="user && canCancel(data.event, user)"
+          type="submit"
+          class="btn btn-outline-danger"
+          (click)="onCancel()"
+        >
+          Cancel
+        </button>
+        <button
+          *ngIf="user && canParticipate(data.event, user)"
+          type="submit"
+          class="btn btn-primary"
+          (click)="onParticipate()"
+        >
+          Participate
+        </button>
+        <button
+          *ngIf="user && canComment(data.event, user)"
+          type="submit"
+          class="btn btn-info"
+          (click)="onComment()"
+        >
+          Comment
+        </button>
+      </div>
+
+      <br />
     </div>
   </div>
   }

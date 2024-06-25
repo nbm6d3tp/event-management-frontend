@@ -1,4 +1,4 @@
-import { Component, input, model } from '@angular/core';
+import { Component, input, model, signal } from '@angular/core';
 
 @Component({
   selector: 'app-star-rating',
@@ -8,16 +8,12 @@ import { Component, input, model } from '@angular/core';
 export class StarRatingComponent {
   rating = model.required<number>();
   readonly = input(false);
+  ratingArr = signal<number[]>([]);
 
-  ratingArr: number[] = [];
-
-  ngOnInit() {
-    for (let index = 0; index < 5; index++) {
-      this.ratingArr.push(index);
-    }
-  }
   onClick(rating: number) {
-    if (!this.readonly) this.rating.set(rating);
+    if (this.readonly() === false) {
+      this.rating.set(rating);
+    }
   }
 
   showIcon(index: number) {

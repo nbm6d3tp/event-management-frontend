@@ -45,6 +45,7 @@ import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { StarRatingComponent } from './components/star-rating/star-rating.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ModalFeedbackComponent } from './components/modal-feedback/modal-feedback.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     SelectTimeComponent,
     SelectDateComponent,
     StarRatingComponent,
+    ModalFeedbackComponent,
   ],
   imports: [
     MatTooltipModule,
