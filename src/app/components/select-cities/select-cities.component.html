@@ -7,8 +7,7 @@
       formControlName="cityGroup"
       [matAutocomplete]="autoGroup"
       placeholder="Cities"
-      [value]="placeholder"
-      [required]="required()"
+      [value]="placeholder()"
     />
     <mat-autocomplete #autoGroup="matAutocomplete">
       @for (group of filteredData | async; track group) {

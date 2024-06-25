@@ -1,4 +1,4 @@
-import { Component, input, model } from '@angular/core';
+import { Component, input, model, signal } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Observable, map, startWith } from 'rxjs';
 import { cityGroups } from '../../data/location';
@@ -24,14 +24,9 @@ export class SelectCitiesComponent {
   constructor(private fb: FormBuilder) {}
 
   filteredData: Observable<{ letter: string; names: string[] }[]> | undefined;
-  rawData: Array<{ letter: string; names: string[] }> = [];
-  placeholder = 'Cities';
+  placeholder = signal('Cities');
 
   ngOnInit() {
-    this.rawData = cityGroups.map((group) => ({
-      letter: group.letter,
-      names: group.names,
-    }));
     this.filteredData = this.citiesForm.get('cityGroup')!.valueChanges.pipe(
       startWith(''),
       map((value) => {
@@ -42,14 +37,14 @@ export class SelectCitiesComponent {
 
   private _filterGroup(value: string): { letter: string; names: string[] }[] {
     if (value) {
-      return this.rawData
+      return cityGroups
         .map((group) => ({
           letter: group.letter,
           names: _filter(group.names, value),
         }))
         .filter((group) => group.names.length > 0);
     }
-    return this.rawData;
+    return cityGroups;
   }
 
   optionClicked = (event: Event, data: string): void => {
@@ -66,6 +61,6 @@ export class SelectCitiesComponent {
         this.selectedCities().filter((city) => city !== data)
       );
     }
-    this.placeholder = (this.selectedCities() || []).join(', ');
+    this.placeholder.set((this.selectedCities() || []).join(', '));
   };
 }

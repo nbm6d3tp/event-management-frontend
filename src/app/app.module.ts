@@ -46,6 +46,7 @@ import { StarRatingComponent } from './components/star-rating/star-rating.compon
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ModalFeedbackComponent } from './components/modal-feedback/modal-feedback.component';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import { ModalFeedbackComponent } from './components/modal-feedback/modal-feedba
     ModalFeedbackComponent,
   ],
   imports: [
+    MatBadgeModule,
     MatTooltipModule,
     MatSnackBarModule,
     NgxMatTimepickerModule,

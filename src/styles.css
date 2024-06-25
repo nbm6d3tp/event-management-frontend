@@ -12,13 +12,23 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 3px;
   overflow-y: scroll;
   background: grey;
   box-shadow: inset 0 0 4px #707070;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: blue;
+  background: white;
   border-radius: 10px;
+}
+
+.my-custom-badge-primary.mat-badge-primary .mat-badge-content {
+  background-color: #ad2121;
+  color: white;
+}
+
+.my-custom-badge-accent.mat-badge-accent .mat-badge-content {
+  background-color: #e3bc08;
+  color: white;
 }
