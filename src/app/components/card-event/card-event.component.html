@@ -1,4 +1,9 @@
-<div (click)="onClick()" onclick="" class="card shadow" style="cursor: pointer">
+<div
+  (click)="onClick()"
+  onclick=""
+  class="card shadow"
+  style="cursor: pointer; height: 330px"
+>
   <div class="card-img-top" style="position: relative; height: 210px">
     <h2
       class="card-title h2"
@@ -50,19 +55,6 @@
       "
     >
       <div
-        style="
-          background-color: #4bf059;
-          color: #fff;
-          padding: 5px 10px;
-          border-radius: 12px;
-          font-size: 12px;
-          margin-bottom: 2px;
-          text-align: center;
-        "
-      >
-        {{ event().typeLocation }}
-      </div>
-      <div
         *ngIf="event().location"
         style="
           background-color: #007bff;
@@ -84,9 +76,13 @@
       priority
     />
   </div>
-  <div class="card-body">
-    <p class="card-text">
+  <div class="card-body d-flex flex-column justify-content-between">
+    <p style="height: 40px" class="card-text">
       {{ event().description | truncateName : 80 : "..." }}
     </p>
+    <mat-chip-set class="mb-2" aria-label="Selection">
+      <mat-chip>{{ event().type }}</mat-chip>
+      <mat-chip>{{ event().typeLocation }}</mat-chip>
+    </mat-chip-set>
   </div>
 </div>
