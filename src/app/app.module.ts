@@ -42,6 +42,7 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
 import { SelectTimeComponent } from './components/select-time/select-time.component';
 import { SelectDateComponent } from './components/select-date/select-date.component';
 import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
+import { StarRatingModule } from 'angular-star-rating';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
     SelectDateComponent,
   ],
   imports: [
+    StarRatingModule.forRoot(),
     NgxMatTimepickerModule,
     MatDatepickerModule,
     MatFormFieldModule,
