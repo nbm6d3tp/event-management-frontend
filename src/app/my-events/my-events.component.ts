@@ -16,6 +16,8 @@ import { TEvent } from '../data/event';
 import { TPerson } from '../data/person';
 import { AuthenticationService } from '../services/authentication.service';
 import { ModalFeedbackComponent } from '../components/modal-feedback/modal-feedback.component';
+import { EventsService } from '../services/events.service';
+import { ToastService } from '../services/toast.service';
 
 const toComment = (event: TEvent, person: TPerson) => {
   if (
@@ -53,7 +55,7 @@ export const canDelete = (event: TEvent, person: TPerson) =>
   event.organizer.id == person.id;
 
 export const canEdit = (event: TEvent, person: TPerson) =>
-  isEventEnd(event) && event.organizer.id == person.id;
+  !isEventEnd(event) && event.organizer.id == person.id;
 
 export const canCancel = (event: TEvent, person: TPerson) =>
   haveParticipated(event, person) &&
@@ -100,12 +102,33 @@ export class MyEventsComponent {
 
   readonly dialog = inject(MatDialog);
 
+  onClickEditEvent(idEvent: string) {
+    const dialogRef = this.dialog.open(ModalAddEventComponent, {
+      height: '80%',
+      width: '600px',
+      data: idEvent,
+    });
+    dialogRef.afterClosed().subscribe((result) => {});
+  }
+
   onClickFeedbackEvent() {
     const dialogRef = this.dialog.open(ModalFeedbackComponent, {
       height: '25%',
       width: '500px',
     });
     dialogRef.afterClosed().subscribe((result) => {});
+  }
+
+  onClickCancelEvent() {
+    this.toastService.showToastWithConfirm('cancel', () => {
+      console.log('Cancel event');
+    });
+  }
+
+  onClickDeleteEvent() {
+    this.toastService.showToastWithConfirm('delete', () => {
+      console.log('Delete event');
+    });
   }
 
   onClickAddEvent() {
@@ -129,13 +152,14 @@ export class MyEventsComponent {
   user?: TPerson | null;
 
   constructor(
-    private myEventsService: MyEventsService,
-    private authenticationService: AuthenticationService
+    private myEventsService: EventsService,
+    private authenticationService: AuthenticationService,
+    private toastService: ToastService
   ) {
     this.authenticationService.user.subscribe((person) => {
       this.user = person;
       if (person)
-        myEventsService.getAll().subscribe((events) => {
+        myEventsService.getMyEvents(person.id).subscribe((events) => {
           this.events = events.map((event) => {
             return {
               start: event.start,
@@ -163,14 +187,15 @@ export class MyEventsComponent {
         onClick: ({ event }: { event: CalendarEvent }): void => {
           // this.events = this.events.filter((iEvent) => iEvent !== event);
           // this.activeDayIsOpen = false;
-          console.log('Delete event', event);
+          this.onClickDeleteEvent();
         },
       });
-      if (isEventEnd(event))
+      if (!isEventEnd(event))
         actions.push({
           label: '<i class="mx-1 bi bi-pencil"></i>',
           a11yLabel: 'Edit',
           onClick: ({ event }: { event: CalendarEvent }): void => {
+            this.onClickEditEvent(event.meta);
             console.log('Edit event', event);
           },
         });
@@ -191,7 +216,7 @@ export class MyEventsComponent {
             label: '<i class="mx-1 bi bi-x-circle"></i>',
             a11yLabel: 'Cancel',
             onClick: ({ event }: { event: CalendarEvent }): void => {
-              console.log('Cancel event', event);
+              this.onClickCancelEvent();
             },
           });
       }

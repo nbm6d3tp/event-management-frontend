@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TPerson } from '../data/person';
 import { AuthenticationService } from '../services/authentication.service';
 import { TEvent, eventData } from '../data/event';
+import { EventsService } from '../services/events.service';
 
 @Component({
   selector: 'app-my-profile',
@@ -12,10 +13,16 @@ export class MyProfileComponent {
   user?: TPerson | null;
   myEvents: TEvent[] = [];
 
-  constructor(private authenticationService: AuthenticationService) {
-    this.authenticationService.user.subscribe((x) => {
-      this.user = x;
-      this.myEvents = eventData.filter((event) => event.organizer.id === x?.id);
+  constructor(
+    private authenticationService: AuthenticationService,
+    eventsService: EventsService
+  ) {
+    this.authenticationService.user.subscribe((person) => {
+      this.user = person;
+      if (person)
+        eventsService
+          .getEventsCreatedByMe(person.id || '')
+          .subscribe((events) => (this.myEvents = events));
     });
   }
 

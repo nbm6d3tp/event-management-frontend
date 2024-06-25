@@ -1,12 +1,19 @@
-import { Component, OnInit, inject, isDevMode, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  input,
+  isDevMode,
+  signal,
+} from '@angular/core';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-import { TTypeEvent, typeEventList } from '../../data/event';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { TEvent, TTypeEvent, typeEventList } from '../../data/event';
 import {
   SupabaseService,
   supabaseUrlPublic,
@@ -21,7 +28,8 @@ import {
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { AuthenticationService } from '../../services/authentication.service';
 import { TPerson } from '../../data/person';
-import Swal from 'sweetalert2';
+import { ToastService } from '../../services/toast.service';
+import { EventsService } from '../../services/events.service';
 
 function combineDateAndTime(dateObj: Date, timeStr: string) {
   // Extract year, month, and day from the date object
@@ -70,6 +78,10 @@ function getTimeAsNumberOfMinutes(time: string) {
 export class ModalAddEventComponent implements OnInit {
   typeEventList = typeEventList;
   locationTypes = locationTypes;
+  event: TEvent | undefined;
+
+  readonly dialogRef = inject(MatDialogRef<ModalAddEventComponent>);
+  readonly data = inject<string | undefined>(MAT_DIALOG_DATA);
 
   startDayForm = new FormGroup({
     date: new FormControl<Date | null>(isDevMode() ? new Date() : null),
@@ -89,9 +101,36 @@ export class ModalAddEventComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private readonly supabase: SupabaseService,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private eventService: EventsService,
+    private toastService: ToastService
   ) {
     this.authenticationService.user.subscribe((x) => (this.user = x));
+    if (this.data) {
+      eventService.getEvent(this.data).subscribe((event) => {
+        if (!event) {
+          console.error('Event not found');
+          return;
+        }
+        this.form.controls['title'].setValue(event.title);
+        this.form.controls['description'].setValue(event.description);
+        this.startDayForm.controls['date'].setValue(new Date(event.start));
+        this.endDayForm.controls['date'].setValue(new Date(event.end));
+        this.startTimeForm.controls['time'].setValue(
+          event.start.toLocaleTimeString().slice(0, 5)
+        );
+        this.endTimeForm.controls['time'].setValue(
+          event.end.toLocaleTimeString().slice(0, 5)
+        );
+        this.selectedEventType = event.type;
+        this.cityForm.controls['cityGroup'].setValue(
+          event.location?.name || ''
+        );
+        this.locationTypeControl.setValue(event.typeLocation);
+        this.event = event;
+        return;
+      });
+    }
   }
 
   checkLocationType(event: MatButtonToggleChange) {
@@ -105,8 +144,6 @@ export class ModalAddEventComponent implements OnInit {
       ctrl.setValue(null);
     }
   }
-
-  readonly dialogRef = inject(MatDialogRef<ModalAddEventComponent>);
 
   selectedEventType: undefined | TTypeEvent = isDevMode()
     ? 'Conferences'
@@ -139,6 +176,10 @@ export class ModalAddEventComponent implements OnInit {
       startWith(''),
       map((value) => _filterGroup(value || ''))
     );
+  }
+
+  onCancel() {
+    this.dialogRef.close();
   }
 
   onNoClick(): void {
@@ -254,21 +295,26 @@ export class ModalAddEventComponent implements OnInit {
     let urlImage = '';
 
     if (!isDevMode()) {
-      const { data: dataSupabase, error: errorSupabase } =
-        await this.supabase.uploadImage('events', image);
-      if (errorSupabase || dataSupabase === null) {
-        if (errorSupabase?.message === 'The resource already exists') {
-          this.errorImage.set(
-            'The resource already exists. Please choose another image or change its name.'
-          );
-        } else {
-          this.errorImage.set(
-            'There was an error uploading the image. Please try again.'
-          );
+      if (image) {
+        const { data: dataSupabase, error: errorSupabase } =
+          await this.supabase.uploadImage('events', image);
+        if (errorSupabase || dataSupabase === null) {
+          if (errorSupabase?.message === 'The resource already exists') {
+            this.errorImage.set(
+              'The resource already exists. Please choose another image or change its name.'
+            );
+          } else {
+            this.errorImage.set(
+              'There was an error uploading the image. Please try again.'
+            );
+          }
+          return;
         }
-        return;
+        urlImage = supabaseUrlPublic + dataSupabase.fullPath;
+      } else {
+        urlImage =
+          'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/Default_avatar_profile.jpg';
       }
-      urlImage = supabaseUrlPublic + dataSupabase.fullPath;
     }
 
     urlImage =
@@ -276,33 +322,38 @@ export class ModalAddEventComponent implements OnInit {
         ? urlImage
         : 'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/events/event1.jpg';
 
-    console.log('Data to send to the server: ', {
-      title,
-      description,
-      start: combineDateAndTime(startDay, startTime),
-      end: combineDateAndTime(endDay, endTime),
-      eventType,
-      city,
-      locationType,
-      urlImage,
-      organizer: this.user,
-    });
+    if (this.data) {
+      console.log('Data to send to the server to edit: ', {
+        title,
+        description,
+        start: combineDateAndTime(startDay, startTime),
+        end: combineDateAndTime(endDay, endTime),
+        eventType,
+        city,
+        locationType,
+        urlImage:
+          this.event?.image ||
+          'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/Default_avatar_profile.jpg',
+        organizer: this.user,
+      });
+    } else {
+      console.log('Data to send to the server to create: ', {
+        title,
+        description,
+        start: combineDateAndTime(startDay, startTime),
+        end: combineDateAndTime(endDay, endTime),
+        eventType,
+        city,
+        locationType,
+        urlImage,
+        organizer: this.user,
+      });
+    }
 
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      },
-    });
-    Toast.fire({
-      icon: 'success',
-      title: 'Event created successfully!',
-    });
+    this.toastService.showToast(
+      'success',
+      this.data ? 'Event updated successfully!' : 'Event created successfully!'
+    );
     this.dialogRef.close();
 
     // if (this.form.valid && this.email.value && this.password.value) {

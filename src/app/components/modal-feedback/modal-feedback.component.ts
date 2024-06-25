@@ -3,6 +3,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { TPerson } from '../../data/person';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-modal-feedback',
@@ -30,11 +31,13 @@ export class ModalFeedbackComponent {
       rating: this.rating(),
     });
     this.dialogRef.close();
+    this.toastService.showToast('success', 'Comment');
   }
 
   constructor(
     private fb: FormBuilder,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private toastService: ToastService
   ) {
     this.authenticationService.user.subscribe((x) => (this.user = x));
   }

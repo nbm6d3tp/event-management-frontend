@@ -41,7 +41,9 @@
             </div>
           </div>
         </div>
-        <app-file-upload [(file)]="selectedImage" />
+        <div *ngIf="!this.data">
+          <app-file-upload [(file)]="selectedImage" />
+        </div>
 
         <div class="mt-3 row d-flex justify-content-around align-items-center">
           <div class="col-6">
@@ -132,6 +134,13 @@
       </div>
 
       <div style="display: flex; justify-content: flex-end" class="me-2 mb-3">
+        <button
+          type="submit"
+          class="btn btn-outline-danger me-2"
+          (click)="onCancel()"
+        >
+          Cancel
+        </button>
         <button type="submit" class="btn btn-primary" (click)="onSubmit()">
           Submit
         </button>

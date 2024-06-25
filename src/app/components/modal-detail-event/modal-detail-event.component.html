@@ -17,6 +17,19 @@
       />
     </div>
 
+    <button
+      (click)="onClose()"
+      style="
+        border-width: 0;
+        position: absolute;
+        top: 20px;
+        right: 15px;
+        background: none;
+      "
+    >
+      <i style="font-size: 30px" class="bi bi-x text-white"></i>
+    </button>
+
     <div
       style="
         top: 90%;
@@ -40,10 +53,12 @@
               width: 40px;
               height: 40px;
             "
+            (click)="onDelete()"
           >
             <i class="bi bi-trash text-danger"></i>
           </button>
           <button
+            (click)="onEdit()"
             *ngIf="user && canEdit(data.event, user)"
             style="
               border-radius: 50%;
@@ -191,7 +206,7 @@
         </button>
       </div>
 
-      <br />
+      <div style="height: 25px"></div>
     </div>
   </div>
   }
