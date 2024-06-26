@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../services/authentication.service';
-import { TPerson } from '../../data/person';
+import { TUser } from '../../data/person';
 import { EventsService } from '../../services/events.service';
 import { TEvent } from '../../data/event';
 import { canComment } from '../../my-events/my-events.component';
@@ -12,7 +12,7 @@ import { canComment } from '../../my-events/my-events.component';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
-  user?: TPerson | null;
+  user?: TUser | null;
   upcomingEventsCount: number = 0;
   eventsToFeedbackCount: number = 0;
 

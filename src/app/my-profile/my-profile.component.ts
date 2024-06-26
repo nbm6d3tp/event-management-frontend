@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TPerson } from '../data/person';
+import { TUser } from '../data/person';
 import { AuthenticationService } from '../services/authentication.service';
 import { TEvent, eventData } from '../data/event';
 import { EventsService } from '../services/events.service';
@@ -10,7 +10,7 @@ import { EventsService } from '../services/events.service';
   styleUrl: './my-profile.component.css',
 })
 export class MyProfileComponent {
-  user?: TPerson | null;
+  user?: TUser | null;
   myEvents: TEvent[] = [];
 
   constructor(
@@ -21,7 +21,7 @@ export class MyProfileComponent {
       this.user = person;
       if (person)
         eventsService
-          .getEventsCreatedByMe(person.id || '')
+          .getEventsCreatedByMe(person.email || '')
           .subscribe((events) => (this.myEvents = events));
     });
   }

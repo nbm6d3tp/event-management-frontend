@@ -51,7 +51,10 @@ export class LoginComponent {
     this.form.markAllAsTouched();
     if (this.form.valid && this.email.value && this.password.value) {
       this.authenticationService
-        .login(this.email.value, this.password.value)
+        .login({
+          email: this.email.value,
+          password: this.password.value,
+        })
         .pipe(first())
         .subscribe({
           next: () => {

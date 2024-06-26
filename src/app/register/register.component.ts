@@ -11,6 +11,7 @@ import {
   SupabaseService,
   supabaseUrlPublic,
 } from '../services/supabase.service';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-register',
@@ -21,7 +22,8 @@ export class RegisterComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private readonly supabase: SupabaseService
+    private readonly supabase: SupabaseService,
+    private authenticationService: AuthenticationService
   ) {}
   selectedImage: undefined | File;
   errorImage = signal('');
@@ -52,7 +54,14 @@ export class RegisterComponent {
     this.errorImage.set('');
     this.form.markAllAsTouched();
 
-    if (this.form.valid && this.selectedImage) {
+    if (
+      this.form.valid &&
+      this.selectedImage &&
+      this.email.value &&
+      this.password.value &&
+      this.firstName.value &&
+      this.lastName.value
+    ) {
       let urlImage = '';
 
       if (!isDevMode()) {
@@ -77,15 +86,24 @@ export class RegisterComponent {
         urlImage !== ''
           ? urlImage
           : 'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/events/event1.jpg';
-      console.log('Data: ', {
-        firstName: this.firstName.value,
-        lastName: this.lastName.value,
-        avatar: urlImage,
-        email: this.email.value,
-        password: this.password.value,
-      });
 
-      // this.router.navigate(['/my-events']);
+      this.authenticationService
+        .register({
+          firstname: this.firstName.value,
+          lastname: this.lastName.value,
+          avatar: urlImage,
+          email: this.email.value,
+          password: this.password.value,
+        })
+        .subscribe({
+          next: () => {
+            this.router.navigate(['/my-events']);
+            console.log('Register successfully!');
+          },
+          error: (error) => {
+            console.log(error);
+          },
+        });
     }
   }
 

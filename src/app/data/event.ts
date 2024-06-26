@@ -1,5 +1,5 @@
 import { addDays, addHours, startOfDay, subDays, subHours } from 'date-fns';
-import { TPerson, people } from './person';
+import { TUser, people } from './person';
 import { TReview } from './review';
 import { TCity, cities } from './city';
 
@@ -15,8 +15,8 @@ export type TEvent =
       type: TTypeEvent;
       typeLocation: 'On-site' | 'Hybrid';
       location: TCity;
-      organizer: TPerson;
-      participations: TPerson[];
+      organizer: TUser;
+      participations: TUser[];
       reviews: TReview[] | null;
       image: string;
     }
@@ -29,8 +29,8 @@ export type TEvent =
       type: TTypeEvent;
       typeLocation: 'Remote';
       location?: never;
-      organizer: TPerson;
-      participations: TPerson[];
+      organizer: TUser;
+      participations: TUser[];
       reviews: TReview[] | null;
       image: string;
     };

@@ -47,6 +47,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ModalFeedbackComponent } from './components/modal-feedback/modal-feedback.component';
 import { MatBadgeModule } from '@angular/material/badge';
+import { GetNamePersonPipe } from './pipes/get-name-person.pipe';
 
 @NgModule({
   declarations: [
@@ -72,6 +73,7 @@ import { MatBadgeModule } from '@angular/material/badge';
     SelectDateComponent,
     StarRatingComponent,
     ModalFeedbackComponent,
+    GetNamePersonPipe,
   ],
   imports: [
     MatBadgeModule,

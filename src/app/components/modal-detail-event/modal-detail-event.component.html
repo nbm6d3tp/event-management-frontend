@@ -91,7 +91,10 @@
         <div style="display: flex; flex-direction: column">
           <div class="text-secondary">Event organized by</div>
           <div class="fw-bolder">
-            {{ data.event.organizer.name }}
+            {{
+              data.event.organizer.firstname
+                | getNamePerson : data.event.organizer.lastname
+            }}
           </div>
         </div>
       </div>
@@ -130,9 +133,12 @@
 
       <h2 class="display-6 mt-4">Participants</h2>
       <div style="display: flex">
-        @for (participant of data.event.participations; track participant.id) {
+        @for (participant of data.event.participations; track participant.email)
+        {
         <img
-          matTooltip="{{ participant.name }}"
+          matTooltip="{{
+            participant.firstname | getNamePerson : participant.lastname
+          }}"
           [src]="participant.avatar"
           alt="participantvatar"
           class="rounded-circle"
@@ -164,7 +170,11 @@
                 margin-bottom: 5px;
               "
             />
-            <h4 class="mb-1">{{ review.person.name }}</h4>
+            <h4 class="mb-1">
+              {{
+                review.person.firstname | getNamePerson : review.person.lastname
+              }}
+            </h4>
           </div>
           <div class="d-flex flex-column align-items-start w-75">
             <small>{{ review.date | date : "short" }}</small>

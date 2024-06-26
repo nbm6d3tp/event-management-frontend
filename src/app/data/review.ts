@@ -1,8 +1,8 @@
-import { TPerson } from './person';
+import { TUser } from './person';
 
 export type TReview = {
   id: string;
-  person: TPerson;
+  person: TUser;
   comment: string;
   date: Date;
   rating: number;

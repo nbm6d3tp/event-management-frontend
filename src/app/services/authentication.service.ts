@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { TPerson, people } from '../data/person';
+import { BehaviorSubject, Observable, map, of } from 'rxjs';
+import { TUser, TUserRegisterData } from '../data/person';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-  private userSubject: BehaviorSubject<TPerson | null>;
-  public user: Observable<TPerson | null>;
+  url = 'http://localhost:8080/v1/auth/';
+  private userSubject: BehaviorSubject<TUser | null>;
+  public user: Observable<TUser | null>;
 
   constructor(private router: Router, private http: HttpClient) {
     this.userSubject = new BehaviorSubject(
@@ -20,17 +21,42 @@ export class AuthenticationService {
     return this.userSubject.value;
   }
 
-  login(email: string, password: string) {
-    const user = people.find(
-      (person) => person.email === email && person.password === password
-    );
-    if (user) {
-      localStorage.setItem('user', JSON.stringify(user));
-      user.authdata = window.btoa(email + ':' + password);
-      this.userSubject.next(user);
-      return of(user);
-    }
-    return of();
+  register(data: TUserRegisterData): Observable<TUser> {
+    return this.http
+      .post<TUser & { token: string }>(this.url + 'register', data)
+      .pipe(
+        map((value) => {
+          console.log('register', value);
+          localStorage.setItem('user', value.token);
+          const user = {
+            lastname: value.lastname,
+            firstname: value.firstname,
+            email: value.email,
+            avatar: value.avatar,
+          };
+          this.userSubject.next(user);
+          return user;
+        })
+      );
+  }
+
+  login(data: { email: string; password: string }) {
+    return this.http
+      .post<TUser & { token: string }>(this.url + 'login', data)
+      .pipe(
+        map((value) => {
+          console.log('login', value);
+          localStorage.setItem('user', value.token);
+          const user = {
+            lastname: value.lastname,
+            firstname: value.firstname,
+            email: value.email,
+            avatar: value.avatar,
+          };
+          this.userSubject.next(user);
+          return user;
+        })
+      );
   }
 
   logout() {

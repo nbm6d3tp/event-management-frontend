@@ -16,18 +16,18 @@ export class EventsService {
     return of(eventData);
   }
 
-  getMyEvents(idPerson: string) {
+  getMyEvents(email: string) {
     return of(
       eventData.filter(
         (event) =>
           event.participations
-            .map((participation) => participation.id)
-            .includes(idPerson) || event.organizer.id === idPerson
+            .map((participation) => participation.email)
+            .includes(email) || event.organizer.email === email
       )
     );
   }
 
-  getEventsCreatedByMe(idPerson: string) {
-    return of(eventData.filter((event) => event.organizer.id === idPerson));
+  getEventsCreatedByMe(email: string) {
+    return of(eventData.filter((event) => event.organizer.email === email));
   }
 }

@@ -13,13 +13,13 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ModalDetailEventComponent } from '../components/modal-detail-event/modal-detail-event.component';
 import { ModalAddEventComponent } from '../components/modal-add-event/modal-add-event.component';
 import { TEvent } from '../data/event';
-import { TPerson } from '../data/person';
+import { TUser } from '../data/person';
 import { AuthenticationService } from '../services/authentication.service';
 import { ModalFeedbackComponent } from '../components/modal-feedback/modal-feedback.component';
 import { EventsService } from '../services/events.service';
 import { ToastService } from '../services/toast.service';
 
-const toComment = (event: TEvent, person: TPerson) => {
+const toComment = (event: TEvent, person: TUser) => {
   if (
     isEventEnd(event) &&
     event.organizer.id !== person.id &&
@@ -35,7 +35,7 @@ const isEventEnd = (event: TEvent) => {
   return event.end.getTime() < new Date().getTime();
 };
 
-const chooseColor = (event: TEvent, person: TPerson) => {
+const chooseColor = (event: TEvent, person: TUser) => {
   if (!isEventEnd(event)) return { ...colors.red };
   else if (toComment(event, person)) {
     return { ...colors.yellow };
@@ -43,31 +43,31 @@ const chooseColor = (event: TEvent, person: TPerson) => {
   return { ...colors.blue };
 };
 
-const haveParticipated = (event: TEvent, person: TPerson) => {
+const haveParticipated = (event: TEvent, person: TUser) => {
   return event.participations.map((person) => person.id).includes(person.id);
 };
 
-const haveCommented = (event: TEvent, person: TPerson) => {
+const haveCommented = (event: TEvent, person: TUser) => {
   return event.reviews?.map((review) => review.person.id).includes(person.id);
 };
 
-export const canDelete = (event: TEvent, person: TPerson) =>
+export const canDelete = (event: TEvent, person: TUser) =>
   event.organizer.id == person.id;
 
-export const canEdit = (event: TEvent, person: TPerson) =>
+export const canEdit = (event: TEvent, person: TUser) =>
   !isEventEnd(event) && event.organizer.id == person.id;
 
-export const canCancel = (event: TEvent, person: TPerson) =>
+export const canCancel = (event: TEvent, person: TUser) =>
   haveParticipated(event, person) &&
   !isEventEnd(event) &&
   !(event.organizer.id == person.id);
 
-export const canParticipate = (event: TEvent, person: TPerson) =>
+export const canParticipate = (event: TEvent, person: TUser) =>
   !haveParticipated(event, person) &&
   !isEventEnd(event) &&
   !(event.organizer.id == person.id);
 
-export const canComment = (event: TEvent, person: TPerson) =>
+export const canComment = (event: TEvent, person: TUser) =>
   isEventEnd(event) &&
   !(event.organizer.id == person.id) &&
   haveParticipated(event, person) &&
@@ -149,7 +149,7 @@ export class MyEventsComponent {
 
     dialogRef.afterClosed().subscribe((result) => {});
   }
-  user?: TPerson | null;
+  user?: TUser | null;
 
   constructor(
     private myEventsService: EventsService,
@@ -178,9 +178,9 @@ export class MyEventsComponent {
     });
   }
 
-  getPossibleActions(event: TEvent, person: TPerson): CalendarEventAction[] {
+  getPossibleActions(event: TEvent, person: TUser): CalendarEventAction[] {
     const actions = [];
-    if (event.organizer.id == person.id) {
+    if (event.organizer.email == person.email) {
       actions.push({
         label: '<i class="bi bi-trash"></i>',
         a11yLabel: 'Delete',

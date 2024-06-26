@@ -27,7 +27,7 @@ import {
 } from '../../data/location';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { AuthenticationService } from '../../services/authentication.service';
-import { TPerson } from '../../data/person';
+import { TUser } from '../../data/person';
 import { ToastService } from '../../services/toast.service';
 import { EventsService } from '../../services/events.service';
 
@@ -96,7 +96,7 @@ export class ModalAddEventComponent implements OnInit {
   endTimeForm = new FormGroup({
     time: new FormControl<string | null>(null),
   });
-  user?: TPerson | null;
+  user?: TUser | null;
 
   constructor(
     private fb: FormBuilder,

@@ -7,7 +7,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { AuthenticationService } from '../../services/authentication.service';
-import { TPerson } from '../../data/person';
+import { TUser } from '../../data/person';
 import {
   canCancel,
   canComment,
@@ -18,6 +18,7 @@ import {
 import { ToastService } from '../../services/toast.service';
 import { ModalFeedbackComponent } from '../modal-feedback/modal-feedback.component';
 import { ModalAddEventComponent } from '../modal-add-event/modal-add-event.component';
+import { GetNamePersonPipe } from '../../pipes/get-name-person.pipe';
 
 @Component({
   selector: 'app-modal-detail-event',
@@ -45,7 +46,7 @@ export class ModalDetailEventComponent {
     event: null,
     isError: true,
   };
-  user?: TPerson | null;
+  user?: TUser | null;
 
   constructor(
     private eventsService: EventsService,

@@ -1,7 +1,7 @@
 import { Component, inject, isDevMode, signal } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { FormBuilder, Validators } from '@angular/forms';
-import { TPerson } from '../../data/person';
+import { TUser } from '../../data/person';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ToastService } from '../../services/toast.service';
 
@@ -11,7 +11,7 @@ import { ToastService } from '../../services/toast.service';
   styleUrl: './modal-feedback.component.css',
 })
 export class ModalFeedbackComponent {
-  user?: TPerson | null;
+  user?: TUser | null;
   rating = signal(0);
 
   readonly dialogRef = inject(MatDialogRef<ModalFeedbackComponent>);
