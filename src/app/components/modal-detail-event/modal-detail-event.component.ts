@@ -18,7 +18,6 @@ import {
 import { ToastService } from '../../services/toast.service';
 import { ModalFeedbackComponent } from '../modal-feedback/modal-feedback.component';
 import { ModalAddEventComponent } from '../modal-add-event/modal-add-event.component';
-import { GetNamePersonPipe } from '../../pipes/get-name-person.pipe';
 
 @Component({
   selector: 'app-modal-detail-event',
@@ -114,7 +113,7 @@ export class ModalDetailEventComponent {
     const dialogRef = this.dialog.open(ModalAddEventComponent, {
       height: '80%',
       width: '600px',
-      data: this.data.event?.id,
+      data: this.data.event?.idEvent,
     });
     dialogRef.afterClosed().subscribe((result) => {});
     console.log('Edit');

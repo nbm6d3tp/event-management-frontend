@@ -68,7 +68,7 @@
       >
         <div class="accordion-body">
           <div class="row g-4">
-            @for (event of myEvents; track event.id) {
+            @for (event of myEvents; track event.idEvent) {
             <div class="col-4">
               <app-card-event [event]="event"></app-card-event>
             </div>

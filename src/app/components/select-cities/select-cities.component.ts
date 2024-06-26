@@ -1,7 +1,7 @@
 import { Component, input, model, signal } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Observable, map, startWith } from 'rxjs';
-import { cityGroups } from '../../data/location';
+import { LocationService } from '../../services/location.service';
 
 const _filter = (opt: string[], value: string): string[] => {
   const filterValue = value.toLowerCase();
@@ -16,12 +16,23 @@ const _filter = (opt: string[], value: string): string[] => {
 export class SelectCitiesComponent {
   required = input<boolean>(false);
   selectedCities = model<string[]>([]);
+  cityGroups: {
+    letter: string;
+    names: string[];
+  }[] = [];
 
   citiesForm = this.fb.group({
     cityGroup: '',
   });
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private locationService: LocationService
+  ) {
+    locationService.getAll().subscribe((data) => {
+      this.cityGroups = data;
+    });
+  }
 
   filteredData: Observable<{ letter: string; names: string[] }[]> | undefined;
   placeholder = signal('Cities');
@@ -37,14 +48,14 @@ export class SelectCitiesComponent {
 
   private _filterGroup(value: string): { letter: string; names: string[] }[] {
     if (value) {
-      return cityGroups
+      return this.cityGroups
         .map((group) => ({
           letter: group.letter,
           names: _filter(group.names, value),
         }))
         .filter((group) => group.names.length > 0);
     }
-    return cityGroups;
+    return this.cityGroups;
   }
 
   optionClicked = (event: Event, data: string): void => {

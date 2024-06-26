@@ -1,33 +1,48 @@
 import { Injectable } from '@angular/core';
-import { TEvent, eventData } from '../data/event';
-import { Observable, of } from 'rxjs';
+import { TCreateEvent, TEvent, TFilters } from '../data/event';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EventsService {
-  constructor() {}
+  url = 'http://localhost:8080/v1/events/';
 
-  getEvent(id: string) {
-    return of(eventData.find((event) => event.id === id));
-  }
+  constructor(private http: HttpClient) {}
 
   getAll() {
-    return of(eventData);
+    return this.http.get<TEvent[]>(this.url);
   }
 
-  getMyEvents(email: string) {
-    return of(
-      eventData.filter(
-        (event) =>
-          event.participations
-            .map((participation) => participation.email)
-            .includes(email) || event.organizer.email === email
-      )
-    );
+  getEvent(id: string) {
+    return this.http.get<TEvent>(this.url + id);
   }
 
-  getEventsCreatedByMe(email: string) {
-    return of(eventData.filter((event) => event.organizer.email === email));
+  editEvent(id: string, editedEvent: TCreateEvent) {
+    return this.http.put<TEvent>(this.url + id, editedEvent);
+  }
+
+  deleteEvent(id: string) {
+    return this.http.delete(this.url + id);
+  }
+
+  createEvent(event: TCreateEvent) {
+    return this.http.post<TEvent>(this.url, event);
+  }
+
+  filterEvents(filters: TFilters) {
+    const refinedFilters = {
+      ...filters,
+      startDate: filters.startDate.toString(),
+      endDate: filters.endDate.toString(),
+    };
+    const queryParams = new HttpParams({ fromObject: refinedFilters });
+    return this.http.get<TEvent[]>(this.url + 'search', {
+      params: queryParams,
+    });
+  }
+
+  getMyEvents() {
+    return this.http.get<TEvent[]>(this.url + 'my');
   }
 }

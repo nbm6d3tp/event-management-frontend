@@ -17,12 +17,11 @@ export class BasicAuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const user = this.authenticationService.userValue;
-    const isLoggedIn = user?.authdata;
-    const isApiUrl = request.url.startsWith('');
-    if (isLoggedIn && isApiUrl) {
+    const isAuthUrl = request.url.startsWith('http://localhost:8080/v1/auth');
+    if (user && !isAuthUrl) {
       request = request.clone({
         setHeaders: {
-          Authorization: `Basic ${user.authdata}`,
+          Authorization: `Bearer ${localStorage.getItem('user')}`,
         },
       });
     }

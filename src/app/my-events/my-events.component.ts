@@ -7,8 +7,6 @@ import {
 } from 'angular-calendar';
 import { isSameDay, isSameMonth } from 'date-fns';
 import { Subject } from 'rxjs';
-import { MyEventsService } from '../services/my-events.service';
-import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ModalDetailEventComponent } from '../components/modal-detail-event/modal-detail-event.component';
 import { ModalAddEventComponent } from '../components/modal-add-event/modal-add-event.component';
@@ -22,7 +20,7 @@ import { ToastService } from '../services/toast.service';
 const toComment = (event: TEvent, person: TUser) => {
   if (
     isEventEnd(event) &&
-    event.organizer.id !== person.id &&
+    event.organizer.email !== person.email &&
     haveParticipated(event, person) &&
     !haveCommented(event, person)
   ) {
@@ -32,7 +30,7 @@ const toComment = (event: TEvent, person: TUser) => {
 };
 
 const isEventEnd = (event: TEvent) => {
-  return event.end.getTime() < new Date().getTime();
+  return event.endTime.getTime() < new Date().getTime();
 };
 
 const chooseColor = (event: TEvent, person: TUser) => {
@@ -44,32 +42,36 @@ const chooseColor = (event: TEvent, person: TUser) => {
 };
 
 const haveParticipated = (event: TEvent, person: TUser) => {
-  return event.participations.map((person) => person.id).includes(person.id);
+  return event.participants
+    .map((person) => person.email)
+    .includes(person.email);
 };
 
 const haveCommented = (event: TEvent, person: TUser) => {
-  return event.reviews?.map((review) => review.person.id).includes(person.id);
+  return event.feedbacks
+    ?.map((feedback) => feedback.participant.email)
+    .includes(person.email);
 };
 
 export const canDelete = (event: TEvent, person: TUser) =>
-  event.organizer.id == person.id;
+  event.organizer.email == person.email;
 
 export const canEdit = (event: TEvent, person: TUser) =>
-  !isEventEnd(event) && event.organizer.id == person.id;
+  !isEventEnd(event) && event.organizer.email == person.email;
 
 export const canCancel = (event: TEvent, person: TUser) =>
   haveParticipated(event, person) &&
   !isEventEnd(event) &&
-  !(event.organizer.id == person.id);
+  !(event.organizer.email == person.email);
 
 export const canParticipate = (event: TEvent, person: TUser) =>
   !haveParticipated(event, person) &&
   !isEventEnd(event) &&
-  !(event.organizer.id == person.id);
+  !(event.organizer.email == person.email);
 
 export const canComment = (event: TEvent, person: TUser) =>
   isEventEnd(event) &&
-  !(event.organizer.id == person.id) &&
+  !(event.organizer.email == person.email) &&
   haveParticipated(event, person) &&
   !haveCommented(event, person);
 
@@ -159,11 +161,11 @@ export class MyEventsComponent {
     this.authenticationService.user.subscribe((person) => {
       this.user = person;
       if (person)
-        myEventsService.getMyEvents(person.id).subscribe((events) => {
+        myEventsService.getMyEvents().subscribe((events) => {
           this.events = events.map((event) => {
             return {
-              start: event.start,
-              end: event.end,
+              start: event.startTime,
+              end: event.startTime,
               title: event.title,
               actions: this.getPossibleActions(event, person),
               color: chooseColor(event, person),
@@ -171,7 +173,7 @@ export class MyEventsComponent {
                 beforeStart: true,
                 afterEnd: true,
               },
-              meta: event.id,
+              meta: event.idEvent,
             };
           });
         });

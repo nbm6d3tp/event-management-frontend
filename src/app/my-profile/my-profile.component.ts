@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { TUser } from '../data/person';
 import { AuthenticationService } from '../services/authentication.service';
-import { TEvent, eventData } from '../data/event';
+import { TEvent } from '../data/event';
 import { EventsService } from '../services/events.service';
 
 @Component({
@@ -21,8 +21,13 @@ export class MyProfileComponent {
       this.user = person;
       if (person)
         eventsService
-          .getEventsCreatedByMe(person.email || '')
-          .subscribe((events) => (this.myEvents = events));
+          .getMyEvents()
+          .subscribe(
+            (events) =>
+              (this.myEvents = events.filter(
+                (event) => event.organizer.email == person.email
+              ))
+          );
     });
   }
 
