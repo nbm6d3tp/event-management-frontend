@@ -1,7 +1,6 @@
-import { Component, Input, inject, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { TEvent } from '../../data/event';
-import { MatDialog } from '@angular/material/dialog';
-import { ModalDetailEventComponent } from '../modal-detail-event/modal-detail-event.component';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-card-event',
@@ -10,19 +9,10 @@ import { ModalDetailEventComponent } from '../modal-detail-event/modal-detail-ev
 })
 export class CardEventComponent {
   event = input.required<TEvent>();
-  readonly dialog = inject(MatDialog);
 
-  constructor() {}
+  constructor(private modalService: ModalService) {}
 
   onClick() {
-    const dialogRef = this.dialog.open(ModalDetailEventComponent, {
-      data: this.event().idEvent,
-      height: '80%',
-      width: '40%',
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log({ result });
-    });
+    this.modalService.openModalDetailEvent(this.event().idEvent);
   }
 }

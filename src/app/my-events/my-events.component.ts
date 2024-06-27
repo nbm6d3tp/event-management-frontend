@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   CalendarEvent,
   CalendarEventAction,
@@ -7,15 +7,12 @@ import {
 } from 'angular-calendar';
 import { isSameDay, isSameMonth } from 'date-fns';
 import { Subject } from 'rxjs';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { ModalDetailEventComponent } from '../components/modal-detail-event/modal-detail-event.component';
-import { ModalAddEventComponent } from '../components/modal-add-event/modal-add-event.component';
 import { TEvent } from '../data/event';
 import { TUser } from '../data/person';
 import { AuthenticationService } from '../services/authentication.service';
-import { ModalFeedbackComponent } from '../components/modal-feedback/modal-feedback.component';
 import { EventsService } from '../services/events.service';
 import { ToastService } from '../services/toast.service';
+import { ModalService } from '../services/modal.service';
 
 const toComment = (event: TEvent, person: TUser) => {
   if (
@@ -102,23 +99,16 @@ export class MyEventsComponent {
   activeDayIsOpen: boolean = true;
   events: CalendarEvent[] = [];
 
-  readonly dialog = inject(MatDialog);
+  onClickAddEvent() {
+    this.modalService.openModalAddEvent();
+  }
 
   onClickEditEvent(idEvent: string) {
-    const dialogRef = this.dialog.open(ModalAddEventComponent, {
-      height: '80%',
-      width: '600px',
-      data: idEvent,
-    });
-    dialogRef.afterClosed().subscribe((result) => {});
+    this.modalService.openModalAddEvent(idEvent);
   }
 
   onClickFeedbackEvent() {
-    const dialogRef = this.dialog.open(ModalFeedbackComponent, {
-      height: '25%',
-      width: '500px',
-    });
-    dialogRef.afterClosed().subscribe((result) => {});
+    this.modalService.openModalFeedback();
   }
 
   onClickCancelEvent() {
@@ -133,23 +123,8 @@ export class MyEventsComponent {
     });
   }
 
-  onClickAddEvent() {
-    const dialogRef = this.dialog.open(ModalAddEventComponent, {
-      height: '80%',
-      width: '600px',
-    });
-    dialogRef.afterClosed().subscribe((result) => {});
-  }
-
   onClickEvent(event: CalendarEvent) {
-    const eventID = event.meta;
-    const dialogRef = this.dialog.open(ModalDetailEventComponent, {
-      data: eventID,
-      height: '80%',
-      width: '600px',
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {});
+    this.modalService.openModalDetailEvent(event.meta);
   }
   user?: TUser | null;
 
@@ -157,6 +132,7 @@ export class MyEventsComponent {
     private myEventsService: EventsService,
     private authenticationService: AuthenticationService,
     private toastService: ToastService,
+    private modalService: ModalService
   ) {
     this.authenticationService.user.subscribe((person) => {
       this.user = person;
