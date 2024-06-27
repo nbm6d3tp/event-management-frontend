@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -49,6 +49,11 @@ import { ModalFeedbackComponent } from './components/modal-feedback/modal-feedba
 import { MatBadgeModule } from '@angular/material/badge';
 import { GetNamePersonPipe } from './pipes/get-name-person.pipe';
 import { BasicAuthInterceptor } from './interceptors/auth.interceptor';
+import { AuthenticationService } from './services/authentication.service';
+
+export function initializeApp(authService: AuthenticationService) {
+  return (): void => authService.initialize();
+}
 
 @NgModule({
   declarations: [
@@ -113,6 +118,12 @@ import { BasicAuthInterceptor } from './interceptors/auth.interceptor';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: BasicAuthInterceptor,
+      multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [AuthenticationService],
       multi: true,
     },
     provideImgixLoader('https://placehold.co/600x400'),
