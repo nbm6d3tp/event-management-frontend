@@ -14,7 +14,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
 
   intercept(
     request: HttpRequest<any>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<any>> {
     const user = this.authenticationService.userValue;
     const isAuthUrl = request.url.startsWith('http://localhost:8080/v1/auth');

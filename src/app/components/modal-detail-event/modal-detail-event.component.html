@@ -1,5 +1,6 @@
+<!-- @ts-ignore -->
 <mat-dialog-content class="mat-typography mh-100 p-0 container">
-  @if (data.isError) {
+  @if (!event) {
   <div
     class="d-flex justify-content-center align-items-center min-vh-100 w-100 bg-light"
   >
@@ -9,7 +10,7 @@
   <div class="position-relative">
     <div class="img-fluid">
       <img
-        [src]="data.event.image"
+        [src]="event.image"
         handleImgError
         style="padding-bottom: -50px"
         class="img-fluid bg-gradient"
@@ -41,11 +42,11 @@
     >
       <div class="d-flex justify-content-between align-items-center">
         <h1 class="display-4 fw-bolder text-black mb-3">
-          {{ data.event.title }}
+          {{ event.title }}
         </h1>
         <div>
           <button
-            *ngIf="user && canDelete(data.event, user)"
+            *ngIf="user && canDelete(event, user)"
             style="
               border-radius: 50%;
               border-width: 0;
@@ -59,7 +60,7 @@
           </button>
           <button
             (click)="onEdit()"
-            *ngIf="user && canEdit(data.event, user)"
+            *ngIf="user && canEdit(event, user)"
             style="
               border-radius: 50%;
               border-width: 0;
@@ -73,12 +74,12 @@
       </div>
 
       <div class="lead mb-3">
-        {{ data.event.description }}
+        {{ event.description }}
       </div>
 
       <div class="mb-3" style="display: flex; align-items: center">
         <img
-          [src]="data.event.organizer.avatar"
+          [src]="event.organizer.avatar"
           alt="Organisator vatar"
           class="rounded-circle"
           style="
@@ -92,8 +93,8 @@
           <div class="text-secondary">Event organized by</div>
           <div class="fw-bolder">
             {{
-              data.event.organizer.firstname
-                | getNamePerson : data.event.organizer.lastname
+              event.organizer.firstname
+                | getNamePerson : event.organizer.lastname
             }}
           </div>
         </div>
@@ -105,15 +106,15 @@
           class="bi bi-calendar2"
         ></i>
         <div class="fw-bolder">
-          {{ data.event.startTime | date : "MMM d, y h:mm a" }}
+          {{ event.startTime | date : "MMM d, y h:mm a" }}
         </div>
         <i style="font-size: 20px" class="bi bi-dash"></i>
         <div class="fw-bolder">
-          {{ data.event.endTime | date : "MMM d, y h:mm a" }}
+          {{ event.endTime | date : "MMM d, y h:mm a" }}
         </div>
       </div>
       <div
-        *ngIf="data.event.locationName"
+        *ngIf="event.locationName"
         class="mb-3"
         style="display: flex; align-items: center"
       >
@@ -122,18 +123,18 @@
           class="bi bi-geo-alt"
         ></i>
         <div class="fw-bolder">
-          {{ data.event.locationName }}
+          {{ event.locationName }}
         </div>
       </div>
 
       <mat-chip-set aria-label="Selection">
-        <mat-chip>{{ data.event.typeEventName }}</mat-chip>
-        <mat-chip>{{ data.event.typeLocationName }}</mat-chip>
+        <mat-chip>{{ event.typeEventName }}</mat-chip>
+        <mat-chip>{{ event.typeLocationName }}</mat-chip>
       </mat-chip-set>
 
       <h2 class="display-6 mt-4">Participants</h2>
       <div style="display: flex">
-        @for (participant of data.event.participants; track participant.email) {
+        @for (participant of event.participants; track participant.email) {
         <img
           matTooltip="{{
             participant.firstname | getNamePerson : participant.lastname
@@ -151,9 +152,9 @@
         }
       </div>
 
-      <h2 *ngIf="data.event.feedbacks" class="display-6 mt-4">Reviews</h2>
-      <div *ngIf="data.event.feedbacks" class="list-group">
-        @for (feedback of data.event.feedbacks; track $index) {
+      <h2 *ngIf="event.feedbacks" class="display-6 mt-4">Reviews</h2>
+      <div *ngIf="event.feedbacks" class="list-group">
+        @for (feedback of event.feedbacks; track $index) {
         <div
           class="list-group-item list-group-item-action d-flex align-items-center justify-content-around"
         >
@@ -161,7 +162,7 @@
             class="d-flex flex-column me-3 align-items-center justify-content-between"
           >
             <img
-              [src]="review.person.avatar"
+              [src]="feedback.participant.avatar"
               style="
                 height: 50px;
                 width: 50px;
@@ -171,16 +172,17 @@
             />
             <h4 class="mb-1">
               {{
-                review.person.firstname | getNamePerson : review.person.lastname
+                feedback.participant.firstname
+                  | getNamePerson : feedback.participant.lastname
               }}
             </h4>
           </div>
           <div class="d-flex flex-column align-items-start w-75">
-            <small>{{ review.date | date : "short" }}</small>
+            <small>{{ feedback.date | date : "short" }}</small>
             <p class="mb-1">
-              {{ review.comment }}
+              {{ feedback.content }}
             </p>
-            <app-star-rating [readonly]="true" [rating]="review.rating" />
+            <app-star-rating [readonly]="true" [rating]="feedback.score" />
           </div>
         </div>
         }
@@ -191,7 +193,7 @@
         class="me-2"
       >
         <button
-          *ngIf="user && canCancel(data.event, user)"
+          *ngIf="user && canCancel(event, user)"
           type="submit"
           class="btn btn-outline-danger"
           (click)="onCancel()"
@@ -199,7 +201,7 @@
           Cancel
         </button>
         <button
-          *ngIf="user && canParticipate(data.event, user)"
+          *ngIf="user && canParticipate(event, user)"
           type="submit"
           class="btn btn-primary"
           (click)="onParticipate()"
@@ -207,7 +209,7 @@
           Participate
         </button>
         <button
-          *ngIf="user && canComment(data.event, user)"
+          *ngIf="user && canComment(event, user)"
           type="submit"
           class="btn btn-info"
           (click)="onComment()"

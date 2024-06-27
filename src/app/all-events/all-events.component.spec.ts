@@ -8,10 +8,9 @@ describe('AllEventsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AllEventsComponent]
-    })
-    .compileComponents();
-    
+      declarations: [AllEventsComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(AllEventsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

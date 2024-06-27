@@ -48,6 +48,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ModalFeedbackComponent } from './components/modal-feedback/modal-feedback.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { GetNamePersonPipe } from './pipes/get-name-person.pipe';
+import { BasicAuthInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -107,6 +108,11 @@ import { GetNamePersonPipe } from './pipes/get-name-person.pipe';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: LoadingInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: BasicAuthInterceptor,
       multi: true,
     },
     provideImgixLoader('https://placehold.co/600x400'),

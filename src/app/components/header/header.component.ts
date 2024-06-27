@@ -19,17 +19,18 @@ export class HeaderComponent {
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
-    private eventsService: EventsService
+    private eventsService: EventsService,
   ) {
     this.authenticationService.user.subscribe((person) => {
       this.user = person;
       if (person)
-        this.eventsService.getMyEvents(person.id).subscribe((events) => {
+        this.eventsService.getMyEvents().subscribe((events) => {
+          console.log({ events });
           this.upcomingEventsCount = events.filter(
-            (event) => event.end.getTime() > new Date().getTime()
+            (event) => event.endTime.getTime() > new Date().getTime(),
           ).length;
           this.eventsToFeedbackCount = events.filter((event) =>
-            canComment(event, person)
+            canComment(event, person),
           ).length;
         });
     });

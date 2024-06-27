@@ -1,15 +1,15 @@
-@for (index of [0,1,2,3,4]; track index) {
-<button
-  mat-icon-button
-  color="accent"
-  [id]="'star_' + index"
-  (click)="onClick(index + 1)"
-  [matTooltip]="index + 1 + ''"
-  matTooltipPosition="above"
-  style="margin-left: 0; margin-right: 0"
->
-  <mat-icon>
-    {{ showIcon(index) }}
-  </mat-icon>
-</button>
+@for (index of [0, 1, 2, 3, 4]; track index) {
+  <button
+    mat-icon-button
+    color="accent"
+    [id]="'star_' + index"
+    (click)="onClick(index + 1)"
+    [matTooltip]="index + 1 + ''"
+    matTooltipPosition="above"
+    style="margin-left: 0; margin-right: 0"
+  >
+    <mat-icon>
+      {{ showIcon(index) }}
+    </mat-icon>
+  </button>
 }

@@ -8,9 +8,10 @@
   <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
   <mat-date-range-picker #picker></mat-date-range-picker>
 
-  @if (dateRangeForm.controls.start.hasError('matStartDateInvalid')) {
-  <mat-error>Invalid start date</mat-error>
-  } @if (dateRangeForm.controls.end.hasError('matEndDateInvalid')) {
-  <mat-error>Invalid end date</mat-error>
+  @if (dateRangeForm.controls.start.hasError("matStartDateInvalid")) {
+    <mat-error>Invalid start date</mat-error>
+  }
+  @if (dateRangeForm.controls.end.hasError("matEndDateInvalid")) {
+    <mat-error>Invalid end date</mat-error>
   }
 </mat-form-field>

@@ -8,10 +8,9 @@ describe('CardEventComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CardEventComponent]
-    })
-    .compileComponents();
-    
+      declarations: [CardEventComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(CardEventComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

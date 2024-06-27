@@ -69,7 +69,7 @@
               <mat-form-field class="w-100">
                 <mat-label>City</mat-label>
                 <input
-                  [required]="locationTypeControl.value !== 'Remote'"
+                  [required]="locationTypeControl.value !== 'ONLINE'"
                   type="text"
                   matInput
                   formControlName="cityGroup"
@@ -77,11 +77,11 @@
                 />
                 <mat-autocomplete #autoGroup="matAutocomplete">
                   @for (group of citiesGroupOptions | async; track group) {
-                  <mat-optgroup [label]="group.letter">
-                    @for (name of group.names; track name) {
-                    <mat-option [value]="name">{{ name }}</mat-option>
-                    }
-                  </mat-optgroup>
+                    <mat-optgroup [label]="group.letter">
+                      @for (name of group.names; track name) {
+                        <mat-option [value]="name">{{ name }}</mat-option>
+                      }
+                    </mat-optgroup>
                   }
                 </mat-autocomplete>
               </mat-form-field>
@@ -91,8 +91,8 @@
             <mat-form-field class="w-100">
               <mat-label>Event type</mat-label>
               <mat-select required [(value)]="selectedEventType">
-                @for (typeEvent of typeEventList; track typeEvent) {
-                <mat-option [value]="typeEvent">{{ typeEvent }}</mat-option>
+                @for (eventType of eventTypesList; track eventType) {
+                  <mat-option [value]="eventType">{{ eventType }}</mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -108,9 +108,9 @@
               (change)="checkLocationType($event)"
             >
               @for (locationType of locationTypes; track locationType) {
-              <mat-button-toggle [value]="locationType">{{
-                locationType
-              }}</mat-button-toggle>
+                <mat-button-toggle [value]="locationType">{{
+                  locationType
+                }}</mat-button-toggle>
               }
             </mat-button-toggle-group>
           </div>

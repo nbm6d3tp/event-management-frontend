@@ -156,7 +156,7 @@ export class MyEventsComponent {
   constructor(
     private myEventsService: EventsService,
     private authenticationService: AuthenticationService,
-    private toastService: ToastService
+    private toastService: ToastService,
   ) {
     this.authenticationService.user.subscribe((person) => {
       this.user = person;

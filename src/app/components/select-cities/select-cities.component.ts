@@ -2,11 +2,7 @@ import { Component, input, model, signal } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Observable, map, startWith } from 'rxjs';
 import { LocationService } from '../../services/location.service';
-
-const _filter = (opt: string[], value: string): string[] => {
-  const filterValue = value.toLowerCase();
-  return opt.filter((item) => item.toLowerCase().includes(filterValue));
-};
+import { _filterGroup } from '../../data/location';
 
 @Component({
   selector: 'app-select-cities',
@@ -27,7 +23,7 @@ export class SelectCitiesComponent {
 
   constructor(
     private fb: FormBuilder,
-    private locationService: LocationService
+    private locationService: LocationService,
   ) {
     locationService.getAll().subscribe((data) => {
       this.cityGroups = data;
@@ -41,21 +37,9 @@ export class SelectCitiesComponent {
     this.filteredData = this.citiesForm.get('cityGroup')!.valueChanges.pipe(
       startWith(''),
       map((value) => {
-        return this._filterGroup(value || '');
-      })
+        return _filterGroup(this.cityGroups, value || '');
+      }),
     );
-  }
-
-  private _filterGroup(value: string): { letter: string; names: string[] }[] {
-    if (value) {
-      return this.cityGroups
-        .map((group) => ({
-          letter: group.letter,
-          names: _filter(group.names, value),
-        }))
-        .filter((group) => group.names.length > 0);
-    }
-    return this.cityGroups;
   }
 
   optionClicked = (event: Event, data: string): void => {
@@ -69,7 +53,7 @@ export class SelectCitiesComponent {
     } else {
       console.log(this.selectedCities().filter((city) => city !== data));
       this.selectedCities.set(
-        this.selectedCities().filter((city) => city !== data)
+        this.selectedCities().filter((city) => city !== data),
       );
     }
     this.placeholder.set((this.selectedCities() || []).join(', '));

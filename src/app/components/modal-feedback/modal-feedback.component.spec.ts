@@ -8,10 +8,9 @@ describe('ModalFeedbackComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ModalFeedbackComponent]
-    })
-    .compileComponents();
-    
+      declarations: [ModalFeedbackComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(ModalFeedbackComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

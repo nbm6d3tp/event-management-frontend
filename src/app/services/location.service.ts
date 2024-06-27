@@ -34,6 +34,7 @@ export class LocationService {
   constructor(private http: HttpClient) {}
 
   getAll() {
+    console.log('Get all locations');
     return this.http
       .get<
         {
@@ -42,7 +43,7 @@ export class LocationService {
         }[]
       >(this.url)
       .pipe(
-        map((cities) => groupByStartingLetter(cities.map((city) => city.name)))
+        map((cities) => groupByStartingLetter(cities.map((city) => city.name))),
       );
   }
 }

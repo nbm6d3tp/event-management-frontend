@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 import { TEvent } from '../../data/event';
 import { EventsService } from '../../services/events.service';
 import {
@@ -33,19 +38,8 @@ export class ModalDetailEventComponent {
   onNoClick(): void {
     this.dialogRef.close();
   }
-  data:
-    | {
-        event: TEvent;
-        isError: false;
-      }
-    | {
-        event: null;
-        isError: true;
-      } = {
-    event: null,
-    isError: true,
-  };
-  user?: TUser | null;
+  event?: TEvent;
+  user?: TUser;
 
   constructor(
     private eventsService: EventsService,
@@ -58,10 +52,9 @@ export class ModalDetailEventComponent {
     eventsService.getEvent(this.eventID).subscribe((event) => {
       if (!event) {
         console.error('Event not found');
-        this.data = { event: null, isError: true };
         return;
       }
-      this.data = { event, isError: false };
+      this.event = event;
       return;
     });
   }
@@ -109,11 +102,11 @@ export class ModalDetailEventComponent {
   }
 
   onEdit() {
-    if (!this.data.event) return;
+    if (!this.event) return;
     const dialogRef = this.dialog.open(ModalAddEventComponent, {
       height: '80%',
       width: '600px',
-      data: this.data.event?.idEvent,
+      data: this.event?.idEvent,
     });
     dialogRef.afterClosed().subscribe((result) => {});
     console.log('Edit');

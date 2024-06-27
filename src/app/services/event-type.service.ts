@@ -11,6 +11,7 @@ export class EventTypeService {
   constructor(private http: HttpClient) {}
 
   getAll() {
+    console.log('Get all types event');
     return this.http.get<
       {
         idType: string;

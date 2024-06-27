@@ -1,7 +1,5 @@
 import { Component, Input, inject, input } from '@angular/core';
 import { TEvent } from '../../data/event';
-import { TruncateNamePipe } from '../../pipes/truncate-name.pipe';
-import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalDetailEventComponent } from '../modal-detail-event/modal-detail-event.component';
 
@@ -18,7 +16,7 @@ export class CardEventComponent {
 
   onClick() {
     const dialogRef = this.dialog.open(ModalDetailEventComponent, {
-      data: this.event().id,
+      data: this.event().idEvent,
       height: '80%',
       width: '40%',
     });

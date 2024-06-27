@@ -8,10 +8,9 @@ describe('ModalDetailEventComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ModalDetailEventComponent]
-    })
-    .compileComponents();
-    
+      declarations: [ModalDetailEventComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(ModalDetailEventComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -13,7 +13,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TEvent, TTypeEvent, typeEventList } from '../../data/event';
+import { TEvent, TTypeEvent } from '../../data/event';
 import {
   SupabaseService,
   supabaseUrlPublic,
@@ -22,7 +22,7 @@ import { Observable, map, startWith } from 'rxjs';
 import {
   TCityGroup,
   TLocationType,
-  cityGroups,
+  _filterGroup,
   locationTypes,
 } from '../../data/location';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
@@ -30,6 +30,8 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { TUser } from '../../data/person';
 import { ToastService } from '../../services/toast.service';
 import { EventsService } from '../../services/events.service';
+import { LocationService } from '../../services/location.service';
+import { EventTypeService } from '../../services/event-type.service';
 
 function combineDateAndTime(dateObj: Date, timeStr: string) {
   // Extract year, month, and day from the date object
@@ -46,23 +48,6 @@ function combineDateAndTime(dateObj: Date, timeStr: string) {
   return combinedDate;
 }
 
-const _filter = (opt: string[], value: string): string[] => {
-  const filterValue = value.toLowerCase();
-
-  return opt.filter((item) => item.toLowerCase().includes(filterValue));
-};
-const _filterGroup = (value: string): TCityGroup[] => {
-  if (value) {
-    return cityGroups
-      .map((group) => ({
-        letter: group.letter,
-        names: _filter(group.names, value),
-      }))
-      .filter((group) => group.names.length > 0);
-  }
-  return cityGroups;
-};
-
 function getTimeAsNumberOfMinutes(time: string) {
   const timeParts = time.split(':');
 
@@ -76,7 +61,7 @@ function getTimeAsNumberOfMinutes(time: string) {
   styleUrl: './modal-add-event.component.css',
 })
 export class ModalAddEventComponent implements OnInit {
-  typeEventList = typeEventList;
+  eventTypesList: TTypeEvent[] = [];
   locationTypes = locationTypes;
   event: TEvent | undefined;
 
@@ -98,13 +83,26 @@ export class ModalAddEventComponent implements OnInit {
   });
   user?: TUser | null;
 
+  cityGroups: {
+    letter: string;
+    names: string[];
+  }[] = [];
+
   constructor(
     private fb: FormBuilder,
     private readonly supabase: SupabaseService,
     private authenticationService: AuthenticationService,
     private eventService: EventsService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private locationService: LocationService,
+    private eventTypeService: EventTypeService,
   ) {
+    locationService.getAll().subscribe((data) => {
+      this.cityGroups = data;
+    });
+    eventTypeService.getAll().subscribe((data) => {
+      this.eventTypesList = data.map((type) => type.name);
+    });
     this.authenticationService.user.subscribe((x) => (this.user = x));
     if (this.data) {
       eventService.getEvent(this.data).subscribe((event) => {
@@ -114,19 +112,17 @@ export class ModalAddEventComponent implements OnInit {
         }
         this.form.controls['title'].setValue(event.title);
         this.form.controls['description'].setValue(event.description);
-        this.startDayForm.controls['date'].setValue(new Date(event.start));
-        this.endDayForm.controls['date'].setValue(new Date(event.end));
+        this.startDayForm.controls['date'].setValue(new Date(event.startTime));
+        this.endDayForm.controls['date'].setValue(new Date(event.endTime));
         this.startTimeForm.controls['time'].setValue(
-          event.start.toLocaleTimeString().slice(0, 5)
+          event.startTime.toLocaleTimeString().slice(0, 5),
         );
         this.endTimeForm.controls['time'].setValue(
-          event.end.toLocaleTimeString().slice(0, 5)
+          event.endTime.toLocaleTimeString().slice(0, 5),
         );
-        this.selectedEventType = event.type;
-        this.cityForm.controls['cityGroup'].setValue(
-          event.location?.name || ''
-        );
-        this.locationTypeControl.setValue(event.typeLocation);
+        this.selectedEventType = event.typeEventName;
+        this.cityForm.controls['cityGroup'].setValue(event.locationName || '');
+        this.locationTypeControl.setValue(event.typeLocationName);
         this.event = event;
         return;
       });
@@ -146,7 +142,7 @@ export class ModalAddEventComponent implements OnInit {
   }
 
   selectedEventType: undefined | TTypeEvent = isDevMode()
-    ? 'Conferences'
+    ? 'Conference'
     : undefined;
   selectedImage: undefined | File;
 
@@ -163,7 +159,7 @@ export class ModalAddEventComponent implements OnInit {
   errorImage = signal('');
 
   locationTypeControl = new FormControl<TLocationType | undefined>(
-    isDevMode() ? 'On-site' : undefined
+    isDevMode() ? 'ONSITE' : undefined,
   );
 
   cityForm = this.fb.group({
@@ -174,7 +170,7 @@ export class ModalAddEventComponent implements OnInit {
   ngOnInit() {
     this.citiesGroupOptions = this.cityForm.get('cityGroup')!.valueChanges.pipe(
       startWith(''),
-      map((value) => _filterGroup(value || ''))
+      map((value) => _filterGroup(this.cityGroups, value || '')),
     );
   }
 
@@ -301,11 +297,11 @@ export class ModalAddEventComponent implements OnInit {
         if (errorSupabase || dataSupabase === null) {
           if (errorSupabase?.message === 'The resource already exists') {
             this.errorImage.set(
-              'The resource already exists. Please choose another image or change its name.'
+              'The resource already exists. Please choose another image or change its name.',
             );
           } else {
             this.errorImage.set(
-              'There was an error uploading the image. Please try again.'
+              'There was an error uploading the image. Please try again.',
             );
           }
           return;
@@ -352,7 +348,7 @@ export class ModalAddEventComponent implements OnInit {
 
     this.toastService.showToast(
       'success',
-      this.data ? 'Event updated successfully!' : 'Event created successfully!'
+      this.data ? 'Event updated successfully!' : 'Event created successfully!',
     );
     this.dialogRef.close();
 

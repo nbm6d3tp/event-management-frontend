@@ -11,14 +11,17 @@ export class FeedbackService {
   constructor(private http: HttpClient) {}
 
   getFeedbacks(idEvent: string) {
+    console.log('Get feedbacks for event ', idEvent);
     return this.http.get<TFeedback[]>(this.url + 'event/' + idEvent);
   }
 
   deleteFeedback(idEvent: string) {
+    console.log('Delete feedback for event ', idEvent);
     return this.http.delete<TFeedback[]>(this.url + 'event/' + idEvent);
   }
 
   createFeedback(data: TCreateFeedback) {
+    console.log('Create feedback ', data);
     return this.http.post<TFeedback>(this.url, data);
   }
 }

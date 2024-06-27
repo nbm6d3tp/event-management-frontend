@@ -14,7 +14,7 @@ export class LoginComponent {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
   ) {
     // redirect to home if already logged in
     if (this.authenticationService.userValue) {
@@ -24,7 +24,7 @@ export class LoginComponent {
   errorAuthenticating = false;
   form = this.fb.group({
     email: [
-      isDevMode() ? 'alice.johnson@example.com' : '',
+      isDevMode() ? 'user1@gmail.com' : '',
       {
         validators: [Validators.required, Validators.email],
       },

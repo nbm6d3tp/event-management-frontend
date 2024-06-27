@@ -8,10 +8,9 @@ describe('SelectDateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SelectDateComponent]
-    })
-    .compileComponents();
-    
+      declarations: [SelectDateComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(SelectDateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -15,7 +15,7 @@ export class MyProfileComponent {
 
   constructor(
     private authenticationService: AuthenticationService,
-    eventsService: EventsService
+    eventsService: EventsService,
   ) {
     this.authenticationService.user.subscribe((person) => {
       this.user = person;
@@ -25,8 +25,8 @@ export class MyProfileComponent {
           .subscribe(
             (events) =>
               (this.myEvents = events.filter(
-                (event) => event.organizer.email == person.email
-              ))
+                (event) => event.organizer.email == person.email,
+              )),
           );
     });
   }

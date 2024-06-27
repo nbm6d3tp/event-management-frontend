@@ -37,7 +37,7 @@ export class ModalFeedbackComponent {
   constructor(
     private fb: FormBuilder,
     private authenticationService: AuthenticationService,
-    private toastService: ToastService
+    private toastService: ToastService,
   ) {
     this.authenticationService.user.subscribe((x) => (this.user = x));
   }

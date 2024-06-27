@@ -11,21 +11,21 @@
     />
     <mat-autocomplete #autoGroup="matAutocomplete">
       @for (group of filteredData | async; track group) {
-      <mat-optgroup [label]="group.letter">
-        @for (data of group.names; track data) {
-        <mat-option>
-          <div (click)="optionClicked($event, data)">
-            <mat-checkbox
-              [checked]="selectedCities().includes(data)"
-              (change)="toggleSelection(data)"
-              (click)="$event.stopPropagation()"
+        <mat-optgroup [label]="group.letter">
+          @for (data of group.names; track data) {
+            <mat-option>
+              <div (click)="optionClicked($event, data)">
+                <mat-checkbox
+                  [checked]="selectedCities().includes(data)"
+                  (change)="toggleSelection(data)"
+                  (click)="$event.stopPropagation()"
+                >
+                  {{ data }}
+                </mat-checkbox>
+              </div></mat-option
             >
-              {{ data }}
-            </mat-checkbox>
-          </div></mat-option
-        >
-        }
-      </mat-optgroup>
+          }
+        </mat-optgroup>
       }
     </mat-autocomplete>
   </mat-form-field>
