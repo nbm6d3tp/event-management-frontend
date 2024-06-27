@@ -6,18 +6,18 @@ import { TCreateFeedback, TFeedback } from '../data/review';
   providedIn: 'root',
 })
 export class FeedbackService {
-  url = 'http://localhost:8080/v1/feedback/';
+  url = 'http://localhost:8080/v1/feedback';
 
   constructor(private http: HttpClient) {}
 
   getFeedbacks(idEvent: string) {
     console.log('Get feedbacks for event ', idEvent);
-    return this.http.get<TFeedback[]>(this.url + 'event/' + idEvent);
+    return this.http.get<TFeedback[]>(this.url + '/event/' + idEvent);
   }
 
   deleteFeedback(idEvent: string) {
     console.log('Delete feedback for event ', idEvent);
-    return this.http.delete<TFeedback[]>(this.url + 'event/' + idEvent);
+    return this.http.delete<TFeedback[]>(this.url + '/event/' + idEvent);
   }
 
   createFeedback(data: TCreateFeedback) {

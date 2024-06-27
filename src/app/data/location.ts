@@ -1,27 +1,32 @@
 export type TCityGroup = {
   letter: string;
-  names: string[];
+  cities: TCity[];
+};
+
+export type TCity = {
+  idCity: string;
+  name: string;
 };
 export type TLocationType = 'ONSITE' | 'HYBRID' | 'ONLINE';
 export const locationTypes: TLocationType[] = ['HYBRID', 'ONSITE', 'ONLINE'];
 
 export const _filterGroup = (
   cityGroups: TCityGroup[],
-  value: string,
+  value: string
 ): TCityGroup[] => {
   if (value) {
     return cityGroups
       .map((group) => ({
         letter: group.letter,
-        names: _filter(group.names, value),
+        cities: _filter(group.cities, value),
       }))
-      .filter((group) => group.names.length > 0);
+      .filter((group) => group.cities.length > 0);
   }
   return cityGroups;
 };
 
-const _filter = (opt: string[], value: string): string[] => {
+const _filter = (opt: TCity[], value: string): TCity[] => {
   const filterValue = value.toLowerCase();
 
-  return opt.filter((item) => item.toLowerCase().includes(filterValue));
+  return opt.filter((item) => item.name.toLowerCase().includes(filterValue));
 };

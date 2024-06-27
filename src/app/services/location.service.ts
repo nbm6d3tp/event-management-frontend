@@ -1,39 +1,40 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs';
+import { Observable, map } from 'rxjs';
+import { TCity, TCityGroup } from '../data/location';
 
-function groupByStartingLetter(words: string[]) {
+function groupByStartingLetter(cities: TCity[]): TCityGroup[] {
   // Create an empty object to hold the groups
-  const groups: { [letter: string]: { letter: string; names: string[] } } = {};
+  const groups: { [letter: string]: { letter: string; cities: TCity[] } } = {};
 
   // Iterate through each word in the input array
-  words.forEach((word) => {
+  cities.forEach((city) => {
     // Get the first letter of the word
-    const firstLetter = word[0].toLowerCase();
+    const firstLetter = city.name[0].toUpperCase();
 
     // Check if the group for this letter already exists
     if (!groups[firstLetter]) {
       // If not, create a new group with this letter
-      groups[firstLetter] = { letter: firstLetter, names: [] };
+      groups[firstLetter] = { letter: firstLetter, cities: [] };
     }
 
     // Add the word to the appropriate group
-    groups[firstLetter].names.push(word);
+    groups[firstLetter].cities.push(city);
   });
 
   // Convert the groups object into an array of objects
-  return Object.values(groups);
+  return Object.values(groups).sort((a, b) => a.letter.localeCompare(b.letter));
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class LocationService {
-  url = 'http://localhost:8080/v1/locations/';
+  url = 'http://localhost:8080/v1/locations';
 
   constructor(private http: HttpClient) {}
 
-  getAll() {
+  getAll(): Observable<TCityGroup[]> {
     console.log('Get all locations');
     return this.http
       .get<
@@ -42,8 +43,6 @@ export class LocationService {
           name: string;
         }[]
       >(this.url)
-      .pipe(
-        map((cities) => groupByStartingLetter(cities.map((city) => city.name))),
-      );
+      .pipe(map((cities) => groupByStartingLetter(cities)));
   }
 }

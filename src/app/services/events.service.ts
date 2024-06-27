@@ -9,7 +9,7 @@ export type TDateResponse = [
   number,
   number,
   number,
-  ...number[],
+  ...number[]
 ];
 export type TEventResponse = Omit<TEvent, 'startTime' | 'endTime'> & {
   startTime: TDateResponse;
@@ -22,7 +22,7 @@ export const convertDateArrayToDateInstance = (dateArray: TDateResponse) => {
     dateArray[1] - 1,
     dateArray[2],
     dateArray[3],
-    dateArray[4],
+    dateArray[4]
   );
 };
 
@@ -30,7 +30,7 @@ export const convertDateArrayToDateInstance = (dateArray: TDateResponse) => {
   providedIn: 'root',
 })
 export class EventsService {
-  url = 'http://localhost:8080/v1/events/';
+  url = 'http://localhost:8080/v1/events';
 
   constructor(private http: HttpClient) {}
 
@@ -44,41 +44,41 @@ export class EventsService {
               ...event,
               startTime: convertDateArrayToDateInstance(event.startTime),
               endTime: convertDateArrayToDateInstance(event.endTime),
-            }) as TEvent,
+            } as TEvent)
         );
-      }),
+      })
     );
   }
 
   getEvent(id: string): Observable<TEvent> {
     console.log('Get event ', id);
-    return this.http.get<TEventResponse>(this.url + id).pipe(
+    return this.http.get<TEventResponse>(this.url + '/' + id).pipe(
       map((event) => {
         return {
           ...event,
           startTime: convertDateArrayToDateInstance(event.startTime),
           endTime: convertDateArrayToDateInstance(event.endTime),
         } as TEvent;
-      }),
+      })
     );
   }
 
   editEvent(id: string, editedEvent: TCreateEvent): Observable<TEvent> {
     console.log('Edit event ', id, editedEvent);
-    return this.http.put<TEventResponse>(this.url + id, editedEvent).pipe(
+    return this.http.put<TEventResponse>(this.url + '/' + id, editedEvent).pipe(
       map((event) => {
         return {
           ...event,
           startTime: convertDateArrayToDateInstance(event.startTime),
           endTime: convertDateArrayToDateInstance(event.endTime),
         } as TEvent;
-      }),
+      })
     );
   }
 
   deleteEvent(id: string) {
     console.log('Delete event ', id);
-    return this.http.delete(this.url + id);
+    return this.http.delete(this.url + '/' + id);
   }
 
   createEvent(event: TCreateEvent): Observable<TEvent> {
@@ -90,7 +90,7 @@ export class EventsService {
           startTime: convertDateArrayToDateInstance(event.startTime),
           endTime: convertDateArrayToDateInstance(event.endTime),
         } as TEvent;
-      }),
+      })
     );
   }
 
@@ -102,14 +102,14 @@ export class EventsService {
     };
     console.log('Filter events ', refinedFilters);
     const queryParams = new HttpParams({ fromObject: refinedFilters });
-    return this.http.get<TEvent[]>(this.url + 'search', {
+    return this.http.get<TEvent[]>(this.url + '/' + 'search', {
       params: queryParams,
     });
   }
 
   getMyEvents(): Observable<TEvent[]> {
     console.log('Get my events');
-    return this.http.get<TEventResponse[]>(this.url + 'my').pipe(
+    return this.http.get<TEventResponse[]>(this.url + '/' + 'my').pipe(
       map((events) => {
         return events.map(
           (event) =>
@@ -117,9 +117,9 @@ export class EventsService {
               ...event,
               startTime: convertDateArrayToDateInstance(event.startTime),
               endTime: convertDateArrayToDateInstance(event.endTime),
-            }) as TEvent,
+            } as TEvent)
         );
-      }),
+      })
     );
   }
 }

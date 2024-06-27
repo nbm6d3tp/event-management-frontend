@@ -6,17 +6,12 @@ import { TTypeEvent } from '../data/event';
   providedIn: 'root',
 })
 export class EventTypeService {
-  url = 'http://localhost:8080/v1/typesEvent/';
+  url = 'http://localhost:8080/v1/typesEvent';
 
   constructor(private http: HttpClient) {}
 
   getAll() {
     console.log('Get all types event');
-    return this.http.get<
-      {
-        idType: string;
-        name: TTypeEvent;
-      }[]
-    >(this.url);
+    return this.http.get<TTypeEvent[]>(this.url);
   }
 }

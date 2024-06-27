@@ -2,11 +2,11 @@ import { TUser } from './person';
 import { TFeedback } from './review';
 
 export type TFilters = {
-  eventTypes: TTypeEvent[];
+  eventTypes: string[]; //array ids
   startDate: Date;
   endDate: Date;
   cities: string[];
-  locationTypes: string[];
+  locationTypes: string[]; //array ids
   orderBy: string;
 };
 
@@ -44,4 +44,7 @@ export type TEvent =
       image: string;
     };
 
-export type TTypeEvent = 'Meetup' | 'Conference' | 'Workshop';
+export type TTypeEvent = {
+  idType: string;
+  name: 'Meetup' | 'Conference' | 'Workshop';
+};

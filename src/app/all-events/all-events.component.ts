@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { TEvent } from '../data/event';
+import { TEvent, TTypeEvent } from '../data/event';
 import { EventsService } from '../services/events.service';
 import { FormBuilder, FormControl } from '@angular/forms';
+import { TCity, TLocationType } from '../data/location';
 
 @Component({
   selector: 'app-all-events',
@@ -12,8 +13,8 @@ import { FormBuilder, FormControl } from '@angular/forms';
 export class AllEventsComponent {
   events: TEvent[] = [];
 
-  selectedCities: string[] = [];
-  selectedEventTypes: string[] = [];
+  selectedCities: TCity[] = [];
+  selectedEventTypes: TTypeEvent[] = [];
   selectedLocationTypes: string[] = [];
   selectedDateRange: { start: Date | null; end: Date | null } = {
     start: null,
@@ -26,10 +27,7 @@ export class AllEventsComponent {
 
   orderByCriteria = new FormControl('');
 
-  constructor(
-    private eventsService: EventsService,
-    private fb: FormBuilder,
-  ) {
+  constructor(private eventsService: EventsService, private fb: FormBuilder) {
     eventsService.getAll().subscribe((events) => {
       this.events = events;
     });

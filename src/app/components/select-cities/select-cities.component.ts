@@ -2,7 +2,7 @@ import { Component, input, model, signal } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Observable, map, startWith } from 'rxjs';
 import { LocationService } from '../../services/location.service';
-import { _filterGroup } from '../../data/location';
+import { TCity, TCityGroup, _filterGroup } from '../../data/location';
 
 @Component({
   selector: 'app-select-cities',
@@ -11,11 +11,8 @@ import { _filterGroup } from '../../data/location';
 })
 export class SelectCitiesComponent {
   required = input<boolean>(false);
-  selectedCities = model<string[]>([]);
-  cityGroups: {
-    letter: string;
-    names: string[];
-  }[] = [];
+  selectedCities = model<TCity[]>([]);
+  cityGroups: TCityGroup[] = [];
 
   citiesForm = this.fb.group({
     cityGroup: '',
@@ -23,14 +20,14 @@ export class SelectCitiesComponent {
 
   constructor(
     private fb: FormBuilder,
-    private locationService: LocationService,
+    private locationService: LocationService
   ) {
     locationService.getAll().subscribe((data) => {
       this.cityGroups = data;
     });
   }
 
-  filteredData: Observable<{ letter: string; names: string[] }[]> | undefined;
+  filteredData: Observable<TCityGroup[]> | undefined;
   placeholder = signal('Cities');
 
   ngOnInit() {
@@ -38,24 +35,40 @@ export class SelectCitiesComponent {
       startWith(''),
       map((value) => {
         return _filterGroup(this.cityGroups, value || '');
-      }),
+      })
     );
   }
 
-  optionClicked = (event: Event, data: string): void => {
+  isOptionChecked(idCity: string) {
+    return this.selectedCities()
+      .map((selectedCity) => selectedCity.idCity)
+      .includes(idCity);
+  }
+
+  optionClicked = (event: Event, data: TCity): void => {
     event.stopPropagation();
     this.toggleSelection(data);
   };
 
-  toggleSelection = (data: string): void => {
-    if (!this.selectedCities().includes(data)) {
+  toggleSelection = (data: TCity): void => {
+    if (
+      !this.selectedCities()
+        .map((selectedCity) => selectedCity.idCity)
+        .includes(data.idCity)
+    ) {
       this.selectedCities.set([...this.selectedCities(), data]);
     } else {
-      console.log(this.selectedCities().filter((city) => city !== data));
+      console.log(
+        this.selectedCities().filter((city) => city.idCity !== data.idCity)
+      );
       this.selectedCities.set(
-        this.selectedCities().filter((city) => city !== data),
+        this.selectedCities().filter((city) => city.idCity !== data.idCity)
       );
     }
-    this.placeholder.set((this.selectedCities() || []).join(', '));
+    this.placeholder.set(
+      (
+        this.selectedCities().map((selectedCity) => selectedCity.name) || []
+      ).join(', ')
+    );
   };
 }

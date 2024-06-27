@@ -9,13 +9,13 @@ import { TTypeEvent } from '../../data/event';
   styleUrl: './select-event-types.component.css',
 })
 export class SelectEventTypesComponent implements OnInit {
-  selectedEventTypes = model<string[]>();
+  selectedEventTypes = model<TTypeEvent[]>();
   eventTypesForm = new FormControl(null);
   typeEventList: TTypeEvent[] = [];
 
   constructor(private eventTypeService: EventTypeService) {
     eventTypeService.getAll().subscribe((data) => {
-      this.typeEventList = data.map((typeEvent) => typeEvent.name);
+      this.typeEventList = data;
     });
   }
 

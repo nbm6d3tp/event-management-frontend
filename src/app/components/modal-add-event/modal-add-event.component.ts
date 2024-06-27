@@ -20,6 +20,7 @@ import {
 } from '../../services/supabase.service';
 import { Observable, map, startWith } from 'rxjs';
 import {
+  TCity,
   TCityGroup,
   TLocationType,
   _filterGroup,
@@ -64,6 +65,7 @@ export class ModalAddEventComponent implements OnInit {
   eventTypesList: TTypeEvent[] = [];
   locationTypes = locationTypes;
   event: TEvent | undefined;
+  placeholderCity = signal('');
 
   readonly dialogRef = inject(MatDialogRef<ModalAddEventComponent>);
   readonly data = inject<string | undefined>(MAT_DIALOG_DATA);
@@ -83,10 +85,7 @@ export class ModalAddEventComponent implements OnInit {
   });
   user?: TUser | null;
 
-  cityGroups: {
-    letter: string;
-    names: string[];
-  }[] = [];
+  cityGroups: TCityGroup[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -95,13 +94,13 @@ export class ModalAddEventComponent implements OnInit {
     private eventService: EventsService,
     private toastService: ToastService,
     private locationService: LocationService,
-    private eventTypeService: EventTypeService,
+    private eventTypeService: EventTypeService
   ) {
     locationService.getAll().subscribe((data) => {
       this.cityGroups = data;
     });
     eventTypeService.getAll().subscribe((data) => {
-      this.eventTypesList = data.map((type) => type.name);
+      this.eventTypesList = data;
     });
     this.authenticationService.user.subscribe((x) => (this.user = x));
     if (this.data) {
@@ -115,10 +114,10 @@ export class ModalAddEventComponent implements OnInit {
         this.startDayForm.controls['date'].setValue(new Date(event.startTime));
         this.endDayForm.controls['date'].setValue(new Date(event.endTime));
         this.startTimeForm.controls['time'].setValue(
-          event.startTime.toLocaleTimeString().slice(0, 5),
+          event.startTime.toLocaleTimeString().slice(0, 5)
         );
         this.endTimeForm.controls['time'].setValue(
-          event.endTime.toLocaleTimeString().slice(0, 5),
+          event.endTime.toLocaleTimeString().slice(0, 5)
         );
         this.selectedEventType = event.typeEventName;
         this.cityForm.controls['cityGroup'].setValue(event.locationName || '');
@@ -133,7 +132,7 @@ export class ModalAddEventComponent implements OnInit {
     const value = event.value;
     const ctrl = this.cityForm.controls['cityGroup'];
 
-    if (event.value !== 'Remote') {
+    if (event.value !== 'ONLINE') {
       ctrl.enable();
     } else {
       ctrl.disable();
@@ -141,9 +140,7 @@ export class ModalAddEventComponent implements OnInit {
     }
   }
 
-  selectedEventType: undefined | TTypeEvent = isDevMode()
-    ? 'Conference'
-    : undefined;
+  selectedEventType: undefined | TTypeEvent;
   selectedImage: undefined | File;
 
   isStartDayError = false;
@@ -159,7 +156,7 @@ export class ModalAddEventComponent implements OnInit {
   errorImage = signal('');
 
   locationTypeControl = new FormControl<TLocationType | undefined>(
-    isDevMode() ? 'ONSITE' : undefined,
+    isDevMode() ? 'ONSITE' : undefined
   );
 
   cityForm = this.fb.group({
@@ -170,7 +167,7 @@ export class ModalAddEventComponent implements OnInit {
   ngOnInit() {
     this.citiesGroupOptions = this.cityForm.get('cityGroup')!.valueChanges.pipe(
       startWith(''),
-      map((value) => _filterGroup(this.cityGroups, value || '')),
+      map((value) => _filterGroup(this.cityGroups, value || ''))
     );
   }
 
@@ -297,11 +294,11 @@ export class ModalAddEventComponent implements OnInit {
         if (errorSupabase || dataSupabase === null) {
           if (errorSupabase?.message === 'The resource already exists') {
             this.errorImage.set(
-              'The resource already exists. Please choose another image or change its name.',
+              'The resource already exists. Please choose another image or change its name.'
             );
           } else {
             this.errorImage.set(
-              'There was an error uploading the image. Please try again.',
+              'There was an error uploading the image. Please try again.'
             );
           }
           return;
@@ -319,57 +316,80 @@ export class ModalAddEventComponent implements OnInit {
         : 'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/events/event1.jpg';
 
     if (this.data) {
-      console.log('Data to send to the server to edit: ', {
-        title,
-        description,
-        start: combineDateAndTime(startDay, startTime),
-        end: combineDateAndTime(endDay, endTime),
-        eventType,
-        city,
-        locationType,
-        urlImage:
-          this.event?.image ||
-          'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/Default_avatar_profile.jpg',
-        organizer: this.user,
-      });
+      this.eventService
+        .editEvent(this.event?.idEvent!, {
+          title: title!,
+          description: description!,
+          startTime: combineDateAndTime(startDay, startTime),
+          endTime: combineDateAndTime(endDay, endTime),
+          typeEventName: eventType!,
+          locationName: city!,
+          typeLocationName: locationType!,
+          image:
+            this.event?.image ||
+            'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/Default_avatar_profile.jpg',
+          organizer: this.user!,
+        })
+        .subscribe({
+          next: () => {
+            this.eventService.getMyEvents();
+            this.toastService.showToast(
+              'success',
+              'Event updated successfully!'
+            );
+            this.dialogRef.close();
+          },
+          error: (error) => {
+            this.toastService.showToast(
+              'error',
+              error + '. Please try again later'
+            );
+            this.dialogRef.close();
+          },
+        });
     } else {
-      console.log('Data to send to the server to create: ', {
-        title,
-        description,
-        start: combineDateAndTime(startDay, startTime),
-        end: combineDateAndTime(endDay, endTime),
-        eventType,
-        city,
-        locationType,
-        urlImage,
-        organizer: this.user,
+      console.log({
+        title: title!,
+        description: description!,
+        startTime: combineDateAndTime(startDay, startTime),
+        endTime: combineDateAndTime(endDay, endTime),
+        typeEventName: eventType!,
+        locationName: city!,
+        typeLocationName: locationType!,
+        image: urlImage,
+        organizer: this.user!,
       });
+      // this.eventService
+      //   .createEvent({
+      //     title: title!,
+      //     description: description!,
+      //     startTime: combineDateAndTime(startDay, startTime),
+      //     endTime: combineDateAndTime(endDay, endTime),
+      //     typeEventName: eventType!,
+      //     locationName: city!,
+      //     typeLocationName: locationType!,
+      //     image: urlImage,
+      //     organizer: this.user!,
+      //   })
+      //   .subscribe({
+      //     next: () => {
+      //       this.eventService.getMyEvents();
+      //       this.toastService.showToast(
+      //         'success',
+      //         'Event created successfully!'
+      //       );
+      //       this.dialogRef.close();
+      //     },
+      //     error: (error) => {
+      //       this.toastService.showToast(
+      //         'error',
+      //         error + '. Please try again later'
+      //       );
+      //       this.dialogRef.close();
+      //     },
+      //   });
+      this.dialogRef.close();
     }
-
-    this.toastService.showToast(
-      'success',
-      this.data ? 'Event updated successfully!' : 'Event created successfully!',
-    );
-    this.dialogRef.close();
-
-    // if (this.form.valid && this.email.value && this.password.value) {
-    //   this.authenticationService
-    //     .login(this.email.value, this.password.value)
-    //     .pipe(first())
-    //     .subscribe({
-    //       next: () => {
-    //         // get return url from route parameters or default to '/'
-    //         const returnUrl =
-    //           this.route.snapshot.queryParams['returnUrl'] || '/';
-    //         console.log({ returnUrl });
-    //         this.router.navigate([returnUrl]);
-    //       },
-    //       error: () => {
-    //         this.errorAuthenticating = true;
-    //       },
-    //     });
-    //   // this.router.navigate(['/my-events']);
-    // }
   }
 
   isFormInvalid() {
