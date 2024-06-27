@@ -79,8 +79,8 @@
                 <mat-autocomplete #autoGroup="matAutocomplete">
                   @for (group of citiesGroupOptions | async; track group) {
                   <mat-optgroup [label]="group.letter">
-                    @for (city of group.cities; track city.idCity) {
-                    <mat-option [value]="city">{{ city.name }}</mat-option>
+                    @for (city of group.cities; track city) {
+                    <mat-option [value]="city">{{ city }}</mat-option>
                     }
                   </mat-optgroup>
                   }
@@ -92,10 +92,8 @@
             <mat-form-field class="w-100">
               <mat-label>Event type</mat-label>
               <mat-select required [(value)]="selectedEventType">
-                @for (eventType of eventTypesList; track eventType.idType) {
-                <mat-option [value]="eventType.idType">{{
-                  eventType.name
-                }}</mat-option>
+                @for (eventType of eventTypesList; track eventType) {
+                <mat-option [value]="eventType">{{ eventType }}</mat-option>
                 }
               </mat-select>
             </mat-form-field>

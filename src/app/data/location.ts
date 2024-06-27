@@ -1,12 +1,8 @@
 export type TCityGroup = {
   letter: string;
-  cities: TCity[];
+  cities: string[];
 };
 
-export type TCity = {
-  idCity: string;
-  name: string;
-};
 export type TLocationType = 'ONSITE' | 'HYBRID' | 'ONLINE';
 export const locationTypes: TLocationType[] = ['HYBRID', 'ONSITE', 'ONLINE'];
 
@@ -25,8 +21,8 @@ export const _filterGroup = (
   return cityGroups;
 };
 
-const _filter = (opt: TCity[], value: string): TCity[] => {
+const _filter = (opt: string[], value: string): string[] => {
   const filterValue = value.toLowerCase();
 
-  return opt.filter((item) => item.name.toLowerCase().includes(filterValue));
+  return opt.filter((item) => item.toLowerCase().includes(filterValue));
 };

@@ -20,7 +20,6 @@ import {
 } from '../../services/supabase.service';
 import { Observable, map, startWith } from 'rxjs';
 import {
-  TCity,
   TCityGroup,
   TLocationType,
   _filterGroup,
@@ -119,8 +118,10 @@ export class ModalAddEventComponent implements OnInit {
         this.endTimeForm.controls['time'].setValue(
           event.endTime.toLocaleTimeString().slice(0, 5)
         );
-        this.selectedEventType = event.typeEventName;
-        this.cityForm.controls['cityGroup'].setValue(event.locationName || '');
+        this.selectedEventType = event.typeEvent.name;
+        this.cityForm.controls['cityGroup'].setValue(
+          event.location?.name || ''
+        );
         this.locationTypeControl.setValue(event.typeLocationName);
         this.event = event;
         return;
@@ -203,10 +204,6 @@ export class ModalAddEventComponent implements OnInit {
         }
       }
     }
-    console.log('Errors: ', {
-      isDaysError: this.isDaysError(),
-      isTimeError: this.isTimeError(),
-    });
   }
 
   errorAuthenticating = false;
@@ -247,32 +244,14 @@ export class ModalAddEventComponent implements OnInit {
     this.endTimeForm.markAllAsTouched();
     this.computeErrors();
 
-    console.log('Title and description: ', this.form.value);
-    console.log('Start day: ', this.startDayForm.value.date);
-    console.log('End day: ', this.endDayForm.value.date);
-    console.log('Start hour: ', this.startTimeForm.value.time);
-    console.log('End hour: ', this.endTimeForm.value.time);
-    console.log('Event types: ', this.selectedEventType);
-    console.log('Cities: ', this.cityForm.value.cityGroup);
-    console.log('Location types: ', this.locationTypeControl.value);
-    console.log('Image: ', this.selectedImage);
-
     const { title, description } = this.form.value;
-
     const startDay = this.startDayForm.value.date;
-
     const endDay = this.endDayForm.value.date;
-
     const startTime = this.startTimeForm.value.time;
-
     const endTime = this.endTimeForm.value.time;
-
     const eventType = this.selectedEventType;
-
     const city = this.cityForm.value.cityGroup;
-
     const locationType = this.locationTypeControl.value;
-
     const image = this.selectedImage;
 
     if (
@@ -324,7 +303,7 @@ export class ModalAddEventComponent implements OnInit {
           endTime: combineDateAndTime(endDay, endTime),
           typeEventName: eventType!,
           locationName: city!,
-          typeLocationName: locationType!,
+          typeLocation: locationType!,
           image:
             this.event?.image ||
             'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/Default_avatar_profile.jpg',
@@ -337,59 +316,44 @@ export class ModalAddEventComponent implements OnInit {
               'success',
               'Event updated successfully!'
             );
-            this.dialogRef.close();
           },
           error: (error) => {
             this.toastService.showToast(
               'error',
               error + '. Please try again later'
             );
-            this.dialogRef.close();
           },
         });
     } else {
-      console.log({
-        title: title!,
-        description: description!,
-        startTime: combineDateAndTime(startDay, startTime),
-        endTime: combineDateAndTime(endDay, endTime),
-        typeEventName: eventType!,
-        locationName: city!,
-        typeLocationName: locationType!,
-        image: urlImage,
-        organizer: this.user!,
-      });
-      // this.eventService
-      //   .createEvent({
-      //     title: title!,
-      //     description: description!,
-      //     startTime: combineDateAndTime(startDay, startTime),
-      //     endTime: combineDateAndTime(endDay, endTime),
-      //     typeEventName: eventType!,
-      //     locationName: city!,
-      //     typeLocationName: locationType!,
-      //     image: urlImage,
-      //     organizer: this.user!,
-      //   })
-      //   .subscribe({
-      //     next: () => {
-      //       this.eventService.getMyEvents();
-      //       this.toastService.showToast(
-      //         'success',
-      //         'Event created successfully!'
-      //       );
-      //       this.dialogRef.close();
-      //     },
-      //     error: (error) => {
-      //       this.toastService.showToast(
-      //         'error',
-      //         error + '. Please try again later'
-      //       );
-      //       this.dialogRef.close();
-      //     },
-      //   });
-      this.dialogRef.close();
+      this.eventService
+        .createEvent({
+          title: title!,
+          description: description!,
+          startTime: combineDateAndTime(startDay, startTime),
+          endTime: combineDateAndTime(endDay, endTime),
+          typeEventName: eventType!,
+          locationName: city!,
+          typeLocation: locationType!,
+          image: urlImage,
+          organizer: this.user!,
+        })
+        .subscribe({
+          next: () => {
+            this.eventService.getMyEvents();
+            this.toastService.showToast(
+              'success',
+              'Event created successfully!'
+            );
+          },
+          error: (error) => {
+            this.toastService.showToast(
+              'error',
+              error + '. Please try again later'
+            );
+          },
+        });
     }
+    this.dialogRef.close();
   }
 
   isFormInvalid() {

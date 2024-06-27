@@ -13,6 +13,7 @@ import { AuthenticationService } from '../services/authentication.service';
 import { EventsService } from '../services/events.service';
 import { ToastService } from '../services/toast.service';
 import { ModalService } from '../services/modal.service';
+import { ParticipationService } from '../services/participation.service';
 
 const toComment = (event: TEvent, person: TUser) => {
   if (
@@ -45,9 +46,13 @@ const haveParticipated = (event: TEvent, person: TUser) => {
 };
 
 const haveCommented = (event: TEvent, person: TUser) => {
-  return event.feedbacks
-    ?.map((feedback) => feedback.participant.email)
-    .includes(person.email);
+  return (
+    event.feedbacks &&
+    event.feedbacks.length > 0 &&
+    event.feedbacks
+      .map((feedback) => feedback.participant.email)
+      .includes(person.email)
+  );
 };
 
 export const canDelete = (event: TEvent, person: TUser) =>
@@ -107,19 +112,35 @@ export class MyEventsComponent {
     this.modalService.openModalAddEvent(idEvent);
   }
 
-  onClickFeedbackEvent() {
-    this.modalService.openModalFeedback();
+  onClickFeedbackEvent(idEvent: string) {
+    this.modalService.openModalFeedback(idEvent);
   }
 
-  onClickCancelEvent() {
+  onClickCancelEvent(idEvent: string) {
     this.toastService.showToastWithConfirm('cancel', () => {
-      console.log('Cancel event');
+      this.participationService.cancelEvent(idEvent).subscribe({
+        next: () => {
+          this.eventsService.getEvent(idEvent);
+          this.eventsService.getMyEvents();
+        },
+        error: (error) => {
+          this.toastService.showToast('error', error);
+        },
+      });
     });
   }
 
-  onClickDeleteEvent() {
+  onClickDeleteEvent(eventID: string) {
     this.toastService.showToastWithConfirm('delete', () => {
-      console.log('Delete event');
+      this.eventsService.deleteEvent(eventID).subscribe({
+        next: () => {
+          this.eventsService.getAll();
+          this.eventsService.getMyEvents();
+        },
+        error: (error) => {
+          this.toastService.showToast('error', error);
+        },
+      });
     });
   }
 
@@ -129,15 +150,16 @@ export class MyEventsComponent {
   user?: TUser | null;
 
   constructor(
-    private myEventsService: EventsService,
+    private eventsService: EventsService,
     private authenticationService: AuthenticationService,
+    private participationService: ParticipationService,
     private toastService: ToastService,
     private modalService: ModalService
   ) {
     this.authenticationService.user.subscribe((person) => {
       this.user = person;
       if (person)
-        myEventsService.getMyEvents().subscribe((events) => {
+        eventsService.getMyEvents().subscribe((events) => {
           this.events = events.map((event) => {
             return {
               start: event.startTime,
@@ -163,9 +185,7 @@ export class MyEventsComponent {
         label: '<i class="bi bi-trash"></i>',
         a11yLabel: 'Delete',
         onClick: ({ event }: { event: CalendarEvent }): void => {
-          // this.events = this.events.filter((iEvent) => iEvent !== event);
-          // this.activeDayIsOpen = false;
-          this.onClickDeleteEvent();
+          this.onClickDeleteEvent(event.meta);
         },
       });
       if (!isEventEnd(event))
@@ -174,7 +194,6 @@ export class MyEventsComponent {
           a11yLabel: 'Edit',
           onClick: ({ event }: { event: CalendarEvent }): void => {
             this.onClickEditEvent(event.meta);
-            console.log('Edit event', event);
           },
         });
     } else {
@@ -184,8 +203,7 @@ export class MyEventsComponent {
             label: '<i class="mx-1 bi bi-chat-dots"></i>',
             a11yLabel: 'Feedback',
             onClick: ({ event }: { event: CalendarEvent }): void => {
-              console.log('Feedback event', event);
-              this.onClickFeedbackEvent();
+              this.onClickFeedbackEvent(event.meta);
             },
           });
       } else {
@@ -194,7 +212,7 @@ export class MyEventsComponent {
             label: '<i class="mx-1 bi bi-x-circle"></i>',
             a11yLabel: 'Cancel',
             onClick: ({ event }: { event: CalendarEvent }): void => {
-              this.onClickCancelEvent();
+              this.onClickCancelEvent(event.meta);
             },
           });
       }

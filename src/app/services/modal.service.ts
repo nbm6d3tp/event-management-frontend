@@ -21,10 +21,11 @@ export class ModalService {
     dialogRef.afterClosed().subscribe((result) => {});
   }
 
-  openModalFeedback() {
+  openModalFeedback(idEvent: string) {
     const dialogRef = this.dialog.open(ModalFeedbackComponent, {
       height: '260px',
       width: '500px',
+      data: idEvent,
     });
     dialogRef.afterClosed().subscribe((result) => {});
   }

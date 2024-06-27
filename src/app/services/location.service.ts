@@ -1,16 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { TCity, TCityGroup } from '../data/location';
+import { TCityGroup } from '../data/location';
 
-function groupByStartingLetter(cities: TCity[]): TCityGroup[] {
+function groupByStartingLetter(cities: string[]): TCityGroup[] {
   // Create an empty object to hold the groups
-  const groups: { [letter: string]: { letter: string; cities: TCity[] } } = {};
+  const groups: { [letter: string]: { letter: string; cities: string[] } } = {};
 
   // Iterate through each word in the input array
   cities.forEach((city) => {
     // Get the first letter of the word
-    const firstLetter = city.name[0].toUpperCase();
+    const firstLetter = city[0].toUpperCase();
 
     // Check if the group for this letter already exists
     if (!groups[firstLetter]) {
@@ -43,6 +43,8 @@ export class LocationService {
           name: string;
         }[]
       >(this.url)
-      .pipe(map((cities) => groupByStartingLetter(cities)));
+      .pipe(
+        map((cities) => groupByStartingLetter(cities.map((city) => city.name)))
+      );
   }
 }

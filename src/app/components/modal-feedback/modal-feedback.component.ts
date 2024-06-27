@@ -2,8 +2,10 @@ import { Component, inject, isDevMode, signal } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { TUser } from '../../data/person';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastService } from '../../services/toast.service';
+import { FeedbackService } from '../../services/feedback.service';
+import { EventsService } from '../../services/events.service';
 
 @Component({
   selector: 'app-modal-feedback',
@@ -11,8 +13,19 @@ import { ToastService } from '../../services/toast.service';
   styleUrl: './modal-feedback.component.css',
 })
 export class ModalFeedbackComponent {
-  user?: TUser | null;
+  user?: TUser;
   rating = signal(0);
+  readonly eventID = inject<string>(MAT_DIALOG_DATA);
+
+  constructor(
+    private fb: FormBuilder,
+    private authenticationService: AuthenticationService,
+    private eventsService: EventsService,
+    private feedbackService: FeedbackService,
+    private toastService: ToastService
+  ) {
+    this.authenticationService.user.subscribe((x) => (this.user = x));
+  }
 
   readonly dialogRef = inject(MatDialogRef<ModalFeedbackComponent>);
 
@@ -25,21 +38,23 @@ export class ModalFeedbackComponent {
   }
 
   onSubmit(): void {
-    console.log('Data submit: ', {
-      person: this.user,
-      content: this.comment.value,
-      rating: this.rating(),
-    });
+    this.feedbackService
+      .createFeedback({
+        idEvent: this.eventID,
+        content: this.comment.value!,
+        score: this.rating(),
+      })
+      .subscribe({
+        next: () => {
+          this.toastService.showToast('success', 'Feedback sent!');
+          this.eventsService.getEvent(this.eventID);
+          this.eventsService.getMyEvents();
+        },
+        error: (error) => {
+          this.toastService.showToast('error', error);
+        },
+      });
     this.dialogRef.close();
-    this.toastService.showToast('success', 'Comment');
-  }
-
-  constructor(
-    private fb: FormBuilder,
-    private authenticationService: AuthenticationService,
-    private toastService: ToastService,
-  ) {
-    this.authenticationService.user.subscribe((x) => (this.user = x));
   }
 
   form = this.fb.group({

@@ -2,18 +2,16 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TEvent, TTypeEvent } from '../data/event';
 import { EventsService } from '../services/events.service';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { TCity, TLocationType } from '../data/location';
 
 @Component({
   selector: 'app-all-events',
   templateUrl: './all-events.component.html',
   styleUrl: './all-events.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AllEventsComponent {
   events: TEvent[] = [];
 
-  selectedCities: TCity[] = [];
+  selectedCities: string[] = [];
   selectedEventTypes: TTypeEvent[] = [];
   selectedLocationTypes: string[] = [];
   selectedDateRange: { start: Date | null; end: Date | null } = {
@@ -34,6 +32,23 @@ export class AllEventsComponent {
   }
 
   onFilter() {
+    this.eventsService
+      .filterEvents({
+        cities: this.selectedCities,
+        eventTypes: this.selectedEventTypes,
+        locationTypes: this.selectedLocationTypes,
+        startDate: this.selectedDateRange.start!,
+        endDate: this.selectedDateRange.end!,
+        orderBy: this.orderByCriteria.value!,
+      })
+      .subscribe({
+        next: (data) => {
+          this.events = data;
+        },
+        error: (error) => {
+          console.error(error);
+        },
+      });
     console.log('Data filter: ', {
       selectedCities: this.selectedCities,
       selectedEventTypes: this.selectedEventTypes,

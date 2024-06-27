@@ -10,34 +10,6 @@ export class AuthenticationService {
   private userSubject: BehaviorSubject<TUser | undefined>;
   public user: Observable<TUser | undefined>;
 
-  // constructor(private router: Router, private http: HttpClient) {
-  //   // Initialize userSubject
-  //   this.userSubject = new BehaviorSubject<TUser | undefined>(undefined);
-  //   this.user = this.userSubject.asObservable();
-  //   // this.userSubject = new BehaviorSubject(
-  //   //   parseJwt(localStorage.getItem('user')!)
-  //   // );
-  //   // this.user = this.userSubject.asObservable();
-  //   const token = localStorage.getItem('user');
-  //   if (token) {
-  //     console.log('Fetch user');
-  //     this.http
-  //       .get<TUser>(this.url + 'user', {
-  //         headers: new HttpHeaders().set('Authorization', `Bearer ${token}`),
-  //       })
-  //       .subscribe({
-  //         next: (user) => {
-  //           this.userSubject.next(user);
-  //           this.user = this.userSubject.asObservable();
-  //         },
-  //         error: (error) => {
-  //           console.error('Error fetching user:', error);
-  //           // this.logout();
-  //         },
-  //       });
-  //   }
-  // }
-
   constructor(private router: Router, private http: HttpClient) {
     this.userSubject = new BehaviorSubject<TUser | undefined>(undefined);
     this.user = this.userSubject.asObservable();
@@ -96,7 +68,7 @@ export class AuthenticationService {
       .post<TUser & { token: string }>(this.url + 'login', data)
       .pipe(
         map((value) => {
-          console.log('login', value);
+          console.log('login success', value);
           console.log('localstorage before', localStorage.getItem('user'));
           localStorage.setItem('user', value.token);
           const user = {

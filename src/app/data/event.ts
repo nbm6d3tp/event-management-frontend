@@ -12,8 +12,17 @@ export type TFilters = {
 
 export type TCreateEvent = Omit<
   TEvent,
-  'idEvent' | 'feedbacks' | 'participants'
->;
+  | 'idEvent'
+  | 'feedbacks'
+  | 'participants'
+  | 'typeEvent'
+  | 'typeLocationName'
+  | 'location'
+> & {
+  typeEventName: string;
+  typeLocation: string;
+  locationName: string;
+};
 export type TEvent =
   | {
       idEvent: string;
@@ -21,12 +30,18 @@ export type TEvent =
       description: string;
       startTime: Date;
       endTime: Date;
-      typeEventName: TTypeEvent;
+      typeEvent: {
+        idType: string;
+        name: TTypeEvent;
+      };
       typeLocationName: 'ONSITE' | 'HYBRID';
-      locationName: string;
+      location: {
+        idCity: string;
+        name: string;
+      };
       organizer: TUser;
       participants: TUser[];
-      feedbacks: TFeedback[] | null;
+      feedbacks?: TFeedback[];
       image: string;
     }
   | {
@@ -35,16 +50,16 @@ export type TEvent =
       description: string;
       startTime: Date;
       endTime: Date;
-      typeEventName: TTypeEvent;
+      typeEvent: {
+        idType: string;
+        name: TTypeEvent;
+      };
       typeLocationName: 'ONLINE';
-      locationName?: never;
+      location?: never;
       organizer: TUser;
       participants: TUser[];
-      feedbacks: TFeedback[] | null;
+      feedbacks?: TFeedback[];
       image: string;
     };
 
-export type TTypeEvent = {
-  idType: string;
-  name: 'Meetup' | 'Conference' | 'Workshop';
-};
+export type TTypeEvent = 'Meetup' | 'Conference' | 'Workshop';

@@ -12,16 +12,16 @@
     <mat-autocomplete #autoGroup="matAutocomplete">
       @for (group of filteredData | async; track group) {
       <mat-optgroup [label]="group.letter">
-        @for (city of group.cities; track city.idCity) {
+        @for (city of group.cities; track city) {
         <mat-option>
           <div (click)="optionClicked($event, city)">
             <mat-checkbox
-              [checked]="isOptionChecked(city.idCity)"
+              [checked]="isOptionChecked(city)"
               (change)="toggleSelection(city)"
               (click)="$event.stopPropagation()"
             >
               <!-- .includes(city) -->
-              {{ city.name }}
+              {{ city }}
             </mat-checkbox>
           </div></mat-option
         >

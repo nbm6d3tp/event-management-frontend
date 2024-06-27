@@ -23,7 +23,7 @@ export class RegisterComponent {
     private fb: FormBuilder,
     private router: Router,
     private readonly supabase: SupabaseService,
-    private authenticationService: AuthenticationService,
+    private authenticationService: AuthenticationService
   ) {}
   selectedImage: undefined | File;
   errorImage = signal('');
@@ -70,11 +70,11 @@ export class RegisterComponent {
         if (errorSupabase || dataSupabase === null) {
           if (errorSupabase?.message === 'The resource already exists') {
             this.errorImage.set(
-              'The resource already exists. Please choose another image or change its name.',
+              'The resource already exists. Please choose another image or change its name.'
             );
           } else {
             this.errorImage.set(
-              'There was an error uploading the image. Please try again.',
+              'There was an error uploading the image. Please try again.'
             );
           }
           return;
@@ -101,7 +101,7 @@ export class RegisterComponent {
             console.log('Register successfully!');
           },
           error: (error) => {
-            console.log(error);
+            console.error(error);
           },
         });
     }

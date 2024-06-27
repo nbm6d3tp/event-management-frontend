@@ -14,7 +14,7 @@ export class LoginComponent {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private authenticationService: AuthenticationService,
+    private authenticationService: AuthenticationService
   ) {
     // redirect to home if already logged in
     if (this.authenticationService.userValue) {
@@ -61,7 +61,6 @@ export class LoginComponent {
             // get return url from route parameters or default to '/'
             const returnUrl =
               this.route.snapshot.queryParams['returnUrl'] || '/';
-            console.log({ returnUrl });
             this.router.navigate([returnUrl]);
           },
           error: () => {

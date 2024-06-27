@@ -10,7 +10,6 @@ import { FormControl, FormGroup } from '@angular/forms';
   selector: 'app-select-date',
   templateUrl: './select-date.component.html',
   styleUrl: './select-date.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectDateComponent {
   label = input.required<string>();

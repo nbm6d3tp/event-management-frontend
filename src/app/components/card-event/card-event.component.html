@@ -55,7 +55,7 @@
       "
     >
       <div
-        *ngIf="event().locationName"
+        *ngIf="event().location"
         style="
           background-color: #007bff;
           color: #fff;
@@ -64,7 +64,7 @@
           font-size: 12px;
         "
       >
-        {{ event().locationName }}
+        {{ event().location }}
       </div>
     </div>
 
@@ -78,10 +78,10 @@
   </div>
   <div class="card-body d-flex flex-column justify-content-between">
     <p style="height: 40px" class="card-text">
-      {{ event().description | truncateName: 80 : "..." }}
+      {{ event().description | truncateName : 80 : "..." }}
     </p>
     <mat-chip-set class="mb-2" aria-label="Selection">
-      <mat-chip>{{ event().typeEventName }}</mat-chip>
+      <mat-chip>{{ event().typeEvent }}</mat-chip>
       <mat-chip>{{ event().typeLocationName }}</mat-chip>
     </mat-chip-set>
   </div>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { TCreateEvent, TEvent, TFilters } from '../data/event';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
+import { TFeedback } from '../data/review';
 
 export type TDateResponse = [
   number,
@@ -11,10 +12,16 @@ export type TDateResponse = [
   number,
   ...number[]
 ];
-export type TEventResponse = Omit<TEvent, 'startTime' | 'endTime'> & {
+export type TEventResponse = Omit<
+  TEvent,
+  'startTime' | 'endTime' | 'feedbacks'
+> & {
   startTime: TDateResponse;
   endTime: TDateResponse;
+  feedbacks: TFeedbackResponse[];
 };
+
+type TFeedbackResponse = Omit<TFeedback, 'date'> & { date: TDateResponse };
 
 export const convertDateArrayToDateInstance = (dateArray: TDateResponse) => {
   return new Date(
@@ -44,6 +51,12 @@ export class EventsService {
               ...event,
               startTime: convertDateArrayToDateInstance(event.startTime),
               endTime: convertDateArrayToDateInstance(event.endTime),
+              feedbacks: event.feedbacks
+                ? event.feedbacks?.map((feedback) => ({
+                    ...feedback,
+                    date: convertDateArrayToDateInstance(feedback.date),
+                  }))
+                : undefined,
             } as TEvent)
         );
       })
@@ -58,6 +71,12 @@ export class EventsService {
           ...event,
           startTime: convertDateArrayToDateInstance(event.startTime),
           endTime: convertDateArrayToDateInstance(event.endTime),
+          feedbacks: event.feedbacks
+            ? event.feedbacks?.map((feedback) => ({
+                ...feedback,
+                date: convertDateArrayToDateInstance(feedback.date),
+              }))
+            : undefined,
         } as TEvent;
       })
     );
@@ -71,6 +90,12 @@ export class EventsService {
           ...event,
           startTime: convertDateArrayToDateInstance(event.startTime),
           endTime: convertDateArrayToDateInstance(event.endTime),
+          feedbacks: event.feedbacks
+            ? event.feedbacks?.map((feedback) => ({
+                ...feedback,
+                date: convertDateArrayToDateInstance(feedback.date),
+              }))
+            : undefined,
         } as TEvent;
       })
     );
@@ -89,12 +114,18 @@ export class EventsService {
           ...event,
           startTime: convertDateArrayToDateInstance(event.startTime),
           endTime: convertDateArrayToDateInstance(event.endTime),
+          feedbacks: event.feedbacks
+            ? event.feedbacks?.map((feedback) => ({
+                ...feedback,
+                date: convertDateArrayToDateInstance(feedback.date),
+              }))
+            : undefined,
         } as TEvent;
       })
     );
   }
 
-  filterEvents(filters: TFilters) {
+  filterEvents(filters: TFilters): Observable<TEvent[]> {
     const refinedFilters = {
       ...filters,
       startDate: filters.startDate.toString(),
@@ -102,9 +133,28 @@ export class EventsService {
     };
     console.log('Filter events ', refinedFilters);
     const queryParams = new HttpParams({ fromObject: refinedFilters });
-    return this.http.get<TEvent[]>(this.url + '/' + 'search', {
-      params: queryParams,
-    });
+    return this.http
+      .get<TEventResponse[]>(this.url + '/' + 'search', {
+        params: queryParams,
+      })
+      .pipe(
+        map((events) => {
+          return events.map(
+            (event) =>
+              ({
+                ...event,
+                startTime: convertDateArrayToDateInstance(event.startTime),
+                endTime: convertDateArrayToDateInstance(event.endTime),
+                feedbacks: event.feedbacks
+                  ? event.feedbacks?.map((feedback) => ({
+                      ...feedback,
+                      date: convertDateArrayToDateInstance(feedback.date),
+                    }))
+                  : undefined,
+              } as TEvent)
+          );
+        })
+      );
   }
 
   getMyEvents(): Observable<TEvent[]> {
@@ -117,6 +167,12 @@ export class EventsService {
               ...event,
               startTime: convertDateArrayToDateInstance(event.startTime),
               endTime: convertDateArrayToDateInstance(event.endTime),
+              feedbacks: event.feedbacks
+                ? event.feedbacks?.map((feedback) => ({
+                    ...feedback,
+                    date: convertDateArrayToDateInstance(feedback.date),
+                  }))
+                : undefined,
             } as TEvent)
         );
       })

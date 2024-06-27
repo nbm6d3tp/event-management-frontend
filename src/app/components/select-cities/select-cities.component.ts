@@ -2,7 +2,7 @@ import { Component, input, model, signal } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Observable, map, startWith } from 'rxjs';
 import { LocationService } from '../../services/location.service';
-import { TCity, TCityGroup, _filterGroup } from '../../data/location';
+import { TCityGroup, _filterGroup } from '../../data/location';
 
 @Component({
   selector: 'app-select-cities',
@@ -11,7 +11,7 @@ import { TCity, TCityGroup, _filterGroup } from '../../data/location';
 })
 export class SelectCitiesComponent {
   required = input<boolean>(false);
-  selectedCities = model<TCity[]>([]);
+  selectedCities = model<string[]>([]);
   cityGroups: TCityGroup[] = [];
 
   citiesForm = this.fb.group({
@@ -39,36 +39,33 @@ export class SelectCitiesComponent {
     );
   }
 
-  isOptionChecked(idCity: string) {
+  isOptionChecked(city: string) {
     return this.selectedCities()
-      .map((selectedCity) => selectedCity.idCity)
-      .includes(idCity);
+      .map((selectedCity) => selectedCity)
+      .includes(city);
   }
 
-  optionClicked = (event: Event, data: TCity): void => {
+  optionClicked = (event: Event, data: string): void => {
     event.stopPropagation();
     this.toggleSelection(data);
   };
 
-  toggleSelection = (data: TCity): void => {
+  toggleSelection = (data: string): void => {
     if (
       !this.selectedCities()
-        .map((selectedCity) => selectedCity.idCity)
-        .includes(data.idCity)
+        .map((selectedCity) => selectedCity)
+        .includes(data)
     ) {
       this.selectedCities.set([...this.selectedCities(), data]);
     } else {
-      console.log(
-        this.selectedCities().filter((city) => city.idCity !== data.idCity)
-      );
       this.selectedCities.set(
-        this.selectedCities().filter((city) => city.idCity !== data.idCity)
+        this.selectedCities().filter((city) => city !== data)
       );
     }
     this.placeholder.set(
-      (
-        this.selectedCities().map((selectedCity) => selectedCity.name) || []
-      ).join(', ')
+      (this.selectedCities().map((selectedCity) => selectedCity) || []).join(
+        ', '
+      )
     );
   };
 }

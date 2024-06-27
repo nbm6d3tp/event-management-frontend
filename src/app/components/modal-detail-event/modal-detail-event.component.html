@@ -1,10 +1,16 @@
 <!-- @ts-ignore -->
 <mat-dialog-content class="mat-typography mh-100 p-0 container">
-  @if (!event) {
+  @if (isError()) {
   <div
     class="d-flex justify-content-center align-items-center min-vh-100 w-100 bg-light"
   >
     There is an error!
+  </div>
+  }@else if (!event) {
+  <div
+    class="d-flex justify-content-center align-items-center min-vh-100 w-100 bg-light"
+  >
+    Loading ...
   </div>
   } @else {
   <div class="position-relative">
@@ -114,7 +120,7 @@
         </div>
       </div>
       <div
-        *ngIf="event.locationName"
+        *ngIf="event.location"
         class="mb-3"
         style="display: flex; align-items: center"
       >
@@ -123,12 +129,12 @@
           class="bi bi-geo-alt"
         ></i>
         <div class="fw-bolder">
-          {{ event.locationName }}
+          {{ event.location.name }}
         </div>
       </div>
 
       <mat-chip-set aria-label="Selection">
-        <mat-chip>{{ event.typeEventName }}</mat-chip>
+        <mat-chip>{{ event.typeEvent.name }}</mat-chip>
         <mat-chip>{{ event.typeLocationName }}</mat-chip>
       </mat-chip-set>
 
