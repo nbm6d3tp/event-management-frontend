@@ -1,11 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { TEvent } from '../../data/event';
 import { EventsService } from '../../services/events.service';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AuthenticationService } from '../../services/authentication.service';
 import { TPerson } from '../../data/person';
 import {
@@ -18,17 +14,16 @@ import {
 import { ToastService } from '../../services/toast.service';
 import { ModalFeedbackComponent } from '../modal-feedback/modal-feedback.component';
 import { ModalAddEventComponent } from '../modal-add-event/modal-add-event.component';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-modal-detail-event',
   templateUrl: './modal-detail-event.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './modal-detail-event.component.css',
 })
 export class ModalDetailEventComponent {
   readonly dialogRef = inject(MatDialogRef<ModalDetailEventComponent>);
   readonly eventID = inject<string>(MAT_DIALOG_DATA);
-  readonly dialog = inject(MatDialog);
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -50,7 +45,8 @@ export class ModalDetailEventComponent {
   constructor(
     private eventsService: EventsService,
     private authenticationService: AuthenticationService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private modalService: ModalService
   ) {
     authenticationService.user.subscribe((person) => {
       this.user = person;
@@ -93,12 +89,7 @@ export class ModalDetailEventComponent {
   }
 
   onComment() {
-    const dialogRef = this.dialog.open(ModalFeedbackComponent, {
-      height: '25%',
-      width: '500px',
-    });
-    dialogRef.afterClosed().subscribe((result) => {});
-    console.log('Comment');
+    this.modalService.openModalFeedback();
   }
 
   onDelete() {
@@ -110,12 +101,7 @@ export class ModalDetailEventComponent {
 
   onEdit() {
     if (!this.data.event) return;
-    const dialogRef = this.dialog.open(ModalAddEventComponent, {
-      height: '80%',
-      width: '600px',
-      data: this.data.event?.id,
-    });
-    dialogRef.afterClosed().subscribe((result) => {});
+    this.modalService.openModalAddEvent(this.data.event.id);
     console.log('Edit');
   }
 }
