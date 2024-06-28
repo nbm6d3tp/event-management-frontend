@@ -12,20 +12,22 @@ export class ModalService {
 
   constructor() {}
 
-  openModalAddEvent(idEvent?: string) {
+  openModalAddEvent(data?: { idEvent: string; onSuccess: () => void }) {
     const dialogRef = this.dialog.open(ModalAddEventComponent, {
       height: '500px',
       width: '600px',
-      data: idEvent,
+      data,
     });
     dialogRef.afterClosed().subscribe((result) => {});
   }
 
-  openModalFeedback(idEvent: string) {
+  openModalFeedback(
+    data: { idEvent: string; onSuccess: () => void } | undefined
+  ) {
     const dialogRef = this.dialog.open(ModalFeedbackComponent, {
       height: '260px',
       width: '500px',
-      data: idEvent,
+      data,
     });
     dialogRef.afterClosed().subscribe((result) => {});
   }

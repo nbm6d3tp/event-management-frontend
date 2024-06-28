@@ -14,6 +14,7 @@ import {
 import { ToastService } from '../../services/toast.service';
 import { ModalService } from '../../services/modal.service';
 import { ParticipationService } from '../../services/participation.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-modal-detail-event',
@@ -29,6 +30,8 @@ export class ModalDetailEventComponent {
     this.dialogRef.close();
   }
   event?: TEvent;
+  private eventSubject = new BehaviorSubject<TEvent | undefined>(undefined);
+  event$ = this.eventSubject.asObservable();
   user?: TUser;
 
   constructor(
@@ -41,10 +44,16 @@ export class ModalDetailEventComponent {
     authenticationService.user.subscribe((person) => {
       this.user = person;
     });
-    eventsService.getEvent(this.eventID).subscribe({
+    this.reloadEvent();
+    this.event$.subscribe((event) => {
+      this.event = event;
+    });
+  }
+
+  public reloadEvent(): void {
+    this.eventsService.getEvent(this.eventID).subscribe({
       next: (event) => {
-        console.log(event);
-        this.event = event;
+        this.eventSubject.next(event);
       },
       error: (error) => {
         console.error(error);
@@ -52,6 +61,7 @@ export class ModalDetailEventComponent {
       },
     });
   }
+
   canDelete = canDelete;
 
   canEdit = canEdit;
@@ -70,10 +80,10 @@ export class ModalDetailEventComponent {
     this.toastService.showToastWithConfirm('cancel', () => {
       this.participationService.cancelEvent(this.eventID).subscribe({
         next: () => {
-          this.eventsService.getEvent(this.eventID);
-          this.eventsService.getMyEvents();
+          this.reloadEvent();
         },
         error: (error) => {
+          console.log(error);
           this.toastService.showToast('error', error);
         },
       });
@@ -84,8 +94,7 @@ export class ModalDetailEventComponent {
     this.participationService.participateEvent(this.eventID).subscribe({
       next: () => {
         this.toastService.showToast('success', 'Participate');
-        this.eventsService.getEvent(this.eventID);
-        this.eventsService.getMyEvents();
+        this.reloadEvent();
       },
       error: (error) => {
         this.toastService.showToast('error', error);
@@ -94,15 +103,17 @@ export class ModalDetailEventComponent {
   }
 
   onComment() {
-    this.modalService.openModalFeedback(this.eventID);
+    this.modalService.openModalFeedback({
+      idEvent: this.eventID,
+      onSuccess: this.reloadEvent,
+    });
   }
 
   onDelete() {
     this.toastService.showToastWithConfirm('delete', () => {
       this.eventsService.deleteEvent(this.eventID).subscribe({
         next: () => {
-          this.eventsService.getAll();
-          this.eventsService.getMyEvents();
+          this.reloadEvent();
           this.dialogRef.close();
         },
         error: (error) => {
@@ -114,9 +125,11 @@ export class ModalDetailEventComponent {
 
   onEdit() {
     if (!this.event) return;
-    this.modalService.openModalAddEvent(this.event.idEvent);
-    this.eventsService.getEvent(this.eventID);
-    this.eventsService.getAll();
-    this.eventsService.getMyEvents();
+    this.modalService.openModalAddEvent({
+      idEvent: this.eventID,
+      onSuccess: () => {
+        this.reloadEvent();
+      },
+    });
   }
 }

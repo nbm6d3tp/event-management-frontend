@@ -103,6 +103,7 @@
         <div class="row">
           <div class="col-6">
             <mat-button-toggle-group
+              selected="HYBRID"
               required
               [formControl]="locationTypeControl"
               aria-label="Font Style"
@@ -117,13 +118,12 @@
           </div>
           <div class="col-6">
             <div>
-              <div *ngIf="isDaysError()" class="text-danger mb-3">
-                Day invalid (Start day must be before end day)
+              <div *ngIf="daysError() !== ''" class="text-danger mb-3">
+                {{ daysError() }}
               </div>
             </div>
-            <div *ngIf="isTimeError()" class="text-danger mb-2">
-              Time invalid (With start day the same as end day, start time must
-              be before end time)
+            <div *ngIf="timeError() !== ''" class="text-danger mb-2">
+              {{ timeError() }}
             </div>
             <div>
               <div *ngIf="errorImage() !== ''" class="text-danger mb-3">

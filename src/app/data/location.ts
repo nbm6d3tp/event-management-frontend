@@ -4,7 +4,7 @@ export type TCityGroup = {
 };
 
 export type TLocationType = 'ONSITE' | 'HYBRID' | 'ONLINE';
-export const locationTypes: TLocationType[] = ['HYBRID', 'ONSITE', 'ONLINE'];
+export const locationTypes: TLocationType[] = ['ONSITE', 'HYBRID', 'ONLINE'];
 
 export const _filterGroup = (
   cityGroups: TCityGroup[],

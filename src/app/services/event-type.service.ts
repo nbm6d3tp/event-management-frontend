@@ -12,6 +12,11 @@ export class EventTypeService {
 
   getAll() {
     console.log('Get all types event');
-    return this.http.get<TTypeEvent[]>(this.url);
+    return this.http.get<
+      {
+        idType: string;
+        name: TTypeEvent;
+      }[]
+    >(this.url);
   }
 }

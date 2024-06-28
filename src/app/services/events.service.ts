@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TCreateEvent, TEvent, TFilters } from '../data/event';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 import { TFeedback } from '../data/review';
 
 export type TDateResponse = [
@@ -38,8 +38,25 @@ export const convertDateArrayToDateInstance = (dateArray: TDateResponse) => {
 })
 export class EventsService {
   url = 'http://localhost:8080/v1/events';
+  private eventsSubject = new BehaviorSubject<TEvent[]>([]);
+  events$ = this.eventsSubject.asObservable();
+
+  private myEventsSubject = new BehaviorSubject<TEvent[]>([]);
+  myEvents$ = this.myEventsSubject.asObservable();
 
   constructor(private http: HttpClient) {}
+
+  public reloadEvents(): void {
+    this.getAll().subscribe((events) => {
+      this.eventsSubject.next(events);
+    });
+  }
+
+  public reloadMyEvents(): void {
+    this.getMyEvents().subscribe((events) => {
+      this.myEventsSubject.next(events);
+    });
+  }
 
   getAll(): Observable<TEvent[]> {
     console.log('Get all events');
@@ -97,13 +114,22 @@ export class EventsService {
               }))
             : undefined,
         } as TEvent;
+      }),
+      tap(() => {
+        this.reloadEvents();
+        this.reloadMyEvents();
       })
     );
   }
 
   deleteEvent(id: string) {
     console.log('Delete event ', id);
-    return this.http.delete(this.url + '/' + id);
+    return this.http.delete(this.url + '/' + id).pipe(
+      tap(() => {
+        this.reloadEvents();
+        this.reloadMyEvents();
+      })
+    );
   }
 
   createEvent(event: TCreateEvent): Observable<TEvent> {
@@ -121,6 +147,10 @@ export class EventsService {
               }))
             : undefined,
         } as TEvent;
+      }),
+      tap(() => {
+        this.reloadEvents();
+        this.reloadMyEvents();
       })
     );
   }

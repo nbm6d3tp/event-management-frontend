@@ -15,7 +15,9 @@ import { EventsService } from '../../services/events.service';
 export class ModalFeedbackComponent {
   user?: TUser;
   rating = signal(0);
-  readonly eventID = inject<string>(MAT_DIALOG_DATA);
+  readonly data = inject<
+    { idEvent: string; onSuccess: () => void } | undefined
+  >(MAT_DIALOG_DATA);
 
   constructor(
     private fb: FormBuilder,
@@ -38,17 +40,17 @@ export class ModalFeedbackComponent {
   }
 
   onSubmit(): void {
+    if (!this.data) return;
     this.feedbackService
       .createFeedback({
-        idEvent: this.eventID,
+        idEvent: this.data.idEvent,
         content: this.comment.value!,
         score: this.rating(),
       })
       .subscribe({
         next: () => {
           this.toastService.showToast('success', 'Feedback sent!');
-          this.eventsService.getEvent(this.eventID);
-          this.eventsService.getMyEvents();
+          this.data?.onSuccess();
         },
         error: (error) => {
           this.toastService.showToast('error', error);

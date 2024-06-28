@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  ViewChild,
   inject,
   input,
   isDevMode,
@@ -67,7 +68,9 @@ export class ModalAddEventComponent implements OnInit {
   placeholderCity = signal('');
 
   readonly dialogRef = inject(MatDialogRef<ModalAddEventComponent>);
-  readonly data = inject<string | undefined>(MAT_DIALOG_DATA);
+  readonly data = inject<
+    { idEvent: string; onSuccess: () => void } | undefined
+  >(MAT_DIALOG_DATA);
 
   startDayForm = new FormGroup({
     date: new FormControl<Date | null>(isDevMode() ? new Date() : null),
@@ -81,6 +84,12 @@ export class ModalAddEventComponent implements OnInit {
   });
   endTimeForm = new FormGroup({
     time: new FormControl<string | null>(null),
+  });
+
+  locationTypeControl = new FormControl<TLocationType>('ONSITE');
+
+  cityForm = this.fb.group({
+    cityGroup: '',
   });
   user?: TUser | null;
 
@@ -99,11 +108,12 @@ export class ModalAddEventComponent implements OnInit {
       this.cityGroups = data;
     });
     eventTypeService.getAll().subscribe((data) => {
-      this.eventTypesList = data;
+      console.log({ data });
+      this.eventTypesList = data.map((data) => data.name);
     });
     this.authenticationService.user.subscribe((x) => (this.user = x));
     if (this.data) {
-      eventService.getEvent(this.data).subscribe((event) => {
+      eventService.getEvent(this.data.idEvent).subscribe((event) => {
         if (!event) {
           console.error('Event not found');
           return;
@@ -152,17 +162,10 @@ export class ModalAddEventComponent implements OnInit {
   isCitiesError = false;
   isLocationTypesError = false;
 
-  isDaysError = signal(false);
-  isTimeError = signal(false);
+  daysError = signal('');
+  timeError = signal('');
   errorImage = signal('');
 
-  locationTypeControl = new FormControl<TLocationType | undefined>(
-    isDevMode() ? 'ONSITE' : undefined
-  );
-
-  cityForm = this.fb.group({
-    cityGroup: '',
-  });
   citiesGroupOptions: Observable<TCityGroup[]> | undefined;
 
   ngOnInit() {
@@ -181,14 +184,23 @@ export class ModalAddEventComponent implements OnInit {
   }
 
   private computeErrors(): void {
-    this.isDaysError.set(false);
-    this.isTimeError.set(false);
+    this.daysError.set('');
+    this.timeError.set('');
     if (!this.startDayForm.value.date || !this.endDayForm.value.date) return;
+    if (
+      this.startDayForm.value.date.getTime() < new Date().getTime() ||
+      this.endDayForm.value.date.getTime() < new Date().getTime()
+    ) {
+      this.daysError.set(
+        'Day invalid (Start day and end day must be after current day)'
+      );
+      return;
+    }
     if (
       this.startDayForm.value.date.getTime() >
       this.endDayForm.value.date.getTime()
     ) {
-      this.isDaysError.set(true);
+      this.daysError.set('Day invalid (Start day must be before end day)');
     } else {
       if (
         this.startDayForm.value.date.getTime() ==
@@ -200,7 +212,9 @@ export class ModalAddEventComponent implements OnInit {
           getTimeAsNumberOfMinutes(this.startTimeForm.value.time) >
           getTimeAsNumberOfMinutes(this.endTimeForm.value.time)
         ) {
-          this.isTimeError.set(true);
+          this.timeError.set(
+            'Time invalid (With start day the same as end day, start time must be before end time)'
+          );
         }
       }
     }
@@ -311,7 +325,7 @@ export class ModalAddEventComponent implements OnInit {
         })
         .subscribe({
           next: () => {
-            this.eventService.getMyEvents();
+            this.data?.onSuccess();
             this.toastService.showToast(
               'success',
               'Event updated successfully!'
@@ -339,7 +353,6 @@ export class ModalAddEventComponent implements OnInit {
         })
         .subscribe({
           next: () => {
-            this.eventService.getMyEvents();
             this.toastService.showToast(
               'success',
               'Event created successfully!'
@@ -378,8 +391,8 @@ export class ModalAddEventComponent implements OnInit {
       !this.selectedEventType ||
       cityInvalid ||
       locationTypeInvalid ||
-      this.isDaysError() ||
-      this.isTimeError()
+      this.daysError() !== '' ||
+      this.timeError() !== ''
     );
   }
 
