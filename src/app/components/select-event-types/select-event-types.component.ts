@@ -14,8 +14,9 @@ export class SelectEventTypesComponent implements OnInit {
   typeEventList: TTypeEvent[] = [];
 
   constructor(private eventTypeService: EventTypeService) {
-    eventTypeService.getAll().subscribe((data) => {
-      this.typeEventList = data.map((typeEvent) => typeEvent.name);
+    eventTypeService.eventTypesList$.subscribe((data) => {
+      console.log('SelectEventTypesComponent', data);
+      this.typeEventList = data;
     });
   }
 

@@ -22,7 +22,7 @@ export class SelectCitiesComponent {
     private fb: FormBuilder,
     private locationService: LocationService
   ) {
-    locationService.getAll().subscribe((data) => {
+    locationService.locationsList$.subscribe((data) => {
       this.cityGroups = data;
     });
   }

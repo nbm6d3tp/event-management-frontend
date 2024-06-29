@@ -136,11 +136,11 @@ export class ModalAddEventComponent implements OnInit {
   ) {
     console.log('Initial data to edit:', { data: this.data });
     this.checkLocationType(this.locationTypeControl.value!);
-    locationService.getAll().subscribe((data) => {
+    locationService.locationsList$.subscribe((data) => {
       this.cityGroups = data;
     });
-    eventTypeService.getAll().subscribe((data) => {
-      this.eventTypesList = data.map((data) => data.name);
+    eventTypeService.eventTypesList$.subscribe((data) => {
+      this.eventTypesList = data;
     });
     this.authenticationService.user.subscribe((x) => (this.user = x));
   }

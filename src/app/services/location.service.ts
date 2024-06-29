@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { TCityGroup } from '../data/location';
 
 function groupByStartingLetter(cities: string[]): TCityGroup[] {
@@ -32,7 +32,14 @@ function groupByStartingLetter(cities: string[]): TCityGroup[] {
 export class LocationService {
   url = 'http://localhost:8080/v1/locations';
 
-  constructor(private http: HttpClient) {}
+  private locationsListSubject = new BehaviorSubject<TCityGroup[]>([]);
+  locationsList$ = this.locationsListSubject.asObservable();
+
+  constructor(private http: HttpClient) {
+    this.getAll().subscribe((locationsList) => {
+      this.locationsListSubject.next(locationsList);
+    });
+  }
 
   getAll(): Observable<TCityGroup[]> {
     console.log('Get all locations');
