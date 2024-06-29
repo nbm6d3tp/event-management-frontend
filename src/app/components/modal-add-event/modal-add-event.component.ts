@@ -27,7 +27,7 @@ import { EventsService } from '../../services/events.service';
 import { LocationService } from '../../services/location.service';
 import { EventTypeService } from '../../services/event-type.service';
 
-function toISOStringWithTimeZoneOffset(date: Date) {
+export function toISOStringWithTimeZoneOffset(date: Date) {
   return new Date(
     date.getTime() - date.getTimezoneOffset() * 60000
   ).toISOString();

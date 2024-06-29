@@ -3,6 +3,7 @@ import { TEvent, TTypeEvent } from '../data/event';
 import { EventsService } from '../services/events.service';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { TCreateTypeLocation, TLocationType } from '../data/location';
+import { toISOStringWithTimeZoneOffset } from '../components/modal-add-event/modal-add-event.component';
 
 @Component({
   selector: 'app-all-events',
@@ -53,8 +54,12 @@ export class AllEventsComponent {
           (selectedLocationType) =>
             selectedLocationType.toUpperCase() as TCreateTypeLocation
         ),
-        startDate: this.selectedDateRange.start!,
-        endDate: this.selectedDateRange.end!,
+        startDate: this.selectedDateRange.start
+          ? toISOStringWithTimeZoneOffset(this.selectedDateRange.start)
+          : undefined,
+        endDate: this.selectedDateRange.end
+          ? toISOStringWithTimeZoneOffset(this.selectedDateRange.end)
+          : undefined,
         orderBy: this.orderByCriteria.value!,
       })
       .subscribe({

@@ -156,13 +156,17 @@ export class EventsService {
   }
 
   filterEvents(filters: TFilters): Observable<TEvent[]> {
-    const refinedFilters = {
-      ...filters,
-      startDate: filters.startDate.toString(),
-      endDate: filters.endDate.toString(),
-    };
-    console.log('Filter events ', refinedFilters);
-    const queryParams = new HttpParams({ fromObject: refinedFilters });
+    console.log('Filter events ', filters);
+    const newQueryParameterObject = Object.entries(filters).reduce(
+      (acc, [key, value]) => ({
+        ...acc,
+        ...(value != null && { [key]: value }),
+      }),
+      {}
+    );
+    console.log('New filter events ', newQueryParameterObject);
+
+    const queryParams = new HttpParams({ fromObject: newQueryParameterObject });
     return this.http
       .get<TEventResponse[]>(this.url + '/' + 'search', {
         params: queryParams,

@@ -4,8 +4,8 @@ import { TFeedback } from './review';
 
 export type TFilters = {
   eventTypes: TTypeEvent[]; //array ids
-  startDate: Date;
-  endDate: Date;
+  startDate?: string;
+  endDate?: string;
   cities: string[];
   locationTypes: TCreateTypeLocation[]; //array ids
   orderBy: string;
@@ -21,6 +21,7 @@ export type TCreateEvent = Omit<
   | 'location'
   | 'startTime'
   | 'endTime'
+  | 'score'
 > & {
   typeEventName: TTypeEvent;
   typeLocation: TCreateTypeLocation;
@@ -49,6 +50,7 @@ export type TEvent =
       participants: TUser[];
       feedbacks?: TFeedback[];
       image?: string;
+      score?: number;
     }
   | {
       idEvent: string;
@@ -66,6 +68,7 @@ export type TEvent =
       participants: TUser[];
       feedbacks?: TFeedback[];
       image?: string;
+      score?: number;
     };
 
 export type TTypeEvent = 'Meetup' | 'Conference' | 'Workshop';

@@ -50,23 +50,51 @@
     ></div>
 
     <div
-      *ngIf="isParticipating()"
       style="
         position: absolute;
         top: 10px;
         right: 10px;
-        background-color: #32a852;
-        color: #fff;
-        padding: 5px 10px;
-        border-radius: 12px;
-        font-size: 12px;
+        flex-direction: column;
         display: flex;
-        justify-content: center;
-        align-items: center;
       "
     >
-      Participated
+      <div
+        *ngIf="isParticipating()"
+        style="
+          background-color: #32a852;
+          color: #fff;
+          padding: 5px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        "
+      >
+        Participated
+      </div>
+      <div
+        *ngIf="event().score"
+        style="
+          background-color: black;
+          color: #fff;
+          padding: 5px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-top: 5px;
+        "
+      >
+        {{ event().score
+        }}<i
+          style="margin-left: 2px; color: yellow"
+          class="bi bi-star-fill"
+        ></i>
+      </div>
     </div>
+
     <img
       style="height: 100%; width: 100%"
       [src]="event().image || 'https://placehold.co/1500x1000?text=No%20Image'"

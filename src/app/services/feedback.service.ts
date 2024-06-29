@@ -36,6 +36,7 @@ export class FeedbackService {
     return this.http.post<TFeedback>(this.url, data).pipe(
       tap(() => {
         this.eventsServices.reloadMyEvents();
+        this.eventsServices.reloadEvents();
       })
     );
   }

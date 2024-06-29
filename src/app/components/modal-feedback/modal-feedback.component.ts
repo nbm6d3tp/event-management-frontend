@@ -15,7 +15,10 @@ import { EventsService } from '../../services/events.service';
 export class ModalFeedbackComponent {
   user?: TUser;
   rating = signal(0);
-  readonly data = inject<string>(MAT_DIALOG_DATA);
+  isError = signal(false);
+  readonly data = inject<{ idEvent: string; onSuccess: () => void }>(
+    MAT_DIALOG_DATA
+  );
 
   constructor(
     private fb: FormBuilder,
@@ -24,7 +27,6 @@ export class ModalFeedbackComponent {
     private feedbackService: FeedbackService,
     private toastService: ToastService
   ) {
-    console.log(this.data);
     this.authenticationService.user.subscribe((x) => (this.user = x));
   }
 
@@ -39,10 +41,11 @@ export class ModalFeedbackComponent {
   }
 
   onSubmit(): void {
-    if (!this.data) return;
+    if (this.rating() < 1) this.isError.set(true);
+    if (!this.data || this.isError()) return;
     this.feedbackService
       .createFeedback({
-        idEvent: this.data,
+        idEvent: this.data.idEvent,
         content: this.comment.value!,
         score: this.rating(),
       })
@@ -58,6 +61,9 @@ export class ModalFeedbackComponent {
           this.toastService.showToast({
             icon: 'error',
           });
+        },
+        complete: () => {
+          this.data.onSuccess();
         },
       });
     this.dialogRef.close();

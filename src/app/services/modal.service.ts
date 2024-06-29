@@ -26,13 +26,14 @@ export class ModalService {
 
   openModalFeedback(idEvent?: string, onSuccess?: () => void) {
     const dialogRef = this.dialog.open(ModalFeedbackComponent, {
-      height: '260px',
+      height: '280px',
       width: '500px',
-      data: idEvent,
+      data: {
+        idEvent,
+        onSuccess,
+      },
     });
-    dialogRef.afterClosed().subscribe(() => {
-      if (onSuccess) onSuccess();
-    });
+    dialogRef.afterClosed().subscribe(() => {});
   }
 
   openModalDetailEvent(eventID: string) {

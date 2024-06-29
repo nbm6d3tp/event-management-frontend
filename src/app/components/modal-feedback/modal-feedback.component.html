@@ -45,6 +45,7 @@
       </form>
     </div>
     <app-star-rating [(rating)]="rating" />
+    <div class="text-danger" *ngIf="isError()!">Score can't be 0</div>
     <div class="d-flex justify-content-between align-items-center mb-3">
       <button (click)="onCancel()" class="btn btn-outline-danger me-3">
         Cancel
