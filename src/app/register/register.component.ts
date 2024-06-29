@@ -56,7 +56,6 @@ export class RegisterComponent {
 
     if (
       this.form.valid &&
-      this.selectedImage &&
       this.email.value &&
       this.password.value &&
       this.firstName.value &&
@@ -64,21 +63,23 @@ export class RegisterComponent {
     ) {
       let urlImage = undefined;
 
-      const { data: dataSupabase, error: errorSupabase } =
-        await this.supabase.uploadImage('events', this.selectedImage);
-      if (errorSupabase || dataSupabase === null) {
-        if (errorSupabase?.message === 'The resource already exists') {
-          this.errorImage.set(
-            'The resource already exists. Please choose another image or change its name.'
-          );
+      if (this.selectedImage) {
+        const { data: dataSupabase, error: errorSupabase } =
+          await this.supabase.uploadImage('events', this.selectedImage);
+        if (errorSupabase || dataSupabase === null) {
+          if (errorSupabase?.message === 'The resource already exists') {
+            this.errorImage.set(
+              'The resource already exists. Please choose another image or change its name.'
+            );
+          } else {
+            this.errorImage.set(
+              'There was an error uploading the image. Please try again.'
+            );
+          }
+          return;
         } else {
-          this.errorImage.set(
-            'There was an error uploading the image. Please try again.'
-          );
+          urlImage = supabaseUrlPublic + dataSupabase.fullPath;
         }
-        return;
-      } else {
-        urlImage = supabaseUrlPublic + dataSupabase.fullPath;
       }
 
       this.authenticationService
