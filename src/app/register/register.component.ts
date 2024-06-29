@@ -56,15 +56,14 @@ export class RegisterComponent {
 
     if (
       this.form.valid &&
-      this.selectedImage &&
       this.email.value &&
       this.password.value &&
       this.firstName.value &&
       this.lastName.value
     ) {
-      let urlImage = '';
+      let urlImage = undefined;
 
-      if (!isDevMode()) {
+      if (this.selectedImage) {
         const { data: dataSupabase, error: errorSupabase } =
           await this.supabase.uploadImage('events', this.selectedImage);
         if (errorSupabase || dataSupabase === null) {
@@ -78,14 +77,10 @@ export class RegisterComponent {
             );
           }
           return;
+        } else {
+          urlImage = supabaseUrlPublic + dataSupabase.fullPath;
         }
-        urlImage = supabaseUrlPublic + dataSupabase.fullPath;
       }
-
-      urlImage =
-        urlImage !== ''
-          ? urlImage
-          : 'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/events/event1.jpg';
 
       this.authenticationService
         .register({

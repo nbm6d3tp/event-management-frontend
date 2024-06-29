@@ -8,6 +8,7 @@ import {
 import { AuthenticationService } from '../services/authentication.service';
 
 function parseJwt(token?: string) {
+  console.log({ token });
   if (!token) return undefined;
   var base64Url = token.split('.')[1];
   var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -20,6 +21,8 @@ function parseJwt(token?: string) {
       })
       .join('')
   );
+
+  console.log('jsonPayload', jsonPayload);
 
   return JSON.parse(jsonPayload);
 }

@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  inject,
-  input,
-  isDevMode,
-  signal,
-} from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -21,6 +14,7 @@ import {
 import { Observable, map, startWith } from 'rxjs';
 import {
   TCityGroup,
+  TCreateTypeLocation,
   TLocationType,
   _filterGroup,
   locationTypes,
@@ -32,6 +26,21 @@ import { ToastService } from '../../services/toast.service';
 import { EventsService } from '../../services/events.service';
 import { LocationService } from '../../services/location.service';
 import { EventTypeService } from '../../services/event-type.service';
+
+export function toISOStringWithTimeZoneOffset(date: Date) {
+  return new Date(
+    date.getTime() - date.getTimezoneOffset() * 60000
+  ).toISOString();
+}
+
+function formatTime(date: Date) {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+
+  return `${hours < 10 ? '0' + hours : hours}:${
+    minutes < 10 ? '0' + minutes : minutes
+  }`;
+}
 
 function combineDateAndTime(dateObj: Date, timeStr: string) {
   // Extract year, month, and day from the date object
@@ -63,27 +72,57 @@ function getTimeAsNumberOfMinutes(time: string) {
 export class ModalAddEventComponent implements OnInit {
   eventTypesList: TTypeEvent[] = [];
   locationTypes = locationTypes;
-  event: TEvent | undefined;
   placeholderCity = signal('');
 
   readonly dialogRef = inject(MatDialogRef<ModalAddEventComponent>);
-  readonly data = inject<string | undefined>(MAT_DIALOG_DATA);
+  readonly data = inject<TEvent | undefined>(MAT_DIALOG_DATA);
 
   startDayForm = new FormGroup({
-    date: new FormControl<Date | null>(isDevMode() ? new Date() : null),
+    date: new FormControl<Date | null>(this.data ? this.data.startTime : null),
   });
   endDayForm = new FormGroup({
-    date: new FormControl<Date | null>(isDevMode() ? new Date() : null),
+    date: new FormControl<Date | null>(this.data ? this.data.endTime : null),
   });
 
   startTimeForm = new FormGroup({
-    time: new FormControl<string | null>(null),
+    time: new FormControl<string | null>(
+      this.data ? formatTime(this.data.startTime) : null
+    ),
   });
   endTimeForm = new FormGroup({
-    time: new FormControl<string | null>(null),
+    time: new FormControl<string | null>(
+      this.data ? formatTime(this.data.endTime) : null
+    ),
   });
-  user?: TUser | null;
 
+  locationTypeControl = new FormControl<TLocationType>(
+    this.data ? this.data.typeLocationName : locationTypes[0]
+  );
+
+  cityForm = this.fb.group({
+    cityGroup: this.data ? this.data.location?.name : '',
+  });
+
+  selectedEventType = signal<TTypeEvent>(
+    this.data ? this.data.typeEvent.name : 'Conference'
+  );
+
+  form = this.fb.group({
+    title: [
+      this.data ? this.data.title : '',
+      {
+        validators: [Validators.required],
+      },
+    ],
+    description: [
+      this.data ? this.data.description : '',
+      {
+        validators: [Validators.required, Validators.maxLength(2500)],
+      },
+    ],
+  });
+
+  user?: TUser | null;
   cityGroups: TCityGroup[] = [];
 
   constructor(
@@ -95,53 +134,27 @@ export class ModalAddEventComponent implements OnInit {
     private locationService: LocationService,
     private eventTypeService: EventTypeService
   ) {
-    locationService.getAll().subscribe((data) => {
+    console.log('Initial data to edit:', { data: this.data });
+    this.checkLocationType(this.locationTypeControl.value!);
+    locationService.locationsList$.subscribe((data) => {
       this.cityGroups = data;
     });
-    eventTypeService.getAll().subscribe((data) => {
+    eventTypeService.eventTypesList$.subscribe((data) => {
       this.eventTypesList = data;
     });
     this.authenticationService.user.subscribe((x) => (this.user = x));
-    if (this.data) {
-      eventService.getEvent(this.data).subscribe((event) => {
-        if (!event) {
-          console.error('Event not found');
-          return;
-        }
-        this.form.controls['title'].setValue(event.title);
-        this.form.controls['description'].setValue(event.description);
-        this.startDayForm.controls['date'].setValue(new Date(event.startTime));
-        this.endDayForm.controls['date'].setValue(new Date(event.endTime));
-        this.startTimeForm.controls['time'].setValue(
-          event.startTime.toLocaleTimeString().slice(0, 5)
-        );
-        this.endTimeForm.controls['time'].setValue(
-          event.endTime.toLocaleTimeString().slice(0, 5)
-        );
-        this.selectedEventType = event.typeEvent.name;
-        this.cityForm.controls['cityGroup'].setValue(
-          event.location?.name || ''
-        );
-        this.locationTypeControl.setValue(event.typeLocationName);
-        this.event = event;
-        return;
-      });
-    }
   }
 
-  checkLocationType(event: MatButtonToggleChange) {
-    const value = event.value;
+  checkLocationType(value: string) {
     const ctrl = this.cityForm.controls['cityGroup'];
-
-    if (event.value !== 'ONLINE') {
+    ctrl.disable();
+    if (value !== 'Online') {
       ctrl.enable();
     } else {
       ctrl.disable();
-      ctrl.setValue(null);
     }
   }
 
-  selectedEventType: undefined | TTypeEvent;
   selectedImage: undefined | File;
 
   isStartDayError = false;
@@ -152,17 +165,9 @@ export class ModalAddEventComponent implements OnInit {
   isCitiesError = false;
   isLocationTypesError = false;
 
-  isDaysError = signal(false);
-  isTimeError = signal(false);
+  daysError = signal('');
+  timeError = signal('');
   errorImage = signal('');
-
-  locationTypeControl = new FormControl<TLocationType | undefined>(
-    isDevMode() ? 'ONSITE' : undefined
-  );
-
-  cityForm = this.fb.group({
-    cityGroup: '',
-  });
   citiesGroupOptions: Observable<TCityGroup[]> | undefined;
 
   ngOnInit() {
@@ -181,14 +186,29 @@ export class ModalAddEventComponent implements OnInit {
   }
 
   private computeErrors(): void {
-    this.isDaysError.set(false);
-    this.isTimeError.set(false);
+    this.daysError.set('');
+    this.timeError.set('');
     if (!this.startDayForm.value.date || !this.endDayForm.value.date) return;
+    if (
+      combineDateAndTime(
+        this.startDayForm.value.date,
+        this.startTimeForm.value.time!
+      ).getTime() < new Date().getTime() ||
+      combineDateAndTime(
+        this.endDayForm.value.date,
+        this.endTimeForm.value.time!
+      ).getTime() < new Date().getTime()
+    ) {
+      this.daysError.set(
+        'Day invalid (Start day/time and end day/time must be after current moment)'
+      );
+      return;
+    }
     if (
       this.startDayForm.value.date.getTime() >
       this.endDayForm.value.date.getTime()
     ) {
-      this.isDaysError.set(true);
+      this.daysError.set('Day invalid (Start day must be before end day)');
     } else {
       if (
         this.startDayForm.value.date.getTime() ==
@@ -200,32 +220,15 @@ export class ModalAddEventComponent implements OnInit {
           getTimeAsNumberOfMinutes(this.startTimeForm.value.time) >
           getTimeAsNumberOfMinutes(this.endTimeForm.value.time)
         ) {
-          this.isTimeError.set(true);
+          this.timeError.set(
+            'Time invalid (With start day the same as end day, start time must be before end time)'
+          );
         }
       }
     }
   }
 
-  errorAuthenticating = false;
-  form = this.fb.group({
-    title: [
-      isDevMode() ? 'New Event' : '',
-      {
-        validators: [Validators.required],
-      },
-    ],
-    description: [
-      isDevMode()
-        ? 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi earum optio iste aspernatur nobis accusantium nulla molestias, obcaecati, maiores nisi id esse recusandae quod? Itaque et facere similique perspiciatis qui!'
-        : '',
-      {
-        validators: [Validators.required, Validators.maxLength(2500)],
-      },
-    ],
-  });
-
   onFocus(input: HTMLElement) {
-    this.errorAuthenticating = false;
     const formControlName = input.getAttribute('formControlName') as
       | 'title'
       | 'description'
@@ -264,64 +267,52 @@ export class ModalAddEventComponent implements OnInit {
       return;
     }
 
-    let urlImage = '';
+    let urlImage = undefined;
 
-    if (!isDevMode()) {
-      if (image) {
-        const { data: dataSupabase, error: errorSupabase } =
-          await this.supabase.uploadImage('events', image);
-        if (errorSupabase || dataSupabase === null) {
-          if (errorSupabase?.message === 'The resource already exists') {
-            this.errorImage.set(
-              'The resource already exists. Please choose another image or change its name.'
-            );
-          } else {
-            this.errorImage.set(
-              'There was an error uploading the image. Please try again.'
-            );
-          }
-          return;
+    if (image) {
+      const { data: dataSupabase, error: errorSupabase } =
+        await this.supabase.uploadImage('events', image);
+      if (errorSupabase || dataSupabase === null) {
+        if (errorSupabase?.message === 'The resource already exists') {
+          this.errorImage.set(
+            'The resource already exists. Please choose another image or change its name.'
+          );
+        } else {
+          this.errorImage.set(
+            'There was an error uploading the image. Please try again.'
+          );
         }
-        urlImage = supabaseUrlPublic + dataSupabase.fullPath;
-      } else {
-        urlImage =
-          'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/Default_avatar_profile.jpg';
+        return;
       }
+      urlImage = supabaseUrlPublic + dataSupabase.fullPath;
     }
-
-    urlImage =
-      urlImage !== ''
-        ? urlImage
-        : 'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/events/event1.jpg';
 
     if (this.data) {
       this.eventService
-        .editEvent(this.event?.idEvent!, {
+        .editEvent(this.data.idEvent, {
           title: title!,
           description: description!,
-          startTime: combineDateAndTime(startDay, startTime),
-          endTime: combineDateAndTime(endDay, endTime),
-          typeEventName: eventType!,
-          locationName: city!,
-          typeLocation: locationType!,
-          image:
-            this.event?.image ||
-            'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/Default_avatar_profile.jpg',
+          startTime: toISOStringWithTimeZoneOffset(
+            combineDateAndTime(startDay, startTime)
+          ),
+          endTime: toISOStringWithTimeZoneOffset(
+            combineDateAndTime(endDay, endTime)
+          ),
+          typeEventName: eventType()!,
+          locationName: locationType !== 'Online' ? city! : undefined,
+          typeLocation: locationType!.toUpperCase() as TCreateTypeLocation,
+          image: this.data.image,
           organizer: this.user!,
         })
         .subscribe({
           next: () => {
-            this.eventService.getMyEvents();
-            this.toastService.showToast(
-              'success',
-              'Event updated successfully!'
-            );
+            this.toastService.showToast({
+              icon: 'success',
+              title: 'Event updated successfully!',
+            });
           },
           error: (error) => {
-            this.toastService.showToast(
-              'error',
-              error + '. Please try again later'
-            );
+            this.toastService.showToast({ icon: 'error' });
           },
         });
     } else {
@@ -329,27 +320,29 @@ export class ModalAddEventComponent implements OnInit {
         .createEvent({
           title: title!,
           description: description!,
-          startTime: combineDateAndTime(startDay, startTime),
-          endTime: combineDateAndTime(endDay, endTime),
-          typeEventName: eventType!,
-          locationName: city!,
-          typeLocation: locationType!,
+          startTime: toISOStringWithTimeZoneOffset(
+            combineDateAndTime(startDay, startTime)
+          ),
+          endTime: toISOStringWithTimeZoneOffset(
+            combineDateAndTime(endDay, endTime)
+          ),
+          typeEventName: eventType()!,
+          locationName: locationType !== 'Online' ? city! : undefined,
+          typeLocation: locationType!.toUpperCase() as TCreateTypeLocation,
           image: urlImage,
           organizer: this.user!,
         })
         .subscribe({
           next: () => {
-            this.eventService.getMyEvents();
-            this.toastService.showToast(
-              'success',
-              'Event created successfully!'
-            );
+            this.toastService.showToast({
+              icon: 'success',
+              title: 'Event created successfully!',
+            });
           },
           error: (error) => {
-            this.toastService.showToast(
-              'error',
-              error + '. Please try again later'
-            );
+            this.toastService.showToast({
+              icon: 'error',
+            });
           },
         });
     }
@@ -378,8 +371,8 @@ export class ModalAddEventComponent implements OnInit {
       !this.selectedEventType ||
       cityInvalid ||
       locationTypeInvalid ||
-      this.isDaysError() ||
-      this.isTimeError()
+      this.daysError() !== '' ||
+      this.timeError() !== ''
     );
   }
 

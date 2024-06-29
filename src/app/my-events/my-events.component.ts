@@ -56,7 +56,7 @@ const haveCommented = (event: TEvent, person: TUser) => {
 };
 
 export const canDelete = (event: TEvent, person: TUser) =>
-  event.organizer.email == person.email;
+  event.organizer.email == person.email && !isEventEnd(event);
 
 export const canEdit = (event: TEvent, person: TUser) =>
   !isEventEnd(event) && event.organizer.email == person.email;
@@ -108,8 +108,8 @@ export class MyEventsComponent {
     this.modalService.openModalAddEvent();
   }
 
-  onClickEditEvent(idEvent: string) {
-    this.modalService.openModalAddEvent(idEvent);
+  onClickEditEvent(event: TEvent) {
+    this.modalService.openModalAddEvent(event);
   }
 
   onClickFeedbackEvent(idEvent: string) {
@@ -120,11 +120,16 @@ export class MyEventsComponent {
     this.toastService.showToastWithConfirm('cancel', () => {
       this.participationService.cancelEvent(idEvent).subscribe({
         next: () => {
-          this.eventsService.getEvent(idEvent);
-          this.eventsService.getMyEvents();
+          this.toastService.showToast({
+            icon: 'success',
+            title: 'Event canceled!',
+          });
         },
         error: (error) => {
-          this.toastService.showToast('error', error);
+          console.error(error);
+          this.toastService.showToast({
+            icon: 'error',
+          });
         },
       });
     });
@@ -134,11 +139,16 @@ export class MyEventsComponent {
     this.toastService.showToastWithConfirm('delete', () => {
       this.eventsService.deleteEvent(eventID).subscribe({
         next: () => {
-          this.eventsService.getAll();
-          this.eventsService.getMyEvents();
+          this.toastService.showToast({
+            icon: 'success',
+            title: 'Event deleted!',
+          });
         },
         error: (error) => {
-          this.toastService.showToast('error', error);
+          console.error(error);
+          this.toastService.showToast({
+            icon: 'error',
+          });
         },
       });
     });
@@ -158,8 +168,9 @@ export class MyEventsComponent {
   ) {
     this.authenticationService.user.subscribe((person) => {
       this.user = person;
-      if (person)
-        eventsService.getMyEvents().subscribe((events) => {
+      if (person) {
+        eventsService.reloadMyEvents();
+        eventsService.myEvents$.subscribe((events) => {
           this.events = events.map((event) => {
             return {
               start: event.startTime,
@@ -175,48 +186,44 @@ export class MyEventsComponent {
             };
           });
         });
+      }
     });
   }
 
   getPossibleActions(event: TEvent, person: TUser): CalendarEventAction[] {
     const actions = [];
-    if (event.organizer.email == person.email) {
+    if (canDelete(event, person))
       actions.push({
         label: '<i class="bi bi-trash"></i>',
         a11yLabel: 'Delete',
-        onClick: ({ event }: { event: CalendarEvent }): void => {
-          this.onClickDeleteEvent(event.meta);
+        onClick: () => {
+          this.onClickDeleteEvent(event.idEvent);
         },
       });
-      if (!isEventEnd(event))
-        actions.push({
-          label: '<i class="mx-1 bi bi-pencil"></i>',
-          a11yLabel: 'Edit',
-          onClick: ({ event }: { event: CalendarEvent }): void => {
-            this.onClickEditEvent(event.meta);
-          },
-        });
-    } else {
-      if (isEventEnd(event)) {
-        if (haveParticipated(event, person) && !haveCommented(event, person))
-          actions.push({
-            label: '<i class="mx-1 bi bi-chat-dots"></i>',
-            a11yLabel: 'Feedback',
-            onClick: ({ event }: { event: CalendarEvent }): void => {
-              this.onClickFeedbackEvent(event.meta);
-            },
-          });
-      } else {
-        if (haveParticipated(event, person))
-          actions.push({
-            label: '<i class="mx-1 bi bi-x-circle"></i>',
-            a11yLabel: 'Cancel',
-            onClick: ({ event }: { event: CalendarEvent }): void => {
-              this.onClickCancelEvent(event.meta);
-            },
-          });
-      }
-    }
+    if (canEdit(event, person))
+      actions.push({
+        label: '<i class="mx-1 bi bi-pencil"></i>',
+        a11yLabel: 'Edit',
+        onClick: () => {
+          this.onClickEditEvent(event);
+        },
+      });
+    if (canComment(event, person))
+      actions.push({
+        label: '<i class="mx-1 bi bi-chat-dots"></i>',
+        a11yLabel: 'Feedback',
+        onClick: () => {
+          this.onClickFeedbackEvent(event.idEvent);
+        },
+      });
+    if (canCancel(event, person))
+      actions.push({
+        label: '<i class="mx-1 bi bi-x-circle"></i>',
+        a11yLabel: 'Cancel',
+        onClick: () => {
+          this.onClickCancelEvent(event.idEvent);
+        },
+      });
     return actions;
   }
 

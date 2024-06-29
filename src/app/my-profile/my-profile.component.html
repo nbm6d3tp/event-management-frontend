@@ -25,7 +25,7 @@
                 <h2 class="display-5">
                   Name :
                   {{
-                    user?.firstname || "" | getNamePerson: user?.lastname || ""
+                    user?.firstname || "" | getNamePerson : user?.lastname || ""
                   }}
                 </h2>
                 <h2 class="display-5">Email : {{ user?.email }}</h2>
@@ -39,7 +39,10 @@
             </div>
             <div class="col-4">
               <img
-                src="{{ user?.avatar }}"
+                src="{{
+                  user?.avatar ||
+                    'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/Default_avatar_profile.jpg'
+                }}"
                 class="img-fluid rounded-circle"
                 alt="Profile Picture"
               />
@@ -69,9 +72,9 @@
         <div class="accordion-body">
           <div class="row g-4">
             @for (event of myEvents; track event.idEvent) {
-              <div class="col-4">
-                <app-card-event [event]="event"></app-card-event>
-              </div>
+            <div class="col-4">
+              <app-card-event [event]="event"></app-card-event>
+            </div>
             }
           </div>
         </div>

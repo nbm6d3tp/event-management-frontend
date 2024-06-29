@@ -1,10 +1,10 @@
 <div
   (click)="onClick()"
-  onclick=""
   class="card shadow"
   style="cursor: pointer; height: 330px"
+  [style.opacity]="isEnded() ? 0.5 : 1"
 >
-  <div class="card-img-top" style="position: relative; height: 210px">
+  <div class="card-img-top" style="position: relative; height: 230px">
     <h2
       class="card-title h2"
       style="
@@ -18,12 +18,15 @@
       {{ event().title }}
     </h2>
     <img
-      [src]="event().organizer.avatar"
+      [src]="
+        event().organizer.avatar ||
+        'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/Default_avatar_profile.jpg'
+      "
       style="
         height: 50px;
         width: 50px;
-        top: 5px;
-        left: 5px;
+        top: 10px;
+        left: 10px;
         position: absolute;
         border-radius: 50%;
         border: 2px solid white;
@@ -45,6 +48,7 @@
       "
       class="gradient-filter"
     ></div>
+
     <div
       style="
         position: absolute;
@@ -55,34 +59,68 @@
       "
     >
       <div
-        *ngIf="event().location"
+        *ngIf="isParticipating()"
         style="
-          background-color: #007bff;
+          background-color: #32a852;
           color: #fff;
           padding: 5px 10px;
           border-radius: 12px;
           font-size: 12px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         "
       >
-        {{ event().location }}
+        Participated
+      </div>
+      <div
+        *ngIf="event().score"
+        style="
+          background-color: black;
+          color: #fff;
+          padding: 5px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-top: 5px;
+        "
+      >
+        {{ event().score
+        }}<i
+          style="margin-left: 2px; color: yellow"
+          class="bi bi-star-fill"
+        ></i>
       </div>
     </div>
 
     <img
       style="height: 100%; width: 100%"
-      [src]="event().image"
+      [src]="event().image || 'https://placehold.co/1500x1000?text=No%20Image'"
       alt="Card Event"
       fill
       priority
     />
   </div>
   <div class="card-body d-flex flex-column justify-content-between">
-    <p style="height: 40px" class="card-text">
-      {{ event().description | truncateName : 80 : "..." }}
-    </p>
+    <div class="mb-2" style="display: flex; align-items: center">
+      <i
+        style="font-size: 20px; margin-right: 10px"
+        class="bi bi-calendar2"
+      ></i>
+      <div class="fw-bolder">
+        {{ event().startTime | date : "MMM d, h:mm a" }}
+      </div>
+      <i style="font-size: 20px" class="bi bi-dash"></i>
+      <div class="fw-bolder">
+        {{ event().endTime | date : "MMM d, h:mm a" }}
+      </div>
+    </div>
     <mat-chip-set class="mb-2" aria-label="Selection">
-      <mat-chip>{{ event().typeEvent }}</mat-chip>
+      <mat-chip>{{ event().typeEvent.name }}</mat-chip>
       <mat-chip>{{ event().typeLocationName }}</mat-chip>
+      <mat-chip *ngIf="event().location">{{ event().location?.name }}</mat-chip>
     </mat-chip-set>
   </div>
 </div>

@@ -1,6 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TUser } from '../data/person';
+import { EventsService } from './events.service';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -8,11 +10,21 @@ import { TUser } from '../data/person';
 export class ParticipationService {
   url = 'http://localhost:8080/v1/participation/';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private eventsServices: EventsService
+  ) {}
 
   participateEvent(idEvent: string) {
     console.log('Participate event ', idEvent);
-    return this.http.post(this.url + 'participate', idEvent);
+    return this.http
+      .post(this.url + 'participate', { idEvent }, { responseType: 'text' })
+      .pipe(
+        tap(() => {
+          this.eventsServices.reloadEvents();
+          this.eventsServices.reloadMyEvents();
+        })
+      );
   }
 
   getParticipantsOfEvent(idEvent: string) {
@@ -22,6 +34,13 @@ export class ParticipationService {
 
   cancelEvent(idEvent: string) {
     console.log('Cancel event ', idEvent);
-    return this.http.delete(this.url + 'cancel/' + idEvent);
+    return this.http
+      .delete(this.url + 'cancel/' + idEvent, { responseType: 'text' })
+      .pipe(
+        tap(() => {
+          this.eventsServices.reloadEvents();
+          this.eventsServices.reloadMyEvents();
+        })
+      );
   }
 }

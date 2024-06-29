@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TEvent, TTypeEvent } from '../data/event';
 import { EventsService } from '../services/events.service';
 import { FormBuilder, FormControl } from '@angular/forms';
+import { TCreateTypeLocation, TLocationType } from '../data/location';
+import { toISOStringWithTimeZoneOffset } from '../components/modal-add-event/modal-add-event.component';
 
 @Component({
   selector: 'app-all-events',
@@ -13,7 +15,7 @@ export class AllEventsComponent {
 
   selectedCities: string[] = [];
   selectedEventTypes: TTypeEvent[] = [];
-  selectedLocationTypes: string[] = [];
+  selectedLocationTypes: TLocationType[] = [];
   selectedDateRange: { start: Date | null; end: Date | null } = {
     start: null,
     end: null,
@@ -26,19 +28,37 @@ export class AllEventsComponent {
   orderByCriteria = new FormControl('');
 
   constructor(private eventsService: EventsService, private fb: FormBuilder) {
-    eventsService.getAll().subscribe((events) => {
+    eventsService.events$.subscribe((events) => {
       this.events = events;
     });
   }
 
   onFilter() {
+    console.log('Data filter: ', {
+      cities: this.selectedCities,
+      eventTypes: this.selectedEventTypes,
+      locationTypes: this.selectedLocationTypes.map(
+        (selectedLocationType) =>
+          selectedLocationType.toUpperCase() as TCreateTypeLocation
+      ),
+      startDate: this.selectedDateRange.start!,
+      endDate: this.selectedDateRange.end!,
+      orderBy: this.orderByCriteria.value!,
+    });
     this.eventsService
       .filterEvents({
         cities: this.selectedCities,
         eventTypes: this.selectedEventTypes,
-        locationTypes: this.selectedLocationTypes,
-        startDate: this.selectedDateRange.start!,
-        endDate: this.selectedDateRange.end!,
+        locationTypes: this.selectedLocationTypes.map(
+          (selectedLocationType) =>
+            selectedLocationType.toUpperCase() as TCreateTypeLocation
+        ),
+        startDate: this.selectedDateRange.start
+          ? toISOStringWithTimeZoneOffset(this.selectedDateRange.start)
+          : undefined,
+        endDate: this.selectedDateRange.end
+          ? toISOStringWithTimeZoneOffset(this.selectedDateRange.end)
+          : undefined,
         orderBy: this.orderByCriteria.value!,
       })
       .subscribe({
@@ -49,13 +69,5 @@ export class AllEventsComponent {
           console.error(error);
         },
       });
-    console.log('Data filter: ', {
-      selectedCities: this.selectedCities,
-      selectedEventTypes: this.selectedEventTypes,
-      selectedLocationTypes: this.selectedLocationTypes,
-      selectedDateRange: this.selectedDateRange,
-      orderBy: this.orderByCriteria.value,
-      likeTitle: this.searchForm.controls['searchInput'].value,
-    });
   }
 }

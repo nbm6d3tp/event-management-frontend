@@ -1,4 +1,4 @@
-import { Component, inject, isDevMode, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { AuthenticationService } from '../../services/authentication.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { TUser } from '../../data/person';
@@ -15,7 +15,10 @@ import { EventsService } from '../../services/events.service';
 export class ModalFeedbackComponent {
   user?: TUser;
   rating = signal(0);
-  readonly eventID = inject<string>(MAT_DIALOG_DATA);
+  isError = signal(false);
+  readonly data = inject<{ idEvent: string; onSuccess: () => void }>(
+    MAT_DIALOG_DATA
+  );
 
   constructor(
     private fb: FormBuilder,
@@ -38,20 +41,29 @@ export class ModalFeedbackComponent {
   }
 
   onSubmit(): void {
+    if (this.rating() < 1) this.isError.set(true);
+    if (!this.data || this.isError()) return;
     this.feedbackService
       .createFeedback({
-        idEvent: this.eventID,
+        idEvent: this.data.idEvent,
         content: this.comment.value!,
         score: this.rating(),
       })
       .subscribe({
         next: () => {
-          this.toastService.showToast('success', 'Feedback sent!');
-          this.eventsService.getEvent(this.eventID);
-          this.eventsService.getMyEvents();
+          this.toastService.showToast({
+            icon: 'success',
+            title: 'Feedback sent!',
+          });
         },
         error: (error) => {
-          this.toastService.showToast('error', error);
+          console.error(error);
+          this.toastService.showToast({
+            icon: 'error',
+          });
+        },
+        complete: () => {
+          this.data.onSuccess();
         },
       });
     this.dialogRef.close();
@@ -59,11 +71,9 @@ export class ModalFeedbackComponent {
 
   form = this.fb.group({
     comment: [
-      isDevMode()
-        ? 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi earum optio iste aspernatur nobis accusantium nulla molestias, obcaecati, maiores nisi id esse recusandae quod? Itaque et facere similique perspiciatis qui!'
-        : '',
+      '',
       {
-        validators: [Validators.required, Validators.maxLength(2500)],
+        validators: [Validators.maxLength(2500)],
       },
     ],
   });

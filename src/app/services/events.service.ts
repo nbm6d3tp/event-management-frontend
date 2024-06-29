@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TCreateEvent, TEvent, TFilters } from '../data/event';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 import { TFeedback } from '../data/review';
 
 export type TDateResponse = [
@@ -38,29 +38,53 @@ export const convertDateArrayToDateInstance = (dateArray: TDateResponse) => {
 })
 export class EventsService {
   url = 'http://localhost:8080/v1/events';
+  private eventsSubject = new BehaviorSubject<TEvent[]>([]);
+  events$ = this.eventsSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  private myEventsSubject = new BehaviorSubject<TEvent[]>([]);
+  myEvents$ = this.myEventsSubject.asObservable();
+
+  constructor(private http: HttpClient) {
+    this.reloadEvents();
+  }
+
+  public reloadEvents(): void {
+    this.getAll().subscribe((events) => {
+      this.eventsSubject.next(events);
+    });
+  }
+
+  public reloadMyEvents(): void {
+    this.getMyEvents().subscribe((events) => {
+      this.myEventsSubject.next(events);
+    });
+  }
 
   getAll(): Observable<TEvent[]> {
     console.log('Get all events');
-    return this.http.get<TEventResponse[]>(this.url).pipe(
-      map((events) => {
-        return events.map(
-          (event) =>
-            ({
-              ...event,
-              startTime: convertDateArrayToDateInstance(event.startTime),
-              endTime: convertDateArrayToDateInstance(event.endTime),
-              feedbacks: event.feedbacks
-                ? event.feedbacks?.map((feedback) => ({
-                    ...feedback,
-                    date: convertDateArrayToDateInstance(feedback.date),
-                  }))
-                : undefined,
-            } as TEvent)
-        );
+    const token = localStorage.getItem('user');
+    return this.http
+      .get<TEventResponse[]>(this.url, {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${token}`),
       })
-    );
+      .pipe(
+        map((events) => {
+          return events.map(
+            (event) =>
+              ({
+                ...event,
+                startTime: convertDateArrayToDateInstance(event.startTime),
+                endTime: convertDateArrayToDateInstance(event.endTime),
+                feedbacks: event.feedbacks
+                  ? event.feedbacks?.map((feedback) => ({
+                      ...feedback,
+                      date: convertDateArrayToDateInstance(feedback.date),
+                    }))
+                  : undefined,
+              } as TEvent)
+          );
+        })
+      );
   }
 
   getEvent(id: string): Observable<TEvent> {
@@ -83,7 +107,7 @@ export class EventsService {
   }
 
   editEvent(id: string, editedEvent: TCreateEvent): Observable<TEvent> {
-    console.log('Edit event ', id, editedEvent);
+    console.log('Edit event ', editedEvent);
     return this.http.put<TEventResponse>(this.url + '/' + id, editedEvent).pipe(
       map((event) => {
         return {
@@ -97,13 +121,22 @@ export class EventsService {
               }))
             : undefined,
         } as TEvent;
+      }),
+      tap(() => {
+        this.reloadEvents();
+        this.reloadMyEvents();
       })
     );
   }
 
   deleteEvent(id: string) {
     console.log('Delete event ', id);
-    return this.http.delete(this.url + '/' + id);
+    return this.http.delete(this.url + '/' + id).pipe(
+      tap(() => {
+        this.reloadEvents();
+        this.reloadMyEvents();
+      })
+    );
   }
 
   createEvent(event: TCreateEvent): Observable<TEvent> {
@@ -121,18 +154,28 @@ export class EventsService {
               }))
             : undefined,
         } as TEvent;
+      }),
+      tap(() => {
+        this.reloadEvents();
+        this.reloadMyEvents();
       })
     );
   }
 
   filterEvents(filters: TFilters): Observable<TEvent[]> {
-    const refinedFilters = {
-      ...filters,
-      startDate: filters.startDate.toString(),
-      endDate: filters.endDate.toString(),
-    };
-    console.log('Filter events ', refinedFilters);
-    const queryParams = new HttpParams({ fromObject: refinedFilters });
+    console.log('Filter events ', filters);
+    const newQueryParameterObject = Object.entries(filters).reduce(
+      (acc, [key, value]) => ({
+        ...acc,
+        ...(value != null &&
+          value != '' &&
+          value.length > 0 && { [key]: value }),
+      }),
+      {}
+    );
+    console.log('New filter events ', newQueryParameterObject);
+
+    const queryParams = new HttpParams({ fromObject: newQueryParameterObject });
     return this.http
       .get<TEventResponse[]>(this.url + '/' + 'search', {
         params: queryParams,

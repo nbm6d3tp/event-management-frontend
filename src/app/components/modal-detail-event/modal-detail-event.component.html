@@ -16,7 +16,7 @@
   <div class="position-relative">
     <div class="img-fluid">
       <img
-        [src]="event.image"
+        [src]="event.image || 'https://placehold.co/1500x1000?text=No%20Image'"
         handleImgError
         style="padding-bottom: -50px"
         class="img-fluid bg-gradient"
@@ -85,7 +85,10 @@
 
       <div class="mb-3" style="display: flex; align-items: center">
         <img
-          [src]="event.organizer.avatar"
+          [src]="
+            event.organizer.avatar ||
+            'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/Default_avatar_profile.jpg'
+          "
           alt="Organisator vatar"
           class="rounded-circle"
           style="
@@ -145,7 +148,10 @@
           matTooltip="{{
             participant.firstname | getNamePerson : participant.lastname
           }}"
-          [src]="participant.avatar"
+          [src]="
+            participant.avatar ||
+            'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/Default_avatar_profile.jpg'
+          "
           alt="participantvatar"
           class="rounded-circle"
           style="
@@ -168,7 +174,10 @@
             class="d-flex flex-column me-3 align-items-center justify-content-between"
           >
             <img
-              [src]="feedback.participant.avatar"
+              [src]="
+                feedback.participant.avatar ||
+                'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/Default_avatar_profile.jpg'
+              "
               style="
                 height: 50px;
                 width: 50px;
@@ -184,7 +193,21 @@
             </h4>
           </div>
           <div class="d-flex flex-column align-items-start w-75">
-            <small>{{ feedback.date | date : "short" }}</small>
+            <div style="display: flex; align-items: center">
+              <small>{{ feedback.date | date : "short" }}</small>
+              <button
+                *ngIf="feedback.participant.email == user?.email"
+                style="
+                  border-width: 0;
+                  width: 40px;
+                  height: 40px;
+                  background: none;
+                "
+                (click)="onDeleteFeedback()"
+              >
+                <i class="bi bi-trash text-danger"></i>
+              </button>
+            </div>
             <p class="mb-1">
               {{ feedback.content }}
             </p>
