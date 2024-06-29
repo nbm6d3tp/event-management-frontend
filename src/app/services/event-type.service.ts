@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TTypeEvent } from '../data/event';
 import { BehaviorSubject } from 'rxjs';
@@ -13,7 +13,6 @@ export class EventTypeService {
 
   constructor(private http: HttpClient) {
     this.getAll().subscribe((eventTypesList) => {
-      console.log(eventTypesList);
       this.eventTypesListSubject.next(
         eventTypesList.map((eventType) => eventType.name)
       );
@@ -22,11 +21,14 @@ export class EventTypeService {
 
   getAll() {
     console.log('Get all types event');
+    const token = localStorage.getItem('user');
     return this.http.get<
       {
         idType: string;
         name: TTypeEvent;
       }[]
-    >(this.url);
+    >(this.url, {
+      headers: new HttpHeaders().set('Authorization', `Bearer ${token}`),
+    });
   }
 }

@@ -28,7 +28,6 @@ export class AllEventsComponent {
   orderByCriteria = new FormControl('');
 
   constructor(private eventsService: EventsService, private fb: FormBuilder) {
-    eventsService.reloadEvents();
     eventsService.events$.subscribe((events) => {
       this.events = events;
     });

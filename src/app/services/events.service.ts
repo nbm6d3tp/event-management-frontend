@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TCreateEvent, TEvent, TFilters } from '../data/event';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 import { TFeedback } from '../data/review';
 
@@ -44,7 +44,9 @@ export class EventsService {
   private myEventsSubject = new BehaviorSubject<TEvent[]>([]);
   myEvents$ = this.myEventsSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.reloadEvents();
+  }
 
   public reloadEvents(): void {
     this.getAll().subscribe((events) => {
@@ -60,24 +62,29 @@ export class EventsService {
 
   getAll(): Observable<TEvent[]> {
     console.log('Get all events');
-    return this.http.get<TEventResponse[]>(this.url).pipe(
-      map((events) => {
-        return events.map(
-          (event) =>
-            ({
-              ...event,
-              startTime: convertDateArrayToDateInstance(event.startTime),
-              endTime: convertDateArrayToDateInstance(event.endTime),
-              feedbacks: event.feedbacks
-                ? event.feedbacks?.map((feedback) => ({
-                    ...feedback,
-                    date: convertDateArrayToDateInstance(feedback.date),
-                  }))
-                : undefined,
-            } as TEvent)
-        );
+    const token = localStorage.getItem('user');
+    return this.http
+      .get<TEventResponse[]>(this.url, {
+        headers: new HttpHeaders().set('Authorization', `Bearer ${token}`),
       })
-    );
+      .pipe(
+        map((events) => {
+          return events.map(
+            (event) =>
+              ({
+                ...event,
+                startTime: convertDateArrayToDateInstance(event.startTime),
+                endTime: convertDateArrayToDateInstance(event.endTime),
+                feedbacks: event.feedbacks
+                  ? event.feedbacks?.map((feedback) => ({
+                      ...feedback,
+                      date: convertDateArrayToDateInstance(feedback.date),
+                    }))
+                  : undefined,
+              } as TEvent)
+          );
+        })
+      );
   }
 
   getEvent(id: string): Observable<TEvent> {
@@ -160,7 +167,9 @@ export class EventsService {
     const newQueryParameterObject = Object.entries(filters).reduce(
       (acc, [key, value]) => ({
         ...acc,
-        ...(value != null && { [key]: value }),
+        ...(value != null &&
+          value != '' &&
+          value.length > 0 && { [key]: value }),
       }),
       {}
     );

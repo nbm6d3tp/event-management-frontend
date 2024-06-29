@@ -15,7 +15,6 @@ export class SelectEventTypesComponent implements OnInit {
 
   constructor(private eventTypeService: EventTypeService) {
     eventTypeService.eventTypesList$.subscribe((data) => {
-      console.log('SelectEventTypesComponent', data);
       this.typeEventList = data;
     });
   }
