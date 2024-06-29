@@ -14,7 +14,7 @@
     <mat-form-field class="col-lg-2 col-sm-4 col-4">
       <mat-label>Order by</mat-label>
       <mat-select [formControl]="orderByCriteria" multiple>
-        <mat-option value="score">Score</mat-option>
+        <mat-option value="score" i18n="@@score">Score</mat-option>
       </mat-select>
     </mat-form-field>
 
@@ -36,7 +36,7 @@
       >
         <i class="bi bi-search"></i>
       </button>
-      <div class="small fst-italic">
+      <div i18n="@@filterInstruction" class="small fst-italic">
         *If no filters are selected, all elements will be included in the
         filtering process.
       </div>
@@ -45,7 +45,10 @@
 </div>
 <div class="container">
   @if (events.length === 0) {
-  <div class="d-flex justify-content-center align-items-center mt-5 w-100">
+  <div
+    i18n="@@noEventFound"
+    class="d-flex justify-content-center align-items-center mt-5 w-100"
+  >
     <h1>No events found</h1>
   </div>
   } @else {

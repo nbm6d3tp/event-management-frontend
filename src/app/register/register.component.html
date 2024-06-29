@@ -2,7 +2,7 @@
   <div class="card-body">
     <form [formGroup]="form" class="needs-validation" autocomplete="off">
       <div>
-        <label>First name :</label>
+        <label i18n="@@firstName">First name :</label>
         <div class="input-group">
           <span class="input-group-text">
             <i class="bi bi-person-fill"></i>
@@ -21,13 +21,13 @@
           *ngIf="firstName?.invalid && firstName.touched"
           class="invalid-feedback text-danger"
         >
-          <div *ngIf="firstName?.errors?.['required']">
+          <div i18n="@@required" *ngIf="firstName?.errors?.['required']">
             This field is required!
           </div>
         </div>
       </div>
       <div>
-        <label>Last name :</label>
+        <label i18n="@@lastName">Last name :</label>
         <div class="input-group">
           <span class="input-group-text">
             <i class="bi bi-person-fill"></i>
@@ -46,13 +46,13 @@
           *ngIf="lastName?.invalid && lastName.touched"
           class="invalid-feedback text-danger"
         >
-          <div *ngIf="lastName?.errors?.['required']">
+          <div i18n="@@required" *ngIf="lastName?.errors?.['required']">
             This field is required!
           </div>
         </div>
       </div>
       <div>
-        <label>Email :</label>
+        <label i18n="@@email">Email :</label>
         <div class="input-group">
           <span class="input-group-text">
             <i class="bi bi-envelope-fill"></i>
@@ -71,12 +71,16 @@
           *ngIf="email?.invalid && email.touched"
           class="invalid-feedback text-danger"
         >
-          <div *ngIf="email?.errors?.['required']">This field is required!</div>
-          <div *ngIf="email?.errors?.['email']">Not correct form of email</div>
+          <div i18n="@@required" *ngIf="email?.errors?.['required']">
+            This field is required!
+          </div>
+          <div i18n="@@notCorrectFormEmail" *ngIf="email?.errors?.['email']">
+            Not correct form of email
+          </div>
         </div>
       </div>
       <div class="mt-3">
-        <label>Password :</label>
+        <label i18n="@@password">Password :</label>
 
         <div class="input-group">
           <span class="input-group-text">
@@ -97,14 +101,16 @@
           *ngIf="password?.invalid && password.touched"
           class="invalid-feedback text-danger"
         >
-          <div *ngIf="password?.errors?.['required']">
+          <div i18n="@@required" *ngIf="password?.errors?.['required']">
             This field is required!
           </div>
-          <div *ngIf="password?.errors?.['minlength']">Min length of 8</div>
+          <div i18n="@@minLength" *ngIf="password?.errors?.['minlength']">
+            Min length of 8
+          </div>
         </div>
       </div>
       <div class="mt-3">
-        <label>Confirm password :</label>
+        <label i18n="@@confirmPassword">Confirm password :</label>
         <div class="input-group">
           <span class="input-group-text">
             <i class="bi bi-lock-fill"></i>
@@ -125,13 +131,19 @@
           *ngIf="confirmPassword?.invalid && confirmPassword.touched"
           class="invalid-feedback text-danger"
         >
-          <div *ngIf="confirmPassword?.errors?.['required']">
+          <div i18n="@@required" *ngIf="confirmPassword?.errors?.['required']">
             This field is required!
           </div>
-          <div *ngIf="confirmPassword?.errors?.['minlength']">
+          <div
+            i18n="@@minLength"
+            *ngIf="confirmPassword?.errors?.['minlength']"
+          >
             Min length of 8
           </div>
-          <div *ngIf="confirmPassword?.errors?.['passwordMismatch']">
+          <div
+            i18n="@@passwordMismatch"
+            *ngIf="confirmPassword?.errors?.['passwordMismatch']"
+          >
             Password mismatch
           </div>
         </div>
@@ -142,7 +154,12 @@
         style="display: flex; justify-content: flex-end; gap: 10px"
         class="mt-4 pt-2"
       >
-        <button type="submit" class="btn btn-primary" (click)="onSubmit()">
+        <button
+          i18n="@@submit"
+          type="submit"
+          class="btn btn-primary"
+          (click)="onSubmit()"
+        >
           Submit
         </button>
       </div>

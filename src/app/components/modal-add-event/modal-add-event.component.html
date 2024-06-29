@@ -7,7 +7,7 @@
     >
       <div>
         <div class="mt-3">
-          <label>Title* : </label>
+          <label i18n="@@title">Title* : </label>
           <input
             required
             #titleFormControl
@@ -20,7 +20,7 @@
           />
         </div>
         <div class="mt-3">
-          <label>Description* :</label>
+          <label i18n="@@description">Description* :</label>
           <textarea
             required
             #descriptionFormControl
@@ -36,7 +36,7 @@
             *ngIf="description?.invalid && description.touched"
             class="invalid-feedback text-danger"
           >
-            <div *ngIf="description?.errors?.['maxlength']">
+            <div i18n="@@maxLength" *ngIf="description?.errors?.['maxlength']">
               Maximum length is 2500 characters
             </div>
           </div>
@@ -47,19 +47,35 @@
 
         <div class="mt-3 row d-flex justify-content-around align-items-center">
           <div class="col-6">
-            <app-select-date label="Start date" [dateForm]="startDayForm" />
+            <app-select-date
+              i18n-label="@@startDate"
+              label="Start date"
+              [dateForm]="startDayForm"
+            />
           </div>
           <div class="col-6">
-            <app-select-date label="End date" [dateForm]="endDayForm" />
+            <app-select-date
+              i18n-label="@@endDate"
+              label="End date"
+              [dateForm]="endDayForm"
+            />
           </div>
         </div>
 
         <div class="row d-flex justify-content-around align-items-center">
           <div class="col-6">
-            <app-select-time label="Start time" [timeForm]="startTimeForm" />
+            <app-select-time
+              i18n-label="@@startTime"
+              label="Start time"
+              [timeForm]="startTimeForm"
+            />
           </div>
           <div class="col-6">
-            <app-select-time label="End time" [timeForm]="endTimeForm" />
+            <app-select-time
+              i18n-label="@@endTime"
+              label="End time"
+              [timeForm]="endTimeForm"
+            />
           </div>
         </div>
 
@@ -90,7 +106,7 @@
           </div>
           <div class="col-6">
             <mat-form-field class="w-100">
-              <mat-label>Event type</mat-label>
+              <mat-label i18n="@@eventType">Event type</mat-label>
               <mat-select required [(value)]="selectedEventType">
                 @for (eventType of eventTypesList; track eventType) {
                 <mat-option [value]="eventType">{{ eventType }}</mat-option>
@@ -142,7 +158,12 @@
         >
           Cancel
         </button>
-        <button type="submit" class="btn btn-primary" (click)="onSubmit()">
+        <button
+          i18n="@@submit"
+          type="submit"
+          class="btn btn-primary"
+          (click)="onSubmit()"
+        >
           Submit
         </button>
       </div>

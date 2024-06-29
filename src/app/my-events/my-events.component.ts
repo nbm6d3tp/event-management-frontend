@@ -122,7 +122,7 @@ export class MyEventsComponent {
         next: () => {
           this.toastService.showToast({
             icon: 'success',
-            title: 'Event canceled!',
+            title: $localize`Event canceled!`,
           });
         },
         error: (error) => {
@@ -141,7 +141,7 @@ export class MyEventsComponent {
         next: () => {
           this.toastService.showToast({
             icon: 'success',
-            title: 'Event deleted!',
+            title: $localize`Event deleted!`,
           });
         },
         error: (error) => {
@@ -195,7 +195,7 @@ export class MyEventsComponent {
     if (canDelete(event, person))
       actions.push({
         label: '<i class="bi bi-trash"></i>',
-        a11yLabel: 'Delete',
+        a11yLabel: $localize`Delete`,
         onClick: () => {
           this.onClickDeleteEvent(event.idEvent);
         },
@@ -203,7 +203,7 @@ export class MyEventsComponent {
     if (canEdit(event, person))
       actions.push({
         label: '<i class="mx-1 bi bi-pencil"></i>',
-        a11yLabel: 'Edit',
+        a11yLabel: $localize`Edit`,
         onClick: () => {
           this.onClickEditEvent(event);
         },
@@ -211,7 +211,7 @@ export class MyEventsComponent {
     if (canComment(event, person))
       actions.push({
         label: '<i class="mx-1 bi bi-chat-dots"></i>',
-        a11yLabel: 'Feedback',
+        a11yLabel: $localize`Feedback`,
         onClick: () => {
           this.onClickFeedbackEvent(event.idEvent);
         },
@@ -219,7 +219,7 @@ export class MyEventsComponent {
     if (canCancel(event, person))
       actions.push({
         label: '<i class="mx-1 bi bi-x-circle"></i>',
-        a11yLabel: 'Cancel',
+        a11yLabel: $localize`Cancel`,
         onClick: () => {
           this.onClickCancelEvent(event.idEvent);
         },

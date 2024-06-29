@@ -3,12 +3,14 @@
   @if (isError()) {
   <div
     class="d-flex justify-content-center align-items-center min-vh-100 w-100 bg-light"
+    i18n="@@thereIsAnError"
   >
     There is an error!
   </div>
   }@else if (!event) {
   <div
     class="d-flex justify-content-center align-items-center min-vh-100 w-100 bg-light"
+    i18n="@@loading"
   >
     Loading ...
   </div>
@@ -99,7 +101,9 @@
           "
         />
         <div style="display: flex; flex-direction: column">
-          <div class="text-secondary">Event organized by</div>
+          <div class="text-secondary" i18n="@@eventOrganizedBy">
+            Event organized by
+          </div>
           <div class="fw-bolder">
             {{
               event.organizer.firstname
@@ -141,7 +145,7 @@
         <mat-chip>{{ event.typeLocationName }}</mat-chip>
       </mat-chip-set>
 
-      <h2 class="display-6 mt-4">Participants</h2>
+      <h2 class="display-6 mt-4" i18n="@@participants">Participants</h2>
       <div style="display: flex">
         @for (participant of event.participants; track participant.email) {
         <img
@@ -164,7 +168,9 @@
         }
       </div>
 
-      <h2 *ngIf="event.feedbacks" class="display-6 mt-4">Reviews</h2>
+      <h2 *ngIf="event.feedbacks" class="display-6 mt-4" i18n="@@reviews">
+        Reviews
+      </h2>
       <div *ngIf="event.feedbacks" class="list-group">
         @for (feedback of event.feedbacks; track $index) {
         <div
@@ -226,6 +232,7 @@
           type="submit"
           class="btn btn-outline-danger"
           (click)="onCancel()"
+          i18n="@@cancel"
         >
           Cancel
         </button>
@@ -234,6 +241,7 @@
           type="submit"
           class="btn btn-primary"
           (click)="onParticipate()"
+          i18n="@@participate"
         >
           Participate
         </button>
@@ -242,6 +250,7 @@
           type="submit"
           class="btn btn-info"
           (click)="onComment()"
+          i18n="@@comment"
         >
           Comment
         </button>

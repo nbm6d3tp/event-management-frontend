@@ -7,6 +7,7 @@
           mwlCalendarPreviousView
           view="month"
           [(viewDate)]="viewDate"
+          i18n="@@previous"
         >
           Previous
         </div>
@@ -14,6 +15,7 @@
           class="btn btn-outline-secondary"
           mwlCalendarToday
           [(viewDate)]="viewDate"
+          i18n="@@today"
         >
           Today
         </div>
@@ -22,6 +24,7 @@
           mwlCalendarNextView
           view="month"
           [(viewDate)]="viewDate"
+          i18n="@@next"
         >
           Next
         </div>
@@ -29,7 +32,7 @@
     </div>
     <div class="col-md-4">
       <h1>
-        {{ viewDate | calendarDate: "month" + "ViewTitle" : "en" }}
+        {{ viewDate | calendarDate : "month" + "ViewTitle" : "en" }}
       </h1>
     </div>
     <div class="col-md-4">
@@ -44,6 +47,7 @@
   <br />
   <div>
     <mwl-calendar-month-view
+    locale="fr"
       style="border-color: black; border-width: 2"
       [viewDate]="viewDate"
       [events]="events"

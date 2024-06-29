@@ -37,7 +37,7 @@
             *ngIf="comment?.invalid && comment.touched"
             class="invalid-feedback text-danger"
           >
-            <div *ngIf="comment?.errors?.['maxlength']">
+            <div i18n="@@maxLength" *ngIf="comment?.errors?.['maxlength']">
               Maximum length is 2500 characters
             </div>
           </div>
@@ -45,12 +45,20 @@
       </form>
     </div>
     <app-star-rating [(rating)]="rating" />
-    <div class="text-danger" *ngIf="isError()!">Score can't be 0</div>
+    <div class="text-danger" *ngIf="isError()!" i18n="@@scoreCantBeZero">
+      Score can't be 0
+    </div>
     <div class="d-flex justify-content-between align-items-center mb-3">
-      <button (click)="onCancel()" class="btn btn-outline-danger me-3">
+      <button
+        i18n="@@cancel"
+        (click)="onCancel()"
+        class="btn btn-outline-danger me-3"
+      >
         Cancel
       </button>
-      <button (click)="onSubmit()" class="btn btn-primary">Submit</button>
+      <button (click)="onSubmit()" class="btn btn-primary" i18n="@@submit">
+        Submit
+      </button>
     </div>
   </div>
 </mat-dialog-content>

@@ -74,7 +74,7 @@ export class ModalDetailEventComponent {
         next: () => {
           this.toastService.showToast({
             icon: 'success',
-            title: 'Event canceled!',
+            title: $localize`Event canceled!`,
           });
         },
         error: (error) => {
@@ -95,7 +95,7 @@ export class ModalDetailEventComponent {
       next: () => {
         this.toastService.showToast({
           icon: 'success',
-          title: 'Event participated!',
+          title: $localize`Event participated!`,
         });
       },
       error: (error) => {
@@ -122,7 +122,7 @@ export class ModalDetailEventComponent {
         next: () => {
           this.toastService.showToast({
             icon: 'success',
-            title: 'Feedback deleted!',
+            title: $localize`Feedback deleted!`,
           });
         },
         error: (error) => {
@@ -144,7 +144,7 @@ export class ModalDetailEventComponent {
         next: () => {
           this.toastService.showToast({
             icon: 'success',
-            title: 'Event deleted!',
+            title: $localize`Event deleted!`,
           });
         },
         error: (error) => {

@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-US" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="score" datatype="html">
+        <source>Score</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/all-events/all-events.component.html</context>
+          <context context-type="linenumber">17,18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="filterInstruction" datatype="html">
+        <source> *If no filters are selected, all elements will be included in the filtering process. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/all-events/all-events.component.html</context>
+          <context context-type="linenumber">40,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="noEventFound" datatype="html">
+        <source><x id="START_HEADING_LEVEL1" ctype="x-h1" equiv-text="&lt;h1&gt;"/>No events found<x id="CLOSE_HEADING_LEVEL1" ctype="x-h1" equiv-text="&lt;/h1&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/all-events/all-events.component.html</context>
+          <context context-type="linenumber">52,54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="participated" datatype="html">
+        <source> Participated </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/card-event/card-event.component.html</context>
+          <context context-type="linenumber">75,77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="imageCantBeChanged" datatype="html">
+        <source>Image (can&apos;t be changed later!) :</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/file-upload/file-upload.component.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="chooseFile" datatype="html">
+        <source>Choose file</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/file-upload/file-upload.component.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fileFormatAllowed" datatype="html">
+        <source> Only .jpg, .jpeg, .png files are allowed </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/file-upload/file-upload.component.html</context>
+          <context context-type="linenumber">22,24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="myEvents" datatype="html">
+        <source>My Events</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/header/header.component.html</context>
+          <context context-type="linenumber">26,27</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/header/header.component.html</context>
+          <context context-type="linenumber">43,44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="allEvents" datatype="html">
+        <source>All Events</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/header/header.component.html</context>
+          <context context-type="linenumber">54,56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="login" datatype="html">
+        <source>Login</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/header/header.component.html</context>
+          <context context-type="linenumber">66,68</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="register" datatype="html">
+        <source>Register</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/header/header.component.html</context>
+          <context context-type="linenumber">75,77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="title" datatype="html">
+        <source>Title* : </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-add-event/modal-add-event.component.html</context>
+          <context context-type="linenumber">10,11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="description" datatype="html">
+        <source>Description* :</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-add-event/modal-add-event.component.html</context>
+          <context context-type="linenumber">23,24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="maxLength" datatype="html">
+        <source> Maximum length is 2500 characters </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-add-event/modal-add-event.component.html</context>
+          <context context-type="linenumber">40,41</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-feedback/modal-feedback.component.html</context>
+          <context context-type="linenumber">41,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="startDate" datatype="html">
+        <source>Start date</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-add-event/modal-add-event.component.html</context>
+          <context context-type="linenumber">52,53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="endDate" datatype="html">
+        <source>End date</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-add-event/modal-add-event.component.html</context>
+          <context context-type="linenumber">59,60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="startTime" datatype="html">
+        <source>Start time</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-add-event/modal-add-event.component.html</context>
+          <context context-type="linenumber">69,70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="endTime" datatype="html">
+        <source>End time</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-add-event/modal-add-event.component.html</context>
+          <context context-type="linenumber">76,77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eventType" datatype="html">
+        <source>Event type</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-add-event/modal-add-event.component.html</context>
+          <context context-type="linenumber">109,110</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="submit" datatype="html">
+        <source> Submit </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-add-event/modal-add-event.component.html</context>
+          <context context-type="linenumber">167,168</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-feedback/modal-feedback.component.html</context>
+          <context context-type="linenumber">60,61</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/login.component.html</context>
+          <context context-type="linenumber">77,78</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/register/register.component.html</context>
+          <context context-type="linenumber">163,164</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4501664764660828505" datatype="html">
+        <source>Day invalid (Start day/time and end day/time must be after current moment)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-add-event/modal-add-event.component.ts</context>
+          <context context-type="linenumber">203</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5571396728279098071" datatype="html">
+        <source>Day invalid (Start day must be before end day)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-add-event/modal-add-event.component.ts</context>
+          <context context-type="linenumber">212</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4963518604525889534" datatype="html">
+        <source>Time invalid (With start day the same as end day, start time must be before end time)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-add-event/modal-add-event.component.ts</context>
+          <context context-type="linenumber">226</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2291909076936707538" datatype="html">
+        <source>The resource already exists. Please choose another image or change its name.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-add-event/modal-add-event.component.ts</context>
+          <context context-type="linenumber">280</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/register/register.component.ts</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5838854804596494701" datatype="html">
+        <source>There was an error uploading the image. Please try again.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-add-event/modal-add-event.component.ts</context>
+          <context context-type="linenumber">284</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/register/register.component.ts</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2710583791449660540" datatype="html">
+        <source>Event updated successfully!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-add-event/modal-add-event.component.ts</context>
+          <context context-type="linenumber">313</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3536406114575995579" datatype="html">
+        <source>Event created successfully!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-add-event/modal-add-event.component.ts</context>
+          <context context-type="linenumber">341</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="thereIsAnError" datatype="html">
+        <source> There is an error! </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-detail-event/modal-detail-event.component.html</context>
+          <context context-type="linenumber">8,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="loading" datatype="html">
+        <source> Loading ... </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-detail-event/modal-detail-event.component.html</context>
+          <context context-type="linenumber">15,17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eventOrganizedBy" datatype="html">
+        <source> Event organized by </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-detail-event/modal-detail-event.component.html</context>
+          <context context-type="linenumber">105,106</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="participants" datatype="html">
+        <source>Participants</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-detail-event/modal-detail-event.component.html</context>
+          <context context-type="linenumber">148,149</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reviews" datatype="html">
+        <source> Reviews </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-detail-event/modal-detail-event.component.html</context>
+          <context context-type="linenumber">172,173</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cancel" datatype="html">
+        <source> Cancel </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-detail-event/modal-detail-event.component.html</context>
+          <context context-type="linenumber">237,238</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-feedback/modal-feedback.component.html</context>
+          <context context-type="linenumber">57,58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="participate" datatype="html">
+        <source> Participate </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-detail-event/modal-detail-event.component.html</context>
+          <context context-type="linenumber">246,247</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="comment" datatype="html">
+        <source> Comment </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-detail-event/modal-detail-event.component.html</context>
+          <context context-type="linenumber">255,256</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6775408534643403653" datatype="html">
+        <source>Event canceled!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-detail-event/modal-detail-event.component.ts</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/my-events/my-events.component.ts</context>
+          <context context-type="linenumber">125</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5147662186837991781" datatype="html">
+        <source>Event participated!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-detail-event/modal-detail-event.component.ts</context>
+          <context context-type="linenumber">98</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1742662042096422933" datatype="html">
+        <source>Feedback deleted!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-detail-event/modal-detail-event.component.ts</context>
+          <context context-type="linenumber">125</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5308130501912014282" datatype="html">
+        <source>Event deleted!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-detail-event/modal-detail-event.component.ts</context>
+          <context context-type="linenumber">147</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/my-events/my-events.component.ts</context>
+          <context context-type="linenumber">144</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="scoreCantBeZero" datatype="html">
+        <source> Score can&apos;t be 0 </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-feedback/modal-feedback.component.html</context>
+          <context context-type="linenumber">49,51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4405810395128884359" datatype="html">
+        <source>Feedback sent!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/modal-feedback/modal-feedback.component.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eventTypes" datatype="html">
+        <source>Event types</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/select-event-types/select-event-types.component.html</context>
+          <context context-type="linenumber">2,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="onsite" datatype="html">
+        <source>On-site</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/select-location-types/select-location-types.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="hybrid" datatype="html">
+        <source>Hybrid</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/select-location-types/select-location-types.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="online" datatype="html">
+        <source>Online</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/select-location-types/select-location-types.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="email" datatype="html">
+        <source>Email :</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/login.component.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/register/register.component.html</context>
+          <context context-type="linenumber">55,56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="required" datatype="html">
+        <source> This field is required! </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/login.component.html</context>
+          <context context-type="linenumber">25,26</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/login.component.html</context>
+          <context context-type="linenumber">53,54</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/register/register.component.html</context>
+          <context context-type="linenumber">25,26</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/register/register.component.html</context>
+          <context context-type="linenumber">50,51</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/register/register.component.html</context>
+          <context context-type="linenumber">75,76</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/register/register.component.html</context>
+          <context context-type="linenumber">105,106</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/register/register.component.html</context>
+          <context context-type="linenumber">135,136</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="notCorrectFormEmail" datatype="html">
+        <source> Not correct form of email </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/login.component.html</context>
+          <context context-type="linenumber">28,30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/register/register.component.html</context>
+          <context context-type="linenumber">78,80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="password" datatype="html">
+        <source>Password :</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/login.component.html</context>
+          <context context-type="linenumber">33,34</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/register/register.component.html</context>
+          <context context-type="linenumber">83,85</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="minLength" datatype="html">
+        <source> Min length of 8 </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/login.component.html</context>
+          <context context-type="linenumber">56,57</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/register/register.component.html</context>
+          <context context-type="linenumber">108,109</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/register/register.component.html</context>
+          <context context-type="linenumber">141,142</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="emailPasswordIncorrect" datatype="html">
+        <source> Email or password is incorrect </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/login.component.html</context>
+          <context context-type="linenumber">65,68</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="previous" datatype="html">
+        <source> Previous </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/my-events/my-events.component.html</context>
+          <context context-type="linenumber">12,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="today" datatype="html">
+        <source> Today </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/my-events/my-events.component.html</context>
+          <context context-type="linenumber">20,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="next" datatype="html">
+        <source> Next </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/my-events/my-events.component.html</context>
+          <context context-type="linenumber">29,30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7022070615528435141" datatype="html">
+        <source>Delete</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/my-events/my-events.component.ts</context>
+          <context context-type="linenumber">198</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7585826646011739428" datatype="html">
+        <source>Edit</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/my-events/my-events.component.ts</context>
+          <context context-type="linenumber">206</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8429316238784832901" datatype="html">
+        <source>Feedback</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/my-events/my-events.component.ts</context>
+          <context context-type="linenumber">214</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2159130950882492111" datatype="html">
+        <source>Cancel</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/my-events/my-events.component.ts</context>
+          <context context-type="linenumber">222</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="myProfile" datatype="html">
+        <source> My Profile </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/my-profile/my-profile.component.html</context>
+          <context context-type="linenumber">14,15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="logout" datatype="html">
+        <source> Logout </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/my-profile/my-profile.component.html</context>
+          <context context-type="linenumber">39,40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eventsOrganizedByMe" datatype="html">
+        <source> Events organized by me </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/my-profile/my-profile.component.html</context>
+          <context context-type="linenumber">67,69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="firstName" datatype="html">
+        <source>First name :</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/register/register.component.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="lastName" datatype="html">
+        <source>Last name :</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/register/register.component.html</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="confirmPassword" datatype="html">
+        <source>Confirm password :</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/register/register.component.html</context>
+          <context context-type="linenumber">113,114</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="passwordMismatch" datatype="html">
+        <source> Password mismatch </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/register/register.component.html</context>
+          <context context-type="linenumber">147,149</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="692516400528829421" datatype="html">
+        <source>There was an error. Please try again later</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/services/toast.service.ts</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4696587297744409785" datatype="html">
+        <source>You won&apos;t be able to revert this!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/services/toast.service.ts</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

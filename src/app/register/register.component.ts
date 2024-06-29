@@ -69,11 +69,11 @@ export class RegisterComponent {
         if (errorSupabase || dataSupabase === null) {
           if (errorSupabase?.message === 'The resource already exists') {
             this.errorImage.set(
-              'The resource already exists. Please choose another image or change its name.'
+              $localize`The resource already exists. Please choose another image or change its name.`
             );
           } else {
             this.errorImage.set(
-              'There was an error uploading the image. Please try again.'
+              $localize`There was an error uploading the image. Please try again.`
             );
           }
           return;
