@@ -1,12 +1,13 @@
+import { TCreateTypeLocation } from './location';
 import { TUser } from './person';
 import { TFeedback } from './review';
 
 export type TFilters = {
-  eventTypes: string[]; //array ids
+  eventTypes: TTypeEvent[]; //array ids
   startDate: Date;
   endDate: Date;
   cities: string[];
-  locationTypes: string[]; //array ids
+  locationTypes: TCreateTypeLocation[]; //array ids
   orderBy: string;
 };
 
@@ -18,11 +19,16 @@ export type TCreateEvent = Omit<
   | 'typeEvent'
   | 'typeLocationName'
   | 'location'
+  | 'startTime'
+  | 'endTime'
 > & {
-  typeEventName: string;
-  typeLocation: string;
-  locationName: string;
+  typeEventName: TTypeEvent;
+  typeLocation: TCreateTypeLocation;
+  locationName?: string;
+  startTime: string; //"2011-10-05T14:48:00.000Z"
+  endTime: string;
 };
+
 export type TEvent =
   | {
       idEvent: string;
@@ -42,7 +48,7 @@ export type TEvent =
       organizer: TUser;
       participants: TUser[];
       feedbacks?: TFeedback[];
-      image: string;
+      image?: string;
     }
   | {
       idEvent: string;
@@ -59,7 +65,7 @@ export type TEvent =
       organizer: TUser;
       participants: TUser[];
       feedbacks?: TFeedback[];
-      image: string;
+      image?: string;
     };
 
 export type TTypeEvent = 'Meetup' | 'Conference' | 'Workshop';

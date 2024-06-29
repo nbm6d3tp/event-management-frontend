@@ -100,7 +100,7 @@ export class EventsService {
   }
 
   editEvent(id: string, editedEvent: TCreateEvent): Observable<TEvent> {
-    console.log('Edit event ', id, editedEvent);
+    console.log('Edit event ', editedEvent);
     return this.http.put<TEventResponse>(this.url + '/' + id, editedEvent).pipe(
       map((event) => {
         return {

@@ -18,7 +18,10 @@
       {{ event().title }}
     </h2>
     <img
-      [src]="event().organizer.avatar"
+      [src]="
+        event().organizer.avatar ||
+        'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/Default_avatar_profile.jpg'
+      "
       style="
         height: 50px;
         width: 50px;
@@ -66,7 +69,7 @@
     </div>
     <img
       style="height: 100%; width: 100%"
-      [src]="event().image"
+      [src]="event().image || 'https://placehold.co/1500x1000?text=No%20Image'"
       alt="Card Event"
       fill
       priority

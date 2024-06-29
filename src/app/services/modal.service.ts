@@ -13,24 +13,26 @@ export class ModalService {
 
   constructor() {}
 
-  openModalAddEvent(data?: { event: TEvent; onSuccess: () => void }) {
+  openModalAddEvent(event?: TEvent, onSuccess?: () => void) {
     const dialogRef = this.dialog.open(ModalAddEventComponent, {
       height: '500px',
       width: '600px',
-      data,
+      data: event,
     });
-    dialogRef.afterClosed().subscribe((result) => {});
+    dialogRef.afterClosed().subscribe((result) => {
+      if (onSuccess) onSuccess();
+    });
   }
 
-  openModalFeedback(
-    data: { idEvent: string; onSuccess: () => void } | undefined
-  ) {
+  openModalFeedback(idEvent?: string, onSuccess?: () => void) {
     const dialogRef = this.dialog.open(ModalFeedbackComponent, {
       height: '260px',
       width: '500px',
-      data,
+      data: idEvent,
     });
-    dialogRef.afterClosed().subscribe((result) => {});
+    dialogRef.afterClosed().subscribe(() => {
+      if (onSuccess) onSuccess();
+    });
   }
 
   openModalDetailEvent(eventID: string) {

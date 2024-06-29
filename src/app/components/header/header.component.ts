@@ -23,8 +23,9 @@ export class HeaderComponent {
   ) {
     this.authenticationService.user.subscribe((person) => {
       this.user = person;
-      if (person)
-        this.eventsService.getMyEvents().subscribe((events) => {
+      if (person) {
+        eventsService.reloadMyEvents();
+        eventsService.myEvents$.subscribe((events) => {
           this.upcomingEventsCount = events.filter(
             (event) => event.endTime.getTime() > new Date().getTime()
           ).length;
@@ -32,6 +33,7 @@ export class HeaderComponent {
             canComment(event, person)
           ).length;
         });
+      }
     });
   }
 

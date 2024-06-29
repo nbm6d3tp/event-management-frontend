@@ -62,30 +62,24 @@ export class RegisterComponent {
       this.firstName.value &&
       this.lastName.value
     ) {
-      let urlImage = '';
+      let urlImage = undefined;
 
-      if (!isDevMode()) {
-        const { data: dataSupabase, error: errorSupabase } =
-          await this.supabase.uploadImage('events', this.selectedImage);
-        if (errorSupabase || dataSupabase === null) {
-          if (errorSupabase?.message === 'The resource already exists') {
-            this.errorImage.set(
-              'The resource already exists. Please choose another image or change its name.'
-            );
-          } else {
-            this.errorImage.set(
-              'There was an error uploading the image. Please try again.'
-            );
-          }
-          return;
+      const { data: dataSupabase, error: errorSupabase } =
+        await this.supabase.uploadImage('events', this.selectedImage);
+      if (errorSupabase || dataSupabase === null) {
+        if (errorSupabase?.message === 'The resource already exists') {
+          this.errorImage.set(
+            'The resource already exists. Please choose another image or change its name.'
+          );
+        } else {
+          this.errorImage.set(
+            'There was an error uploading the image. Please try again.'
+          );
         }
+        return;
+      } else {
         urlImage = supabaseUrlPublic + dataSupabase.fullPath;
       }
-
-      urlImage =
-        urlImage !== ''
-          ? urlImage
-          : 'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/events/event1.jpg';
 
       this.authenticationService
         .register({

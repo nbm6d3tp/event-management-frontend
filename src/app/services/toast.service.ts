@@ -5,7 +5,14 @@ import Swal from 'sweetalert2';
   providedIn: 'root',
 })
 export class ToastService {
-  showToast(icon: 'error' | 'success', title: string) {
+  showToast(
+    data:
+      | {
+          icon: 'success';
+          title: string;
+        }
+      | { icon: 'error'; title?: never }
+  ) {
     const Toast = Swal.mixin({
       toast: true,
       position: 'top-end',
@@ -18,8 +25,11 @@ export class ToastService {
       },
     });
     Toast.fire({
-      icon,
-      title,
+      icon: data.icon,
+      title:
+        data.icon == 'success'
+          ? data.title
+          : 'There was an error. Please try again later',
     });
   }
 
@@ -35,13 +45,6 @@ export class ToastService {
     }).then((result) => {
       if (result.isConfirmed) {
         onDelete();
-        Swal.fire({
-          title: 'Deleted!',
-          text: `Your file has been ${
-            type === 'delete' ? 'deleted' : 'canceled'
-          }.`,
-          icon: 'success',
-        });
       }
     });
   }

@@ -24,28 +24,20 @@
       />
     </div>
 
-    <div class="col-3 d-flex justify-content-end align-items-baseline">
-      <form [formGroup]="searchForm">
-        <input
-          class="form-control me-2"
-          type="search"
-          placeholder="Search by title"
-          aria-label="Search"
-          formControlName="searchInput"
-        />
-      </form>
-    </div>
-    <div class="col-1 d-flex justify-content-end align-items-baseline">
+    <div
+      style="display: flex; flex-direction: column; align-items: end"
+      class="col-6"
+    >
       <button
         (click)="onFilter()"
         style="width: 40px; height: 40px; border-radius: 50%; border-width: 0"
       >
         <i class="bi bi-search"></i>
       </button>
-    </div>
-    <div class="small col-2">
-      *If no filters are selected, all elements will be included in the
-      filtering process.
+      <div class="small">
+        *If no filters are selected, all elements will be included in the
+        filtering process.
+      </div>
     </div>
   </div>
 </div>
@@ -55,7 +47,7 @@
     <h1>No events found</h1>
   </div>
   } @else {
-  <div class="row g-5">
+  <div class="row g-4">
     @for (event of events; track event.idEvent) {
     <div class="col-4">
       <app-card-event [event]="event" />

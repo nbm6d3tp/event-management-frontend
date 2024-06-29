@@ -73,7 +73,10 @@
           *ngIf="user"
           onclick=""
           [routerLink]="['/my-profile']"
-          [src]="user.avatar"
+          [src]="
+            user.avatar ||
+            'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/Default_avatar_profile.jpg'
+          "
           alt="Avatar"
           style="
             height: 50px;

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TEvent, TTypeEvent } from '../data/event';
 import { EventsService } from '../services/events.service';
 import { FormBuilder, FormControl } from '@angular/forms';
+import { TCreateTypeLocation, TLocationType } from '../data/location';
 
 @Component({
   selector: 'app-all-events',
@@ -13,7 +14,7 @@ export class AllEventsComponent {
 
   selectedCities: string[] = [];
   selectedEventTypes: TTypeEvent[] = [];
-  selectedLocationTypes: string[] = [];
+  selectedLocationTypes: TLocationType[] = [];
   selectedDateRange: { start: Date | null; end: Date | null } = {
     start: null,
     end: null,
@@ -37,7 +38,10 @@ export class AllEventsComponent {
       .filterEvents({
         cities: this.selectedCities,
         eventTypes: this.selectedEventTypes,
-        locationTypes: this.selectedLocationTypes,
+        locationTypes: this.selectedLocationTypes.map(
+          (selectedLocationType) =>
+            selectedLocationType.toUpperCase() as TCreateTypeLocation
+        ),
         startDate: this.selectedDateRange.start!,
         endDate: this.selectedDateRange.end!,
         orderBy: this.orderByCriteria.value!,

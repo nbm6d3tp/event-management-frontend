@@ -14,7 +14,7 @@ import {
 import { ToastService } from '../../services/toast.service';
 import { ModalService } from '../../services/modal.service';
 import { ParticipationService } from '../../services/participation.service';
-import { BehaviorSubject } from 'rxjs';
+import { FeedbackService } from '../../services/feedback.service';
 
 @Component({
   selector: 'app-modal-detail-event',
@@ -30,30 +30,22 @@ export class ModalDetailEventComponent {
     this.dialogRef.close();
   }
   event?: TEvent;
-  private eventSubject = new BehaviorSubject<TEvent | undefined>(undefined);
-  event$ = this.eventSubject.asObservable();
   user?: TUser;
 
   constructor(
     private eventsService: EventsService,
     private participationService: ParticipationService,
     private authenticationService: AuthenticationService,
+    private feedbackService: FeedbackService,
     private toastService: ToastService,
     private modalService: ModalService
   ) {
     authenticationService.user.subscribe((person) => {
       this.user = person;
     });
-    this.reloadEvent();
-    this.event$.subscribe((event) => {
-      this.event = event;
-    });
-  }
-
-  public reloadEvent(): void {
     this.eventsService.getEvent(this.eventID).subscribe({
       next: (event) => {
-        this.eventSubject.next(event);
+        this.event = event;
       },
       error: (error) => {
         console.error(error);
@@ -80,11 +72,19 @@ export class ModalDetailEventComponent {
     this.toastService.showToastWithConfirm('cancel', () => {
       this.participationService.cancelEvent(this.eventID).subscribe({
         next: () => {
-          this.reloadEvent();
+          this.toastService.showToast({
+            icon: 'success',
+            title: 'Event canceled!',
+          });
         },
         error: (error) => {
           console.log(error);
-          this.toastService.showToast('error', error);
+          this.toastService.showToast({
+            icon: 'error',
+          });
+        },
+        complete: () => {
+          this.dialogRef.close();
         },
       });
     });
@@ -93,19 +93,48 @@ export class ModalDetailEventComponent {
   onParticipate() {
     this.participationService.participateEvent(this.eventID).subscribe({
       next: () => {
-        this.toastService.showToast('success', 'Participate');
-        this.reloadEvent();
+        this.toastService.showToast({
+          icon: 'success',
+          title: 'Event participated!',
+        });
       },
       error: (error) => {
-        this.toastService.showToast('error', error);
+        console.error(error);
+        this.toastService.showToast({
+          icon: 'error',
+        });
+      },
+      complete: () => {
+        this.dialogRef.close();
       },
     });
   }
 
   onComment() {
-    this.modalService.openModalFeedback({
-      idEvent: this.eventID,
-      onSuccess: this.reloadEvent,
+    this.modalService.openModalFeedback(this.eventID, () => {
+      this.dialogRef.close();
+    });
+  }
+
+  onDeleteFeedback() {
+    this.toastService.showToastWithConfirm('delete', () => {
+      this.feedbackService.deleteFeedback(this.eventID).subscribe({
+        next: () => {
+          this.toastService.showToast({
+            icon: 'success',
+            title: 'Feedback deleted!',
+          });
+        },
+        error: (error) => {
+          console.error(error);
+          this.toastService.showToast({
+            icon: 'error',
+          });
+        },
+        complete: () => {
+          this.dialogRef.close();
+        },
+      });
     });
   }
 
@@ -113,11 +142,19 @@ export class ModalDetailEventComponent {
     this.toastService.showToastWithConfirm('delete', () => {
       this.eventsService.deleteEvent(this.eventID).subscribe({
         next: () => {
-          this.reloadEvent();
-          this.dialogRef.close();
+          this.toastService.showToast({
+            icon: 'success',
+            title: 'Event deleted!',
+          });
         },
         error: (error) => {
-          this.toastService.showToast('error', error);
+          console.error(error);
+          this.toastService.showToast({
+            icon: 'error',
+          });
+        },
+        complete: () => {
+          this.dialogRef.close();
         },
       });
     });
@@ -125,11 +162,8 @@ export class ModalDetailEventComponent {
 
   onEdit() {
     if (!this.event) return;
-    this.modalService.openModalAddEvent({
-      event: this.event,
-      onSuccess: () => {
-        this.reloadEvent();
-      },
+    this.modalService.openModalAddEvent(this.event, () => {
+      this.dialogRef.close();
     });
   }
 }

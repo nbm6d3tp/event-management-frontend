@@ -17,9 +17,8 @@ export class ParticipationService {
 
   participateEvent(idEvent: string) {
     console.log('Participate event ', idEvent);
-    const queryParams = new HttpParams().set('idEvent', idEvent);
     return this.http
-      .post(this.url + 'participate?' + queryParams.toString(), null)
+      .post(this.url + 'participate', { idEvent }, { responseType: 'text' })
       .pipe(
         tap(() => {
           this.eventsServices.reloadEvents();
@@ -35,11 +34,13 @@ export class ParticipationService {
 
   cancelEvent(idEvent: string) {
     console.log('Cancel event ', idEvent);
-    return this.http.delete(this.url + idEvent).pipe(
-      tap(() => {
-        this.eventsServices.reloadEvents();
-        this.eventsServices.reloadMyEvents();
-      })
-    );
+    return this.http
+      .delete(this.url + 'cancel/' + idEvent, { responseType: 'text' })
+      .pipe(
+        tap(() => {
+          this.eventsServices.reloadEvents();
+          this.eventsServices.reloadMyEvents();
+        })
+      );
   }
 }

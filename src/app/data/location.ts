@@ -2,9 +2,10 @@ export type TCityGroup = {
   letter: string;
   cities: string[];
 };
+export type TCreateTypeLocation = 'ONSITE' | 'HYBRID' | 'ONLINE';
 
-export type TLocationType = 'ONSITE' | 'HYBRID' | 'ONLINE';
-export const locationTypes: TLocationType[] = ['ONSITE', 'HYBRID', 'ONLINE'];
+export type TLocationType = 'Onsite' | 'Hybrid' | 'Online';
+export const locationTypes: TLocationType[] = ['Onsite', 'Hybrid', 'Online'];
 
 export const _filterGroup = (
   cityGroups: TCityGroup[],

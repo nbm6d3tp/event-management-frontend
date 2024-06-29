@@ -22,11 +22,13 @@ export class FeedbackService {
 
   deleteFeedback(idEvent: string) {
     console.log('Delete feedback for event ', idEvent);
-    return this.http.delete<TFeedback[]>(this.url + '/event/' + idEvent).pipe(
-      tap(() => {
-        this.eventsServices.reloadMyEvents();
-      })
-    );
+    return this.http
+      .delete(this.url + '/' + idEvent, { responseType: 'text' })
+      .pipe(
+        tap(() => {
+          this.eventsServices.reloadMyEvents();
+        })
+      );
   }
 
   createFeedback(data: TCreateFeedback) {
