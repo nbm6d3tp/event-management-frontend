@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ModalAddEventComponent } from '../components/modal-add-event/modal-add-event.component';
 import { ModalFeedbackComponent } from '../components/modal-feedback/modal-feedback.component';
 import { ModalDetailEventComponent } from '../components/modal-detail-event/modal-detail-event.component';
+import { TEvent } from '../data/event';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class ModalService {
 
   constructor() {}
 
-  openModalAddEvent(data?: { idEvent: string; onSuccess: () => void }) {
+  openModalAddEvent(data?: { event: TEvent; onSuccess: () => void }) {
     const dialogRef = this.dialog.open(ModalAddEventComponent, {
       height: '500px',
       width: '600px',

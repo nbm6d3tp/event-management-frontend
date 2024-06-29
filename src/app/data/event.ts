@@ -34,7 +34,7 @@ export type TEvent =
         idType: string;
         name: TTypeEvent;
       };
-      typeLocationName: 'ONSITE' | 'HYBRID';
+      typeLocationName: 'Onsite' | 'Hybrid';
       location: {
         idCity: string;
         name: string;
@@ -54,7 +54,7 @@ export type TEvent =
         idType: string;
         name: TTypeEvent;
       };
-      typeLocationName: 'ONLINE';
+      typeLocationName: 'Online';
       location?: never;
       organizer: TUser;
       participants: TUser[];

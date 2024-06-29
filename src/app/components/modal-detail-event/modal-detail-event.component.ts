@@ -126,7 +126,7 @@ export class ModalDetailEventComponent {
   onEdit() {
     if (!this.event) return;
     this.modalService.openModalAddEvent({
-      idEvent: this.eventID,
+      event: this.event,
       onSuccess: () => {
         this.reloadEvent();
       },

@@ -108,7 +108,7 @@ export class MyEventsComponent {
     this.modalService.openModalAddEvent();
   }
 
-  onClickEditEvent(data: { idEvent: string; onSuccess: () => void }) {
+  onClickEditEvent(data: { event: TEvent; onSuccess: () => void }) {
     this.modalService.openModalAddEvent(data);
   }
 
@@ -184,19 +184,17 @@ export class MyEventsComponent {
       actions.push({
         label: '<i class="bi bi-trash"></i>',
         a11yLabel: 'Delete',
-        onClick: ({ event }: { event: CalendarEvent }): void => {
-          const idEvent = event.meta as string;
-          this.onClickDeleteEvent(idEvent);
+        onClick: () => {
+          this.onClickDeleteEvent(event.idEvent);
         },
       });
       if (!isEventEnd(event))
         actions.push({
           label: '<i class="mx-1 bi bi-pencil"></i>',
           a11yLabel: 'Edit',
-          onClick: ({ event }: { event: CalendarEvent }): void => {
-            const idEvent = event.meta as string;
+          onClick: () => {
             this.onClickEditEvent({
-              idEvent: event.meta,
+              event,
               onSuccess: () => {
                 this.eventsService.reloadMyEvents();
               },
@@ -209,10 +207,9 @@ export class MyEventsComponent {
           actions.push({
             label: '<i class="mx-1 bi bi-chat-dots"></i>',
             a11yLabel: 'Feedback',
-            onClick: ({ event }: { event: CalendarEvent }): void => {
-              const idEvent = event.meta as string;
+            onClick: () => {
               this.onClickFeedbackEvent({
-                idEvent: event.meta,
+                idEvent: event.idEvent,
                 onSuccess: () => {
                   this.eventsService.reloadMyEvents();
                 },
@@ -224,9 +221,8 @@ export class MyEventsComponent {
           actions.push({
             label: '<i class="mx-1 bi bi-x-circle"></i>',
             a11yLabel: 'Cancel',
-            onClick: ({ event }: { event: CalendarEvent }): void => {
-              const idEvent = event.meta as string;
-              this.onClickCancelEvent(idEvent);
+            onClick: () => {
+              this.onClickCancelEvent(event.idEvent);
             },
           });
       }
