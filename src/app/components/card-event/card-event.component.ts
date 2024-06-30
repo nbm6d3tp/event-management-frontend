@@ -1,8 +1,8 @@
 import { Component, input } from '@angular/core';
 import { TEvent } from '../../data/event';
-import { ModalService } from '../../services/modal.service';
-import { AuthenticationService } from '../../services/authentication.service';
 import { TUser } from '../../data/person';
+import { AuthenticationService } from '../../services/authentication.service';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-card-event',
@@ -17,7 +17,7 @@ export class CardEventComponent {
     private modalService: ModalService,
     private authenticationService: AuthenticationService
   ) {
-    authenticationService.user.subscribe((person) => {
+    this.authenticationService.user.subscribe((person) => {
       this.user = person;
     });
   }

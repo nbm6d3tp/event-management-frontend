@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { TEvent, TTypeEvent } from '../data/event';
-import { EventsService } from '../services/events.service';
+import { Component } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { TCreateTypeLocation, TLocationType } from '../data/location';
 import { toISOStringWithTimeZoneOffset } from '../components/modal-add-event/modal-add-event.component';
+import { TEvent, TTypeEvent } from '../data/event';
+import { TCreateTypeLocation, TLocationType } from '../data/location';
+import { EventsService } from '../services/events.service';
 
 @Component({
   selector: 'app-all-events',

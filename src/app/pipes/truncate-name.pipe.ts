@@ -7,7 +7,7 @@ export class TruncateNamePipe implements PipeTransform {
   transform(
     value: string,
     maxLength: number = 10,
-    ellipsis: string = '...',
+    ellipsis: string = '...'
   ): unknown {
     if (value.length > maxLength) {
       return value.slice(0, maxLength) + ellipsis;

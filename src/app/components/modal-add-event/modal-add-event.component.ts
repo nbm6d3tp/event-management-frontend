@@ -6,12 +6,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TEvent, TTypeEvent } from '../../data/event';
-import {
-  SupabaseService,
-  supabaseUrlPublic,
-} from '../../services/supabase.service';
 import { Observable, map, startWith } from 'rxjs';
+import { TEvent, TTypeEvent } from '../../data/event';
 import {
   TCityGroup,
   TCreateTypeLocation,
@@ -19,13 +15,16 @@ import {
   _filterGroup,
   locationTypes,
 } from '../../data/location';
-import { MatButtonToggleChange } from '@angular/material/button-toggle';
-import { AuthenticationService } from '../../services/authentication.service';
 import { TUser } from '../../data/person';
-import { ToastService } from '../../services/toast.service';
+import { AuthenticationService } from '../../services/authentication.service';
+import { EventTypeService } from '../../services/event-type.service';
 import { EventsService } from '../../services/events.service';
 import { LocationService } from '../../services/location.service';
-import { EventTypeService } from '../../services/event-type.service';
+import {
+  SupabaseService,
+  supabaseUrlPublic,
+} from '../../services/supabase.service';
+import { ToastService } from '../../services/toast.service';
 
 export function toISOStringWithTimeZoneOffset(date: Date) {
   return new Date(
@@ -136,10 +135,10 @@ export class ModalAddEventComponent implements OnInit {
   ) {
     console.log('Initial data to edit:', { data: this.data });
     this.checkLocationType(this.locationTypeControl.value!);
-    locationService.locationsList$.subscribe((data) => {
+    this.locationService.locationsList$.subscribe((data) => {
       this.cityGroups = data;
     });
-    eventTypeService.eventTypesList$.subscribe((data) => {
+    this.eventTypeService.eventTypesList$.subscribe((data) => {
       this.eventTypesList = data;
     });
     this.authenticationService.user.subscribe((x) => (this.user = x));
@@ -313,7 +312,7 @@ export class ModalAddEventComponent implements OnInit {
               title: $localize`Event updated successfully!`,
             });
           },
-          error: (error) => {
+          error: () => {
             this.toastService.showToast({ icon: 'error' });
           },
         });
@@ -341,7 +340,7 @@ export class ModalAddEventComponent implements OnInit {
               title: $localize`Event created successfully!`,
             });
           },
-          error: (error) => {
+          error: () => {
             this.toastService.showToast({
               icon: 'error',
             });

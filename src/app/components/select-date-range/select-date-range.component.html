@@ -17,8 +17,9 @@
   <mat-date-range-picker #picker></mat-date-range-picker>
 
   @if (dateRangeForm.controls.start.hasError("matStartDateInvalid")) {
-  <mat-error>{{ "invalidStartDate" | translate }}</mat-error>
-  } @if (dateRangeForm.controls.end.hasError("matEndDateInvalid")) {
-  <mat-error>{{ "invalidEndDate" | translate }}</mat-error>
+    <mat-error>{{ "invalidStartDate" | translate }}</mat-error>
+  }
+  @if (dateRangeForm.controls.end.hasError("matEndDateInvalid")) {
+    <mat-error>{{ "invalidEndDate" | translate }}</mat-error>
   }
 </mat-form-field>

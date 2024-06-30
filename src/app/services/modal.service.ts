@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalAddEventComponent } from '../components/modal-add-event/modal-add-event.component';
-import { ModalFeedbackComponent } from '../components/modal-feedback/modal-feedback.component';
 import { ModalDetailEventComponent } from '../components/modal-detail-event/modal-detail-event.component';
+import { ModalFeedbackComponent } from '../components/modal-feedback/modal-feedback.component';
 import { TEvent } from '../data/event';
 
 @Injectable({

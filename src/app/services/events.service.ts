@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { TCreateEvent, TEvent, TFilters } from '../data/event';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map, tap } from 'rxjs';
+import { TCreateEvent, TEvent, TFilters } from '../data/event';
 import { TFeedback } from '../data/review';
 
 export type TDateResponse = [

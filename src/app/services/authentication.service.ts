@@ -1,7 +1,7 @@
-import { Injectable, OnInit, signal } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, map, of } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { TUser, TUserRegisterData } from '../data/person';
 
 @Injectable({ providedIn: 'root' })

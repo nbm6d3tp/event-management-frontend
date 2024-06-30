@@ -90,11 +90,11 @@
                 />
                 <mat-autocomplete #autoGroup="matAutocomplete">
                   @for (group of citiesGroupOptions | async; track group) {
-                  <mat-optgroup [label]="group.letter">
-                    @for (city of group.cities; track city) {
-                    <mat-option [value]="city">{{ city }}</mat-option>
-                    }
-                  </mat-optgroup>
+                    <mat-optgroup [label]="group.letter">
+                      @for (city of group.cities; track city) {
+                        <mat-option [value]="city">{{ city }}</mat-option>
+                      }
+                    </mat-optgroup>
                   }
                 </mat-autocomplete>
               </mat-form-field>
@@ -105,7 +105,7 @@
               <mat-label>{{ "eventType" | translate }}</mat-label>
               <mat-select required [(value)]="selectedEventType">
                 @for (eventType of eventTypesList; track eventType) {
-                <mat-option [value]="eventType">{{ eventType }}</mat-option>
+                  <mat-option [value]="eventType">{{ eventType }}</mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -122,9 +122,9 @@
               (change)="checkLocationType($event.value)"
             >
               @for (locationType of locationTypes; track locationType) {
-              <mat-button-toggle [value]="locationType">{{
-                locationType
-              }}</mat-button-toggle>
+                <mat-button-toggle [value]="locationType">{{
+                  locationType
+                }}</mat-button-toggle>
               }
             </mat-button-toggle-group>
           </div>

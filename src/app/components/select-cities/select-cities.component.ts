@@ -1,8 +1,8 @@
 import { Component, input, model, signal } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Observable, map, startWith } from 'rxjs';
-import { LocationService } from '../../services/location.service';
 import { TCityGroup, _filterGroup } from '../../data/location';
+import { LocationService } from '../../services/location.service';
 
 @Component({
   selector: 'app-select-cities',
@@ -22,7 +22,7 @@ export class SelectCitiesComponent {
     private fb: FormBuilder,
     private locationService: LocationService
   ) {
-    locationService.locationsList$.subscribe((data) => {
+    this.locationService.locationsList$.subscribe((data) => {
       this.cityGroups = data;
     });
   }

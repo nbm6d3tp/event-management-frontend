@@ -1,4 +1,4 @@
-import { Component, input, model } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({

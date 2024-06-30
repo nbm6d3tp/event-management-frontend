@@ -1,10 +1,10 @@
 import { Component, signal } from '@angular/core';
+import { MatRadioChange } from '@angular/material/radio';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { TEvent } from '../data/event';
 import { TUser } from '../data/person';
 import { AuthenticationService } from '../services/authentication.service';
-import { TEvent } from '../data/event';
 import { EventsService } from '../services/events.service';
-import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
-import { MatRadioChange } from '@angular/material/radio';
 
 @Component({
   selector: 'app-my-profile',

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { TTypeEvent } from '../data/event';
 import { BehaviorSubject } from 'rxjs';
+import { TTypeEvent } from '../data/event';
 
 @Injectable({
   providedIn: 'root',

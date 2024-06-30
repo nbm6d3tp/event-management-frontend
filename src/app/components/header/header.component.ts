@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthenticationService } from '../../services/authentication.service';
 import { TUser } from '../../data/person';
-import { EventsService } from '../../services/events.service';
-import { TEvent } from '../../data/event';
 import { canComment } from '../../my-events/my-events.component';
+import { AuthenticationService } from '../../services/authentication.service';
+import { EventsService } from '../../services/events.service';
 
 @Component({
   selector: 'app-header',
@@ -24,8 +23,8 @@ export class HeaderComponent {
     this.authenticationService.user.subscribe((person) => {
       this.user = person;
       if (person) {
-        eventsService.reloadMyEvents();
-        eventsService.myEvents$.subscribe((events) => {
+        this.eventsService.reloadMyEvents();
+        this.eventsService.myEvents$.subscribe((events) => {
           this.upcomingEventsCount = events.filter(
             (event) => event.endTime.getTime() > new Date().getTime()
           ).length;

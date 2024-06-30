@@ -1,8 +1,8 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { tap } from 'rxjs';
 import { TUser } from '../data/person';
 import { EventsService } from './events.service';
-import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',

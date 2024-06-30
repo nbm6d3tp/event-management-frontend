@@ -1,4 +1,4 @@
-import { Directive, HostListener, Input, input } from '@angular/core';
+import { Directive, HostListener, input } from '@angular/core';
 
 @Directive({
   selector: 'img[handleImgError]',
@@ -10,6 +10,6 @@ export class HandleImgErrrorDirective {
   @HostListener('error', ['$event'])
   handleImageError(event: Event): void {
     const image = event.target as HTMLInputElement;
-    image.src = this.handleImgError() ?? '../../assets/default.png';
+    image.src = this.handleImgError() ?? '../../assets/default.jpeg';
   }
 }

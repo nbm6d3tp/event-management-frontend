@@ -1,4 +1,3 @@
-import { TDateResponse } from '../services/events.service';
 import { TUser } from './person';
 
 export type TCreateFeedback = Omit<TFeedback, 'participant' | 'date'>;

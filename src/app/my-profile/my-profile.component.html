@@ -25,7 +25,7 @@
                 <h2 class="display-5">
                   {{ "name" | translate }} :
                   {{
-                    user?.firstname || "" | getNamePerson : user?.lastname || ""
+                    user?.firstname || "" | getNamePerson: user?.lastname || ""
                   }}
                 </h2>
                 <h2 class="display-5">
@@ -118,9 +118,9 @@
         <div class="accordion-body">
           <div class="row g-4">
             @for (event of eventsOrganizedByMe; track event.idEvent) {
-            <div class="col-12 col-sm-6 col-lg-4">
-              <app-card-event [event]="event" />
-            </div>
+              <div class="col-12 col-sm-6 col-lg-4">
+                <app-card-event [event]="event" />
+              </div>
             }
           </div>
         </div>

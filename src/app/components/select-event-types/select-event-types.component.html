@@ -2,7 +2,7 @@
   <mat-label i18n="@@eventTypes">Event types</mat-label>
   <mat-select [formControl]="eventTypesForm" multiple>
     @for (typeEvent of typeEventList; track typeEvent) {
-    <mat-option [value]="typeEvent">{{ typeEvent }}</mat-option>
+      <mat-option [value]="typeEvent">{{ typeEvent }}</mat-option>
     }
   </mat-select>
 </mat-form-field>

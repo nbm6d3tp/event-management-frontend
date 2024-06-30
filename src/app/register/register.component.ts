@@ -6,12 +6,12 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { AuthenticationService } from '../services/authentication.service';
 import {
   SupabaseService,
   supabaseUrlPublic,
 } from '../services/supabase.service';
-import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-register',

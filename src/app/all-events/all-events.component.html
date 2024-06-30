@@ -44,16 +44,16 @@
 </div>
 <div class="container">
   @if (events.length === 0) {
-  <div class="d-flex justify-content-center align-items-center mt-5 w-100">
-    <h1>{{ "noEventFound" | translate }}</h1>
-  </div>
-  } @else {
-  <div class="row g-4">
-    @for (event of events; track event.idEvent) {
-    <div class="col-12 col-sm-6 col-lg-4">
-      <app-card-event [event]="event" />
+    <div class="d-flex justify-content-center align-items-center mt-5 w-100">
+      <h1>{{ "noEventFound" | translate }}</h1>
     </div>
-    }
-  </div>
+  } @else {
+    <div class="row g-4">
+      @for (event of events; track event.idEvent) {
+        <div class="col-12 col-sm-6 col-lg-4">
+          <app-card-event [event]="event" />
+        </div>
+      }
+    </div>
   }
 </div>

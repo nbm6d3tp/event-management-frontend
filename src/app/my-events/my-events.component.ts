@@ -1,4 +1,5 @@
 import { Component, signal } from '@angular/core';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import {
   CalendarEvent,
   CalendarEventAction,
@@ -6,15 +7,14 @@ import {
   CalendarView,
 } from 'angular-calendar';
 import { isSameDay, isSameMonth } from 'date-fns';
-import { Subject, single } from 'rxjs';
+import { Subject } from 'rxjs';
 import { TEvent } from '../data/event';
 import { TUser } from '../data/person';
 import { AuthenticationService } from '../services/authentication.service';
 import { EventsService } from '../services/events.service';
-import { ToastService } from '../services/toast.service';
 import { ModalService } from '../services/modal.service';
 import { ParticipationService } from '../services/participation.service';
-import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { ToastService } from '../services/toast.service';
 
 const toComment = (event: TEvent, person: TUser) => {
   if (

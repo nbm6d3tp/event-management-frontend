@@ -1,8 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
-import { TEvent } from '../../data/event';
-import { EventsService } from '../../services/events.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { AuthenticationService } from '../../services/authentication.service';
+import { TEvent } from '../../data/event';
 import { TUser } from '../../data/person';
 import {
   canCancel,
@@ -11,10 +9,12 @@ import {
   canEdit,
   canParticipate,
 } from '../../my-events/my-events.component';
-import { ToastService } from '../../services/toast.service';
+import { AuthenticationService } from '../../services/authentication.service';
+import { EventsService } from '../../services/events.service';
+import { FeedbackService } from '../../services/feedback.service';
 import { ModalService } from '../../services/modal.service';
 import { ParticipationService } from '../../services/participation.service';
-import { FeedbackService } from '../../services/feedback.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-modal-detail-event',
@@ -40,7 +40,7 @@ export class ModalDetailEventComponent {
     private toastService: ToastService,
     private modalService: ModalService
   ) {
-    authenticationService.user.subscribe((person) => {
+    this.authenticationService.user.subscribe((person) => {
       this.user = person;
     });
     this.eventsService.getEvent(this.eventID).subscribe({

@@ -1,4 +1,4 @@
-import { Component, HostListener, input, model } from '@angular/core';
+import { Component, HostListener, model } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 
 function requiredFileType(types: string[]) {

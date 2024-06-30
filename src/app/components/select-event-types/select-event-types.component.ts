@@ -1,7 +1,7 @@
 import { Component, OnInit, model } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { EventTypeService } from '../../services/event-type.service';
 import { TTypeEvent } from '../../data/event';
+import { EventTypeService } from '../../services/event-type.service';
 
 @Component({
   selector: 'app-select-event-types',
@@ -14,7 +14,7 @@ export class SelectEventTypesComponent implements OnInit {
   typeEventList: TTypeEvent[] = [];
 
   constructor(private eventTypeService: EventTypeService) {
-    eventTypeService.eventTypesList$.subscribe((data) => {
+    this.eventTypeService.eventTypesList$.subscribe((data) => {
       this.typeEventList = data;
     });
   }

@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import {
-  Router,
-  CanActivate,
   ActivatedRouteSnapshot,
+  CanActivate,
+  Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { AuthenticationService } from '../services/authentication.service';
 
 function parseJwt(token?: string) {
   console.log({ token });
@@ -29,12 +28,9 @@ function parseJwt(token?: string) {
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
-  constructor(
-    private router: Router,
-    private authenticationService: AuthenticationService
-  ) {}
+  constructor(private router: Router) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  canActivate(_route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const decodedToken = parseJwt(localStorage.getItem('user')!);
 
     if (
