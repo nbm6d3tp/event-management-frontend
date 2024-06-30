@@ -117,9 +117,9 @@
       >
         <div class="accordion-body">
           <div class="row g-4">
-            @for (event of myEvents; track event.idEvent) {
-            <div class="col-4">
-              <app-card-event [event]="event"></app-card-event>
+            @for (event of eventsOrganizedByMe; track event.idEvent) {
+            <div class="col-12 col-sm-6 col-lg-4">
+              <app-card-event [event]="event" />
             </div>
             }
           </div>

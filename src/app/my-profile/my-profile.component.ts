@@ -13,7 +13,7 @@ import { MatRadioChange } from '@angular/material/radio';
 })
 export class MyProfileComponent {
   user?: TUser | null;
-  myEvents: TEvent[] = [];
+  eventsOrganizedByMe: TEvent[] = [];
   lang = signal(this.translateService.getDefaultLang());
 
   constructor(
@@ -26,18 +26,14 @@ export class MyProfileComponent {
         this.lang.set(event.lang);
       }
     );
-    console.log(this.translateService.currentLang);
     this.authenticationService.user.subscribe((person) => {
       this.user = person;
       if (person)
-        eventsService
-          .getMyEvents()
-          .subscribe(
-            (events) =>
-              (this.myEvents = events.filter(
-                (event) => event.organizer.email == person.email
-              ))
+        eventsService.myEvents$.subscribe((myEvents) => {
+          this.eventsOrganizedByMe = myEvents.filter(
+            (event) => event.organizer.email == person.email
           );
+        });
     });
   }
 

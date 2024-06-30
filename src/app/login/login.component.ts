@@ -1,4 +1,4 @@
-import { Component, isDevMode, model } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
@@ -26,14 +26,14 @@ export class LoginComponent {
   errorAuthenticating = false;
   form = this.fb.group({
     email: [
-      isDevMode() ? 'user1@gmail.com' : '',
+      '',
       {
         validators: [Validators.required, Validators.email],
       },
     ],
 
     password: [
-      isDevMode() ? '12345678' : '',
+      '',
       {
         validators: [Validators.required, Validators.minLength(8)],
       },
