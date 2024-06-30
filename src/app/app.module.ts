@@ -56,7 +56,6 @@ import { LoginComponent } from './login/login.component';
 import { MyEventsComponent } from './my-events/my-events.component';
 import { MyProfileComponent } from './my-profile/my-profile.component';
 import { GetNamePersonPipe } from './pipes/get-name-person.pipe';
-import { TruncateNamePipe } from './pipes/truncate-name.pipe';
 import { RegisterComponent } from './register/register.component';
 import { AuthenticationService } from './services/authentication.service';
 
@@ -83,7 +82,6 @@ function HttpLoaderFactory(http: HttpClient) {
     ModalDetailEventComponent,
     MyProfileComponent,
     CardEventComponent,
-    TruncateNamePipe,
     ModalAddEventComponent,
     SelectEventTypesComponent,
     SelectLocationTypesComponent,
