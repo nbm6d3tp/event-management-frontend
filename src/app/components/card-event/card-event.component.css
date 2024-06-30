@@ -2,3 +2,13 @@
   box-shadow: 15px 15px 15px black;
   transform: scale(1.05);
 } */
+
+.tag {
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

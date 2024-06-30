@@ -13,6 +13,8 @@ export class SelectCitiesComponent {
   required = input<boolean>(false);
   selectedCities = model<string[]>([]);
   cityGroups: TCityGroup[] = [];
+  filteredData: Observable<TCityGroup[]> | undefined;
+  placeholder = signal('Cities');
 
   citiesForm = this.fb.group({
     cityGroup: '',
@@ -26,9 +28,6 @@ export class SelectCitiesComponent {
       this.cityGroups = data;
     });
   }
-
-  filteredData: Observable<TCityGroup[]> | undefined;
-  placeholder = signal('Cities');
 
   ngOnInit() {
     this.filteredData = this.citiesForm.get('cityGroup')!.valueChanges.pipe(

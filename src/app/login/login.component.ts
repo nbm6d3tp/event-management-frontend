@@ -10,17 +10,6 @@ import { AuthenticationService } from '../services/authentication.service';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-  constructor(
-    private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private authenticationService: AuthenticationService
-  ) {
-    // redirect to home if already logged in
-    if (this.authenticationService.userValue) {
-      this.router.navigate(['/']);
-    }
-  }
   errorAuthenticating = false;
   form = this.fb.group({
     email: [
@@ -37,6 +26,18 @@ export class LoginComponent {
       },
     ],
   });
+
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private authenticationService: AuthenticationService
+  ) {
+    // redirect to home if already logged in
+    if (this.authenticationService.userValue) {
+      this.router.navigate(['/']);
+    }
+  }
 
   onFocus(input: HTMLElement) {
     this.errorAuthenticating = false;

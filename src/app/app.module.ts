@@ -8,7 +8,7 @@ import {
   HttpClient,
   HttpClientModule,
 } from '@angular/common/http';
-import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -62,11 +62,11 @@ import { AuthenticationService } from './services/authentication.service';
 
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
-export function initializeApp(authService: AuthenticationService) {
+function initializeApp(authService: AuthenticationService) {
   return (): void => authService.initialize();
 }
 
-export function HttpLoaderFactory(http: HttpClient) {
+function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
 
@@ -133,7 +133,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
   ],
   providers: [
-    { provide: LOCALE_ID, useValue: 'en-US' },
     provideAnimationsAsync(),
     {
       provide: HTTP_INTERCEPTORS,

@@ -8,7 +8,7 @@ import {
   canDelete,
   canEdit,
   canParticipate,
-} from '../../my-events/my-events.component';
+} from '../../helpers/manageEvent';
 import { AuthenticationService } from '../../services/authentication.service';
 import { EventsService } from '../../services/events.service';
 import { FeedbackService } from '../../services/feedback.service';
@@ -25,12 +25,14 @@ export class ModalDetailEventComponent {
   readonly dialogRef = inject(MatDialogRef<ModalDetailEventComponent>);
   readonly eventID = inject<string>(MAT_DIALOG_DATA);
   isError = signal(false);
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
   event?: TEvent;
   user?: TUser;
+
+  canDelete = canDelete;
+  canEdit = canEdit;
+  canCancel = canCancel;
+  canParticipate = canParticipate;
+  canComment = canComment;
 
   constructor(
     private eventsService: EventsService,
@@ -54,15 +56,9 @@ export class ModalDetailEventComponent {
     });
   }
 
-  canDelete = canDelete;
-
-  canEdit = canEdit;
-
-  canCancel = canCancel;
-
-  canParticipate = canParticipate;
-
-  canComment = canComment;
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
 
   onClose() {
     this.dialogRef.close();

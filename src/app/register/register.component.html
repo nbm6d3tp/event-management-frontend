@@ -144,10 +144,7 @@
       </div>
       <app-file-upload [(file)]="selectedImage" />
 
-      <div
-        style="display: flex; justify-content: flex-end; gap: 10px"
-        class="mt-4 pt-2"
-      >
+      <div class="mt-4 pt-2 submitButton">
         <button type="submit" class="btn btn-primary" (click)="onSubmit()">
           {{ "submit" | translate }}
         </button>

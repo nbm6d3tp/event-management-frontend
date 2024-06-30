@@ -18,6 +18,16 @@ export class ModalFeedbackComponent {
   readonly data = inject<{ idEvent: string; onSuccess: () => void }>(
     MAT_DIALOG_DATA
   );
+  readonly dialogRef = inject(MatDialogRef<ModalFeedbackComponent>);
+
+  form = this.fb.group({
+    comment: [
+      '',
+      {
+        validators: [Validators.maxLength(2500)],
+      },
+    ],
+  });
 
   constructor(
     private fb: FormBuilder,
@@ -27,8 +37,6 @@ export class ModalFeedbackComponent {
   ) {
     this.authenticationService.user.subscribe((x) => (this.user = x));
   }
-
-  readonly dialogRef = inject(MatDialogRef<ModalFeedbackComponent>);
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -67,14 +75,6 @@ export class ModalFeedbackComponent {
     this.dialogRef.close();
   }
 
-  form = this.fb.group({
-    comment: [
-      '',
-      {
-        validators: [Validators.maxLength(2500)],
-      },
-    ],
-  });
   get comment() {
     return this.form.controls['comment'];
   }

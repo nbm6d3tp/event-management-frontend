@@ -10,27 +10,19 @@ import { isSameDay, isSameMonth } from 'date-fns';
 import { Subject } from 'rxjs';
 import { TEvent } from '../data/event';
 import { TUser } from '../data/person';
+import {
+  canCancel,
+  canComment,
+  canDelete,
+  canEdit,
+  isEventEnd,
+  toComment,
+} from '../helpers/manageEvent';
 import { AuthenticationService } from '../services/authentication.service';
 import { EventsService } from '../services/events.service';
 import { ModalService } from '../services/modal.service';
 import { ParticipationService } from '../services/participation.service';
 import { ToastService } from '../services/toast.service';
-
-const toComment = (event: TEvent, person: TUser) => {
-  if (
-    isEventEnd(event) &&
-    event.organizer.email !== person.email &&
-    haveParticipated(event, person) &&
-    !haveCommented(event, person)
-  ) {
-    return true;
-  }
-  return false;
-};
-
-const isEventEnd = (event: TEvent) => {
-  return event.endTime.getTime() < new Date().getTime();
-};
 
 const chooseColor = (event: TEvent, person: TUser) => {
   if (!isEventEnd(event)) return { ...colors.red };
@@ -39,44 +31,6 @@ const chooseColor = (event: TEvent, person: TUser) => {
   }
   return { ...colors.blue };
 };
-
-const haveParticipated = (event: TEvent, person: TUser) => {
-  return event.participants
-    .map((person) => person.email)
-    .includes(person.email);
-};
-
-const haveCommented = (event: TEvent, person: TUser) => {
-  return (
-    event.feedbacks &&
-    event.feedbacks.length > 0 &&
-    event.feedbacks
-      .map((feedback) => feedback.participant.email)
-      .includes(person.email)
-  );
-};
-
-export const canDelete = (event: TEvent, person: TUser) =>
-  event.organizer.email == person.email && !isEventEnd(event);
-
-export const canEdit = (event: TEvent, person: TUser) =>
-  !isEventEnd(event) && event.organizer.email == person.email;
-
-export const canCancel = (event: TEvent, person: TUser) =>
-  haveParticipated(event, person) &&
-  !isEventEnd(event) &&
-  !(event.organizer.email == person.email);
-
-export const canParticipate = (event: TEvent, person: TUser) =>
-  !haveParticipated(event, person) &&
-  !isEventEnd(event) &&
-  !(event.organizer.email == person.email);
-
-export const canComment = (event: TEvent, person: TUser) =>
-  isEventEnd(event) &&
-  !(event.organizer.email == person.email) &&
-  haveParticipated(event, person) &&
-  !haveCommented(event, person);
 
 const colors = {
   red: {
@@ -104,6 +58,43 @@ export class MyEventsComponent {
   viewDate: Date = new Date();
   activeDayIsOpen: boolean = true;
   events: CalendarEvent[] = [];
+  user?: TUser | null;
+  lang = signal(this.translateService.getDefaultLang());
+
+  constructor(
+    private eventsService: EventsService,
+    private authenticationService: AuthenticationService,
+    private participationService: ParticipationService,
+    private toastService: ToastService,
+    private modalService: ModalService,
+    private translateService: TranslateService
+  ) {
+    translateService.onDefaultLangChange.subscribe((event: LangChangeEvent) => {
+      this.lang.set(event.lang);
+    });
+    this.authenticationService.user.subscribe((person) => {
+      this.user = person;
+      if (person) {
+        eventsService.reloadMyEvents();
+        eventsService.myEvents$.subscribe((events) => {
+          this.events = events.map((event) => {
+            return {
+              start: event.startTime,
+              end: event.startTime,
+              title: event.title,
+              actions: this.getPossibleActions(event, person),
+              color: chooseColor(event, person),
+              resizable: {
+                beforeStart: true,
+                afterEnd: true,
+              },
+              meta: event.idEvent,
+            };
+          });
+        });
+      }
+    });
+  }
 
   onClickAddEvent() {
     this.modalService.openModalAddEvent();
@@ -157,43 +148,6 @@ export class MyEventsComponent {
 
   onClickEvent(event: CalendarEvent) {
     this.modalService.openModalDetailEvent(event.meta);
-  }
-  user?: TUser | null;
-  lang = signal(this.translateService.getDefaultLang());
-
-  constructor(
-    private eventsService: EventsService,
-    private authenticationService: AuthenticationService,
-    private participationService: ParticipationService,
-    private toastService: ToastService,
-    private modalService: ModalService,
-    private translateService: TranslateService
-  ) {
-    translateService.onDefaultLangChange.subscribe((event: LangChangeEvent) => {
-      this.lang.set(event.lang);
-    });
-    this.authenticationService.user.subscribe((person) => {
-      this.user = person;
-      if (person) {
-        eventsService.reloadMyEvents();
-        eventsService.myEvents$.subscribe((events) => {
-          this.events = events.map((event) => {
-            return {
-              start: event.startTime,
-              end: event.startTime,
-              title: event.title,
-              actions: this.getPossibleActions(event, person),
-              color: chooseColor(event, person),
-              resizable: {
-                beforeStart: true,
-                afterEnd: true,
-              },
-              meta: event.idEvent,
-            };
-          });
-        });
-      }
-    });
   }
 
   getPossibleActions(event: TEvent, person: TUser): CalendarEventAction[] {

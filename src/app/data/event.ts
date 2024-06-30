@@ -2,6 +2,27 @@ import { TCreateTypeLocation } from './location';
 import { TUser } from './person';
 import { TFeedback } from './review';
 
+export type TDateResponse = [
+  number,
+  number,
+  number,
+  number,
+  number,
+  ...number[]
+];
+export type TEventResponse = Omit<
+  TEvent,
+  'startTime' | 'endTime' | 'feedbacks'
+> & {
+  startTime: TDateResponse;
+  endTime: TDateResponse;
+  feedbacks: TFeedbackResponse[];
+};
+
+export type TFeedbackResponse = Omit<TFeedback, 'date'> & {
+  date: TDateResponse;
+};
+
 export type TFilters = {
   eventTypes: TTypeEvent[]; //array ids
   startDate?: string;

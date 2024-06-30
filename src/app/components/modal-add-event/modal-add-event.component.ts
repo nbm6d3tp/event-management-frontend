@@ -16,6 +16,12 @@ import {
   locationTypes,
 } from '../../data/location';
 import { TUser } from '../../data/person';
+import {
+  combineDateAndTime,
+  formatTime,
+  getTimeAsNumberOfMinutes,
+  toISOStringWithTimeZoneOffset,
+} from '../../helpers/dateTime';
 import { AuthenticationService } from '../../services/authentication.service';
 import { EventTypeService } from '../../services/event-type.service';
 import { EventsService } from '../../services/events.service';
@@ -26,43 +32,6 @@ import {
 } from '../../services/supabase.service';
 import { ToastService } from '../../services/toast.service';
 
-export function toISOStringWithTimeZoneOffset(date: Date) {
-  return new Date(
-    date.getTime() - date.getTimezoneOffset() * 60000
-  ).toISOString();
-}
-
-function formatTime(date: Date) {
-  let hours = date.getHours();
-  let minutes = date.getMinutes();
-
-  return `${hours < 10 ? '0' + hours : hours}:${
-    minutes < 10 ? '0' + minutes : minutes
-  }`;
-}
-
-function combineDateAndTime(dateObj: Date, timeStr: string) {
-  // Extract year, month, and day from the date object
-  const year = dateObj.getFullYear();
-  const month = dateObj.getMonth(); // Note: Months are zero-based (0-11)
-  const day = dateObj.getDate();
-
-  // Extract hours and minutes from the time string
-  const [hours, minutes] = timeStr.split(':').map(Number);
-
-  // Create a new Date object with the combined date and time
-  const combinedDate = new Date(year, month, day, hours, minutes);
-
-  return combinedDate;
-}
-
-function getTimeAsNumberOfMinutes(time: string) {
-  const timeParts = time.split(':');
-
-  const timeInMinutes = parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]);
-
-  return timeInMinutes;
-}
 @Component({
   selector: 'app-modal-add-event',
   templateUrl: './modal-add-event.component.html',
@@ -71,18 +40,24 @@ function getTimeAsNumberOfMinutes(time: string) {
 export class ModalAddEventComponent implements OnInit {
   eventTypesList: TTypeEvent[] = [];
   locationTypes = locationTypes;
+  user?: TUser | null;
   placeholderCity = signal('');
+  daysError = signal('');
+  timeError = signal('');
+  errorImage = signal('');
+  cityGroups: TCityGroup[] = [];
+  citiesGroupOptions: Observable<TCityGroup[]> | undefined;
 
   readonly dialogRef = inject(MatDialogRef<ModalAddEventComponent>);
   readonly data = inject<TEvent | undefined>(MAT_DIALOG_DATA);
 
+  selectedImage: undefined | File;
   startDayForm = new FormGroup({
     date: new FormControl<Date | null>(this.data ? this.data.startTime : null),
   });
   endDayForm = new FormGroup({
     date: new FormControl<Date | null>(this.data ? this.data.endTime : null),
   });
-
   startTimeForm = new FormGroup({
     time: new FormControl<string | null>(
       this.data ? formatTime(this.data.startTime) : null
@@ -93,19 +68,15 @@ export class ModalAddEventComponent implements OnInit {
       this.data ? formatTime(this.data.endTime) : null
     ),
   });
-
   locationTypeControl = new FormControl<TLocationType>(
     this.data ? this.data.typeLocationName : locationTypes[0]
   );
-
   cityForm = this.fb.group({
     cityGroup: this.data ? this.data.location?.name : '',
   });
-
   selectedEventType = signal<TTypeEvent>(
     this.data ? this.data.typeEvent.name : 'Conference'
   );
-
   form = this.fb.group({
     title: [
       this.data ? this.data.title : '',
@@ -120,9 +91,6 @@ export class ModalAddEventComponent implements OnInit {
       },
     ],
   });
-
-  user?: TUser | null;
-  cityGroups: TCityGroup[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -152,21 +120,6 @@ export class ModalAddEventComponent implements OnInit {
       ctrl.disable();
     }
   }
-
-  selectedImage: undefined | File;
-
-  isStartDayError = false;
-  isEndDayError = false;
-  isStartTimeError = false;
-  isEndTimeError = false;
-  isEventTypesError = false;
-  isCitiesError = false;
-  isLocationTypesError = false;
-
-  daysError = signal('');
-  timeError = signal('');
-  errorImage = signal('');
-  citiesGroupOptions: Observable<TCityGroup[]> | undefined;
 
   ngOnInit() {
     this.citiesGroupOptions = this.cityForm.get('cityGroup')!.valueChanges.pipe(

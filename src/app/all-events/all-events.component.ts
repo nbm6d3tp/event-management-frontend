@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { toISOStringWithTimeZoneOffset } from '../components/modal-add-event/modal-add-event.component';
 import { TEvent, TTypeEvent } from '../data/event';
 import { TCreateTypeLocation, TLocationType } from '../data/location';
+import { toISOStringWithTimeZoneOffset } from '../helpers/dateTime';
 import { EventsService } from '../services/events.service';
 
 @Component({
@@ -20,11 +20,6 @@ export class AllEventsComponent {
     start: null,
     end: null,
   };
-
-  searchForm = this.fb.group({
-    searchInput: [''],
-  });
-
   orderByCriteria = new FormControl('');
 
   constructor(private eventsService: EventsService, private fb: FormBuilder) {

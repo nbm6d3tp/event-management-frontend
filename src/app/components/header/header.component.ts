@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { TUser } from '../../data/person';
-import { canComment } from '../../my-events/my-events.component';
+import { canComment } from '../../helpers/manageEvent';
 import { AuthenticationService } from '../../services/authentication.service';
 import { EventsService } from '../../services/events.service';
 

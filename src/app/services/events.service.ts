@@ -1,37 +1,8 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map, tap } from 'rxjs';
-import { TCreateEvent, TEvent, TFilters } from '../data/event';
-import { TFeedback } from '../data/review';
-
-export type TDateResponse = [
-  number,
-  number,
-  number,
-  number,
-  number,
-  ...number[]
-];
-export type TEventResponse = Omit<
-  TEvent,
-  'startTime' | 'endTime' | 'feedbacks'
-> & {
-  startTime: TDateResponse;
-  endTime: TDateResponse;
-  feedbacks: TFeedbackResponse[];
-};
-
-type TFeedbackResponse = Omit<TFeedback, 'date'> & { date: TDateResponse };
-
-export const convertDateArrayToDateInstance = (dateArray: TDateResponse) => {
-  return new Date(
-    dateArray[0],
-    dateArray[1] - 1,
-    dateArray[2],
-    dateArray[3],
-    dateArray[4]
-  );
-};
+import { TCreateEvent, TEvent, TEventResponse, TFilters } from '../data/event';
+import { convertDateArrayToDateInstance } from '../helpers/dateTime';
 
 @Injectable({
   providedIn: 'root',

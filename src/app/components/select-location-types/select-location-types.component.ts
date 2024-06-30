@@ -8,6 +8,8 @@ import { FormControl } from '@angular/forms';
 })
 export class SelectLocationTypesComponent {
   selectedLocationTypes = model<string[]>();
+  hideMultipleSelectionIndicator = signal(false);
+
   locationTypesForm = new FormControl(null);
 
   ngOnInit(): void {
@@ -15,8 +17,6 @@ export class SelectLocationTypesComponent {
       if (val) this.selectedLocationTypes.set(val);
     });
   }
-
-  hideMultipleSelectionIndicator = signal(false);
 
   toggleMultipleSelectionIndicator() {
     this.hideMultipleSelectionIndicator.update((value) => !value);
