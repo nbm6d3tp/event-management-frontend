@@ -20,7 +20,6 @@ export class EventTypeService {
   }
 
   getAll() {
-    console.log('Get all types event');
     const token = localStorage.getItem('user');
     return this.http.get<
       {

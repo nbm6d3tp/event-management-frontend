@@ -34,17 +34,6 @@ export class AllEventsComponent {
   }
 
   onFilter() {
-    console.log('Data filter: ', {
-      cities: this.selectedCities,
-      eventTypes: this.selectedEventTypes,
-      locationTypes: this.selectedLocationTypes.map(
-        (selectedLocationType) =>
-          selectedLocationType.toUpperCase() as TCreateTypeLocation
-      ),
-      startDate: this.selectedDateRange.start!,
-      endDate: this.selectedDateRange.end!,
-      orderBy: this.orderByCriteria.value!,
-    });
     this.eventsService
       .filterEvents({
         cities: this.selectedCities,

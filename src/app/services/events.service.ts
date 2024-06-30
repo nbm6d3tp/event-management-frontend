@@ -61,7 +61,6 @@ export class EventsService {
   }
 
   getAll(): Observable<TEvent[]> {
-    console.log('Get all events');
     const token = localStorage.getItem('user');
     return this.http
       .get<TEventResponse[]>(this.url, {
@@ -88,7 +87,6 @@ export class EventsService {
   }
 
   getEvent(id: string): Observable<TEvent> {
-    console.log('Get event ', id);
     return this.http.get<TEventResponse>(this.url + '/' + id).pipe(
       map((event) => {
         return {
@@ -107,7 +105,6 @@ export class EventsService {
   }
 
   editEvent(id: string, editedEvent: TCreateEvent): Observable<TEvent> {
-    console.log('Edit event ', editedEvent);
     return this.http.put<TEventResponse>(this.url + '/' + id, editedEvent).pipe(
       map((event) => {
         return {
@@ -130,7 +127,6 @@ export class EventsService {
   }
 
   deleteEvent(id: string) {
-    console.log('Delete event ', id);
     return this.http.delete(this.url + '/' + id).pipe(
       tap(() => {
         this.reloadEvents();
@@ -140,7 +136,6 @@ export class EventsService {
   }
 
   createEvent(event: TCreateEvent): Observable<TEvent> {
-    console.log('Create event ', event);
     return this.http.post<TEventResponse>(this.url, event).pipe(
       map((event) => {
         return {
@@ -163,7 +158,6 @@ export class EventsService {
   }
 
   filterEvents(filters: TFilters): Observable<TEvent[]> {
-    console.log('Filter events ', filters);
     const newQueryParameterObject = Object.entries(filters).reduce(
       (acc, [key, value]) => ({
         ...acc,
@@ -173,8 +167,6 @@ export class EventsService {
       }),
       {}
     );
-    console.log('New filter events ', newQueryParameterObject);
-
     const queryParams = new HttpParams({ fromObject: newQueryParameterObject });
     return this.http
       .get<TEventResponse[]>(this.url + '/' + 'search', {
@@ -201,7 +193,6 @@ export class EventsService {
   }
 
   getMyEvents(): Observable<TEvent[]> {
-    console.log('Get my events');
     return this.http.get<TEventResponse[]>(this.url + '/' + 'my').pipe(
       map((events) => {
         return events.map(

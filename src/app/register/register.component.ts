@@ -93,7 +93,6 @@ export class RegisterComponent {
         .subscribe({
           next: () => {
             this.router.navigate(['/my-events']);
-            console.log('Register successfully!');
           },
           error: (error) => {
             console.error(error);

@@ -42,7 +42,6 @@ export class LocationService {
   }
 
   getAll(): Observable<TCityGroup[]> {
-    console.log('Get all locations');
     return this.http
       .get<
         {

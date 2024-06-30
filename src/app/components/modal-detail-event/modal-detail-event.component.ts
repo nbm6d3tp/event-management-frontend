@@ -78,7 +78,7 @@ export class ModalDetailEventComponent {
           });
         },
         error: (error) => {
-          console.log(error);
+          console.error(error);
           this.toastService.showToast({
             icon: 'error',
           });

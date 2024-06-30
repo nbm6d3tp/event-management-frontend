@@ -33,7 +33,6 @@ export class AuthenticationService {
   }
 
   getUserInfo(): Observable<TUser> {
-    console.log('Get user info');
     return this.http.get<TUser>(this.url + 'user');
   }
 
@@ -42,12 +41,10 @@ export class AuthenticationService {
   }
 
   register(data: TUserRegisterData): Observable<TUser> {
-    console.log('Register ', data);
     return this.http
       .post<TUser & { token: string }>(this.url + 'register', data)
       .pipe(
         map((value) => {
-          console.log('register success', value);
           localStorage.setItem('user', value.token);
           const user = {
             lastname: value.lastname,
@@ -62,14 +59,10 @@ export class AuthenticationService {
   }
 
   login(data: { email: string; password: string }) {
-    console.log('Login ', data);
-
     return this.http
       .post<TUser & { token: string }>(this.url + 'login', data)
       .pipe(
         map((value) => {
-          console.log('login success', value);
-          console.log('localstorage before', localStorage.getItem('user'));
           localStorage.setItem('user', value.token);
           const user = {
             lastname: value.lastname,
@@ -77,7 +70,6 @@ export class AuthenticationService {
             email: value.email,
             avatar: value.avatar,
           };
-          console.log('localstorage after', localStorage.getItem('user'));
           this.userSubject.next(user);
           return user;
         })
@@ -85,11 +77,8 @@ export class AuthenticationService {
   }
 
   logout() {
-    console.log('localstorage before', localStorage.getItem('user'));
-    console.log('Logout');
     localStorage.removeItem('user');
     this.userSubject.next(undefined);
-    console.log('localstorage after', localStorage.getItem('user'));
 
     this.router.navigate(['/login']);
   }

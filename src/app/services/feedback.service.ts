@@ -16,12 +16,10 @@ export class FeedbackService {
   ) {}
 
   getFeedbacks(idEvent: string) {
-    console.log('Get feedbacks for event ', idEvent);
     return this.http.get<TFeedback[]>(this.url + '/event/' + idEvent);
   }
 
   deleteFeedback(idEvent: string) {
-    console.log('Delete feedback for event ', idEvent);
     return this.http
       .delete(this.url + '/' + idEvent, { responseType: 'text' })
       .pipe(
@@ -32,7 +30,6 @@ export class FeedbackService {
   }
 
   createFeedback(data: TCreateFeedback) {
-    console.log('Create feedback ', data);
     return this.http.post<TFeedback>(this.url, data).pipe(
       tap(() => {
         this.eventsServices.reloadMyEvents();

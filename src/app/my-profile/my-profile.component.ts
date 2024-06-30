@@ -42,7 +42,6 @@ export class MyProfileComponent {
   }
 
   onChange(event: MatRadioChange) {
-    console.log(event.value);
     this.translateService.setDefaultLang(event.value);
   }
 }
