@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark py-3">
   <div class="container align-items-center">
-    <a class="navbar-brand me-5" href="#">Event Management</a>
+    <a class="navbar-brand me-5" [routerLink]="['']">Event Management</a>
     <button
       class="navbar-toggler"
       data-bs-toggle="collapse"
@@ -23,7 +23,7 @@
             [routerLink]="['/my-events']"
             routerLinkActive="active"
           >
-            <div class="d-block d-md-none" i18n="@@myEvents">My Events</div>
+            <div class="d-block d-md-none">{{ "myEvents" | translate }}</div>
             <div
               class="my-custom-badge-primary d-none d-md-block"
               matBadgeColor="primary"
@@ -38,9 +38,8 @@
                 matBadgeOverlap="false"
                 [matBadge]="eventsToFeedbackCount"
                 style="margin-left: 20px"
-                i18n="@@myEvents"
               >
-                My Events
+                {{ "myEvents" | translate }}
               </div>
             </div>
           </a>
@@ -50,8 +49,7 @@
             class="nav-link"
             [routerLink]="['/all-events']"
             routerLinkActive="active"
-            i18n="@@allEvents"
-            >All Events</a
+            >{{ "allEvents" | translate }}</a
           >
         </li>
       </ul>
@@ -62,8 +60,7 @@
             class="nav-link"
             [routerLink]="['/login']"
             routerLinkActive="active"
-            i18n="@@login"
-            >Login</a
+            >{{ "login" | translate }}</a
           >
         </li>
         <li *ngIf="!user" class="nav-item">
@@ -71,8 +68,7 @@
             class="nav-link"
             [routerLink]="['/register']"
             routerLinkActive="active"
-            i18n="@@register"
-            >Register</a
+            >{{ "register" | translate }}</a
           >
         </li>
         <img

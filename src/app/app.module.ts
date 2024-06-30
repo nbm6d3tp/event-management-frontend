@@ -10,7 +10,11 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpClient,
+  HttpClientModule,
+} from '@angular/common/http';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { SpinnerComponent } from './components/spinner/spinner.component';
@@ -50,9 +54,22 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { GetNamePersonPipe } from './pipes/get-name-person.pipe';
 import { BasicAuthInterceptor } from './interceptors/auth.interceptor';
 import { AuthenticationService } from './services/authentication.service';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { MatRadioModule } from '@angular/material/radio';
+import { FormsModule } from '@angular/forms';
+
+import {
+  TranslateLoader,
+  TranslateModule,
+  TranslateService,
+} from '@ngx-translate/core';
 
 export function initializeApp(authService: AuthenticationService) {
   return (): void => authService.initialize();
+}
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
 }
 
 @NgModule({
@@ -82,6 +99,7 @@ export function initializeApp(authService: AuthenticationService) {
     GetNamePersonPipe,
   ],
   imports: [
+    FormsModule,
     MatBadgeModule,
     MatTooltipModule,
     MatSnackBarModule,
@@ -100,6 +118,7 @@ export function initializeApp(authService: AuthenticationService) {
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    MatRadioModule,
     HttpClientModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
@@ -107,6 +126,13 @@ export function initializeApp(authService: AuthenticationService) {
     }),
     MatDialogModule,
     MatButtonModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'en-US' },

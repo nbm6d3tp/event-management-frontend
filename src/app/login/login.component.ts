@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 import { first } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,7 @@ export class LoginComponent {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
+    private translate: TranslateService,
     private authenticationService: AuthenticationService
   ) {
     // redirect to home if already logged in

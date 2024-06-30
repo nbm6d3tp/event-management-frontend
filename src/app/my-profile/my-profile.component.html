@@ -9,9 +9,8 @@
           data-bs-target="#collapseOne"
           aria-expanded="true"
           aria-controls="collapseOne"
-          i18n="@@myProfile"
         >
-          My Profile
+          {{ "myProfile" | translate }}
         </button>
       </h2>
       <div
@@ -24,19 +23,20 @@
             <div class="col-8 d-flex flex-column justify-content-between">
               <div>
                 <h2 class="display-5">
-                  Name :
+                  {{ "name" | translate }} :
                   {{
                     user?.firstname || "" | getNamePerson : user?.lastname || ""
                   }}
                 </h2>
-                <h2 class="display-5">Email : {{ user?.email }}</h2>
+                <h2 class="display-5">
+                  {{ "email" | translate }} : {{ user?.email }}
+                </h2>
               </div>
               <button
                 class="btn btn-primary align-self-baseline"
                 (click)="onClickLogout()"
-                i18n="@@logout"
               >
-                Logout
+                {{ "logout" | translate }}
               </button>
             </div>
             <div class="col-4">
@@ -59,12 +59,55 @@
           class="accordion-button"
           type="button"
           data-bs-toggle="collapse"
+          data-bs-target="#collapseThree"
+          aria-expanded="true"
+          aria-controls="collapseThree"
+        >
+          {{ "settings" | translate }}
+        </button>
+      </h2>
+      <div
+        id="collapseThree"
+        class="accordion-collapse collapse"
+        data-bs-parent="#accordionExample"
+      >
+        <div class="accordion-body container">
+          <h2 class="display-5">
+            {{ "chooseLanguage" | translate }}
+          </h2>
+          <mat-radio-group
+            (change)="onChange($event)"
+            [value]="lang()"
+            class="d-flex align-items-center justify-content-between"
+            aria-label="Select a language"
+          >
+            <mat-radio-button value="en">
+              <span class="fi fi-gb"></span> English
+            </mat-radio-button>
+            <mat-radio-button value="fr">
+              <span class="fi fi-fr"></span> Français
+            </mat-radio-button>
+            <mat-radio-button value="zh">
+              <span class="fi fi-cn"></span> 中文
+            </mat-radio-button>
+            <mat-radio-button value="vi">
+              <span class="fi fi-vn"></span> Tiếng Việt
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header m-0">
+        <button
+          class="accordion-button"
+          type="button"
+          data-bs-toggle="collapse"
           data-bs-target="#collapseTwo"
           aria-expanded="true"
           aria-controls="collapseTwo"
-          i18n="@@eventsOrganizedByMe"
         >
-          Events organized by me
+          {{ "eventsOrganizedByMe" | translate }}
         </button>
       </h2>
       <div

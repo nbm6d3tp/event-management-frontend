@@ -1,8 +1,8 @@
 <div class="mt-3">
   <form [formGroup]="form" class="needs-validation" autocomplete="off">
-    <label i18n="@@imageCantBeChanged">Image (can't be changed later!) :</label>
+    <label>{{ "imageCantBeChanged" | translate }} :</label>
     <div class="file-drop-area border-primary mt-3">
-      <span i18n="@@chooseFile" class="btn btn-primary me-2">Choose file</span>
+      <span class="btn btn-primary me-2">{{ "chooseFile" | translate }}</span>
       <span class="file-msg">{{
         file()?.name || "or drag and drop file here"
       }}</span>
@@ -15,11 +15,8 @@
       />
     </div>
     <div *ngIf="image?.errors" class="invalid-feedback text-danger">
-      <div
-        i18n="@@fileFormatAllowed"
-        *ngIf="image?.errors?.['requiredFileType']"
-      >
-        Only .jpg, .jpeg, .png files are allowed
+      <div *ngIf="image?.errors?.['requiredFileType']">
+        {{ "fileFormatAllowed" | translate }}
       </div>
     </div>
   </form>

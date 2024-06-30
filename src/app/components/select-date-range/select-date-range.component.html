@@ -1,17 +1,24 @@
 <mat-form-field class="w-100 h-100">
-  <mat-label>Date range</mat-label>
+  <mat-label>{{ "dateRange" | translate }}</mat-label>
   <mat-date-range-input [formGroup]="dateRangeForm" [rangePicker]="picker">
-    <input matStartDate formControlName="start" placeholder="Start date" />
-    <input matEndDate formControlName="end" placeholder="End date" />
+    <input
+      matStartDate
+      formControlName="start"
+      placeholder="{{ 'startDate' | translate }}"
+    />
+    <input
+      matEndDate
+      formControlName="end"
+      placeholder="{{ 'endDate' | translate }}"
+    />
   </mat-date-range-input>
   <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
   <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
   <mat-date-range-picker #picker></mat-date-range-picker>
 
   @if (dateRangeForm.controls.start.hasError("matStartDateInvalid")) {
-    <mat-error>Invalid start date</mat-error>
-  }
-  @if (dateRangeForm.controls.end.hasError("matEndDateInvalid")) {
-    <mat-error>Invalid end date</mat-error>
+  <mat-error>{{ "invalidStartDate" | translate }}</mat-error>
+  } @if (dateRangeForm.controls.end.hasError("matEndDateInvalid")) {
+  <mat-error>{{ "invalidEndDate" | translate }}</mat-error>
   }
 </mat-form-field>

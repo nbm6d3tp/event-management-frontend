@@ -1,0 +1,67 @@
+{
+  "score": "Điểm",
+
+  "email": "Email",
+  "required": "Trường này là bắt buộc!",
+  "notCorrectFormEmail": "Định dạng email không chính xác",
+  "password": "Mật khẩu",
+  "minLength": "Độ dài tối thiểu là 8 ký tự",
+  "emailPasswordIncorrect": "Email hoặc mật khẩu không chính xác",
+  "submit": "Gửi",
+
+  "filterInstruction": "*Nếu không chọn bộ lọc nào, tất cả các phần tử sẽ được bao gồm trong quá trình lọc.",
+  "noEventFound": "Không tìm thấy sự kiện nào",
+
+  "participated": "Đã tham gia",
+
+  "imageCantBeChanged": "Hình ảnh (không thể thay đổi sau này!)",
+  "chooseFile": "Chọn tệp",
+  "fileFormatAllowed": "Chỉ cho phép các tệp .jpg, .jpeg, .png",
+
+  "myEvents": "Sự kiện của tôi",
+  "allEvents": "Tất cả sự kiện",
+  "login": "Đăng nhập",
+  "register": "Đăng ký",
+
+  "title": "Tiêu đề",
+  "description": "Mô tả",
+  "maxLength": "Độ dài tối đa là 2500 ký tự",
+  "startDate": "Ngày bắt đầu",
+  "endDate": "Ngày kết thúc",
+  "startTime": "Thời gian bắt đầu",
+  "endTime": "Thời gian kết thúc",
+  "city": "Thành phố",
+  "eventType": "Loại sự kiện",
+
+  "thereIsAnError": "Có lỗi xảy ra!",
+  "loading": "Đang tải...",
+  "eventOrganizedBy": "Sự kiện được tổ chức bởi",
+  "participants": "Người tham gia",
+  "feedback": "Phản hồi",
+  "cancel": "Hủy",
+  "participate": "Tham gia",
+  "comment": "Bình luận",
+
+  "scoreCantBeZero": "Điểm không thể là 0",
+
+  "dateRange": "Khoảng thời gian",
+  "invalidStartDate": "Ngày bắt đầu không hợp lệ",
+  "invalidEndDate": "Ngày kết thúc không hợp lệ",
+
+  "previous": "Trước",
+  "today": "Hôm nay",
+  "next": "Tiếp theo",
+
+  "myProfile": "Hồ sơ của tôi",
+  "logout": "Đăng xuất",
+  "eventsOrganizedByMe": "Sự kiện do tôi tổ chức",
+
+  "firstName": "Tên",
+  "lastName": "Họ",
+  "confirmPassword": "Xác nhận mật khẩu",
+  "passwordMismatch": "Mật khẩu không khớp",
+
+  "name": "Tên",
+  "settings": "Cài đặt",
+  "chooseLanguage": "Chọn ngôn ngữ"
+}

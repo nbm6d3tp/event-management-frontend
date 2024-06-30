@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import {
   CalendarEvent,
   CalendarEventAction,
@@ -6,7 +6,7 @@ import {
   CalendarView,
 } from 'angular-calendar';
 import { isSameDay, isSameMonth } from 'date-fns';
-import { Subject } from 'rxjs';
+import { Subject, single } from 'rxjs';
 import { TEvent } from '../data/event';
 import { TUser } from '../data/person';
 import { AuthenticationService } from '../services/authentication.service';
@@ -14,6 +14,7 @@ import { EventsService } from '../services/events.service';
 import { ToastService } from '../services/toast.service';
 import { ModalService } from '../services/modal.service';
 import { ParticipationService } from '../services/participation.service';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 
 const toComment = (event: TEvent, person: TUser) => {
   if (
@@ -158,14 +159,19 @@ export class MyEventsComponent {
     this.modalService.openModalDetailEvent(event.meta);
   }
   user?: TUser | null;
+  lang = signal(this.translateService.getDefaultLang());
 
   constructor(
     private eventsService: EventsService,
     private authenticationService: AuthenticationService,
     private participationService: ParticipationService,
     private toastService: ToastService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private translateService: TranslateService
   ) {
+    translateService.onDefaultLangChange.subscribe((event: LangChangeEvent) => {
+      this.lang.set(event.lang);
+    });
     this.authenticationService.user.subscribe((person) => {
       this.user = person;
       if (person) {

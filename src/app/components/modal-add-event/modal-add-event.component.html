@@ -7,7 +7,7 @@
     >
       <div>
         <div class="mt-3">
-          <label i18n="@@title">Title* : </label>
+          <label>{{ "title" | translate }}* : </label>
           <input
             required
             #titleFormControl
@@ -20,7 +20,7 @@
           />
         </div>
         <div class="mt-3">
-          <label i18n="@@description">Description* :</label>
+          <label>{{ "description" | translate }}* :</label>
           <textarea
             required
             #descriptionFormControl
@@ -36,8 +36,8 @@
             *ngIf="description?.invalid && description.touched"
             class="invalid-feedback text-danger"
           >
-            <div i18n="@@maxLength" *ngIf="description?.errors?.['maxlength']">
-              Maximum length is 2500 characters
+            <div *ngIf="description?.errors?.['maxlength']">
+              {{ "maxLength" | translate }}
             </div>
           </div>
         </div>
@@ -48,15 +48,13 @@
         <div class="mt-3 row d-flex justify-content-around align-items-center">
           <div class="col-6">
             <app-select-date
-              i18n-label="@@startDate"
-              label="Start date"
+              label="{{ 'startDate' | translate }}"
               [dateForm]="startDayForm"
             />
           </div>
           <div class="col-6">
             <app-select-date
-              i18n-label="@@endDate"
-              label="End date"
+              label="{{ 'endDate' | translate }}"
               [dateForm]="endDayForm"
             />
           </div>
@@ -65,15 +63,13 @@
         <div class="row d-flex justify-content-around align-items-center">
           <div class="col-6">
             <app-select-time
-              i18n-label="@@startTime"
-              label="Start time"
+              label="{{ 'startTime' | translate }}"
               [timeForm]="startTimeForm"
             />
           </div>
           <div class="col-6">
             <app-select-time
-              i18n-label="@@endTime"
-              label="End time"
+              label="{{ 'endTime' | translate }}"
               [timeForm]="endTimeForm"
             />
           </div>
@@ -83,7 +79,7 @@
           <div class="col-6">
             <form class="w-100" [formGroup]="cityForm">
               <mat-form-field class="w-100">
-                <mat-label>City</mat-label>
+                <mat-label>{{ "city" | translate }}</mat-label>
                 <input
                   [required]="locationTypeControl.value !== 'Online'"
                   type="text"
@@ -106,7 +102,7 @@
           </div>
           <div class="col-6">
             <mat-form-field class="w-100">
-              <mat-label i18n="@@eventType">Event type</mat-label>
+              <mat-label>{{ "eventType" | translate }}</mat-label>
               <mat-select required [(value)]="selectedEventType">
                 @for (eventType of eventTypesList; track eventType) {
                 <mat-option [value]="eventType">{{ eventType }}</mat-option>
@@ -158,13 +154,8 @@
         >
           Cancel
         </button>
-        <button
-          i18n="@@submit"
-          type="submit"
-          class="btn btn-primary"
-          (click)="onSubmit()"
-        >
-          Submit
+        <button type="submit" class="btn btn-primary" (click)="onSubmit()">
+          {{ "submit" | translate }}
         </button>
       </div>
       <div style="min-height: 15px"></div>

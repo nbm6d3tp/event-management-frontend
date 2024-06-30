@@ -1,0 +1,67 @@
+{
+  "score": "Score",
+
+  "email": "Email",
+  "required": "Ce champ est requis !",
+  "notCorrectFormEmail": "Format de courriel incorrect",
+  "password": "Mot de passe",
+  "minLength": "Longueur minimale de 8",
+  "emailPasswordIncorrect": "Courriel ou mot de passe incorrect",
+  "submit": "Soumettre",
+
+  "filterInstruction": "*Si aucun filtre n'est sélectionné, tous les éléments seront inclus dans le processus de filtrage.",
+  "noEventFound": "Aucun événement trouvé",
+
+  "participated": "A participé",
+
+  "imageCantBeChanged": "Image (ne peut pas être modifiée plus tard !)",
+  "chooseFile": "Choisir un fichier",
+  "fileFormatAllowed": "Seuls les fichiers .jpg, .jpeg, .png sont autorisés",
+
+  "myEvents": "Mes événements",
+  "allEvents": "Tous les événements",
+  "login": "Connexion",
+  "register": "Inscription",
+
+  "title": "Titre",
+  "description": "Description",
+  "maxLength": "La longueur maximale est de 2500 caractères",
+  "startDate": "Date de début",
+  "endDate": "Date de fin",
+  "startTime": "Heure de début",
+  "endTime": "Heure de fin",
+  "city": "Ville",
+  "eventType": "Type d'événement",
+
+  "thereIsAnError": "Il y a une erreur !",
+  "loading": "Chargement...",
+  "eventOrganizedBy": "Événement organisé par",
+  "participants": "Participants",
+  "feedback": "Commentaires",
+  "cancel": "Annuler",
+  "participate": "Participer",
+  "comment": "Commentaire",
+
+  "scoreCantBeZero": "Le score ne peut pas être 0",
+
+  "dateRange": "Plage de dates",
+  "invalidStartDate": "Date de début invalide",
+  "invalidEndDate": "Date de fin invalide",
+
+  "previous": "Précédent",
+  "today": "Aujourd'hui",
+  "next": "Suivant",
+
+  "myProfile": "Mon profil",
+  "logout": "Déconnexion",
+  "eventsOrganizedByMe": "Événements organisés par moi",
+
+  "firstName": "Prénom",
+  "lastName": "Nom de famille",
+  "confirmPassword": "Confirmer le mot de passe",
+  "passwordMismatch": "Les mots de passe ne correspondent pas",
+
+  "name": "Nom et prénom",
+  "settings": "Paramètres",
+  "chooseLanguage": "Choisir la langue"
+}

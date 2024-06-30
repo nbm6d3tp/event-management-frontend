@@ -1,0 +1,67 @@
+{
+  "score": "Score",
+
+  "email": "Email",
+  "required": "This field is required!",
+  "notCorrectFormEmail": "Not correct form of email",
+  "password": "Password",
+  "minLength": "Min length of 8",
+  "emailPasswordIncorrect": "Email or password is incorrect",
+  "submit": "Submit",
+
+  "filterInstruction": "*If no filters are selected, all elements will be included in the filtering process.",
+  "noEventFound": "No events found",
+
+  "participated": "Participated",
+
+  "imageCantBeChanged": "Image (can't be changed later!)",
+  "chooseFile": "Choose file",
+  "fileFormatAllowed": "Only .jpg, .jpeg, .png files are allowed",
+
+  "myEvents": "My Events",
+  "allEvents": "All Events",
+  "login": "Login",
+  "register": "Register",
+
+  "title": "Title",
+  "description": "Description",
+  "maxLength": "Maximum length is 2500 characters",
+  "startDate": "Start date",
+  "endDate": "End date",
+  "startTime": "Start time",
+  "endTime": "End time",
+  "city": "City",
+  "eventType": "Event type",
+
+  "thereIsAnError": "There is an error!",
+  "loading": "Loading...",
+  "eventOrganizedBy": "Event organized by",
+  "participants": "Participants",
+  "feedback": "Feedbacks",
+  "cancel": "Cancel",
+  "participate": "Participate",
+  "comment": "Comment",
+
+  "scoreCantBeZero": "Score can't be 0",
+
+  "dateRange": "Date range",
+  "invalidStartDate": "Invalid start date",
+  "invalidEndDate": "Invalid end date",
+
+  "previous": "Previous",
+  "today": "Today",
+  "next": "Next",
+
+  "myProfile": "My Profile",
+  "logout": "Logout",
+  "eventsOrganizedByMe": "Events organized by me",
+
+  "firstName": "First name",
+  "lastName": "Last name",
+  "confirmPassword": "Confirm password",
+  "passwordMismatch": "Passwords do not match",
+
+  "name": "Name",
+  "settings": "Settings",
+  "chooseLanguage": "Choose language"
+}
