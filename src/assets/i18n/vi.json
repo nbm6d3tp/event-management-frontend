@@ -63,5 +63,10 @@
 
   "name": "Tên",
   "settings": "Cài đặt",
-  "chooseLanguage": "Chọn ngôn ngữ"
+  "chooseLanguage": "Chọn ngôn ngữ",
+
+  "orderBy": "Sắp xếp theo",
+  "Meetup": "Gặp gỡ",
+  "Conference": "Hội nghị",
+  "Workshop": "Xưởng"
 }

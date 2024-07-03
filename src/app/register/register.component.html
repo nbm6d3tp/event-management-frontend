@@ -143,7 +143,12 @@
         </div>
       </div>
       <app-file-upload [(file)]="selectedImage" />
-
+      <div *ngIf="errorImage() !== ''" class="text-danger mt-2">
+        {{ errorImage() }}
+      </div>
+      <div *ngIf="errorBdd() !== ''" class="text-danger mt-2">
+        {{ errorBdd() }}
+      </div>
       <div class="mt-4 pt-2 submitButton">
         <button type="submit" class="btn btn-primary" (click)="onSubmit()">
           {{ "submit" | translate }}

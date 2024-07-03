@@ -57,7 +57,7 @@
           </div>
         </div>
       </div>
-      <div *ngIf="errorAuthenticating" class="text-danger mt-2">
+      <div *ngIf="errorAuthenticating()" class="text-danger mt-2">
         {{ "emailPasswordIncorrect" | translate }}
       </div>
       <div class="mt-4 pt-2 submitButton">

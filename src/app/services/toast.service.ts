@@ -29,14 +29,14 @@ export class ToastService {
       title:
         data.icon == 'success'
           ? data.title
-          : $localize`There was an error. Please try again later`,
+          : `There was an error. Please try again later`,
     });
   }
 
   showToastWithConfirm(type: 'cancel' | 'delete', onDelete: () => void) {
     Swal.fire({
       title: 'Are you sure?',
-      text: $localize`You won't be able to revert this!`,
+      text: `You won't be able to revert this!`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',

@@ -151,7 +151,7 @@ export class ModalAddEventComponent implements OnInit {
       ).getTime() < new Date().getTime()
     ) {
       this.daysError.set(
-        $localize`Day invalid (Start day/time and end day/time must be after current moment)`
+        `Day invalid (Start day/time and end day/time must be after current moment)`
       );
       return;
     }
@@ -159,9 +159,7 @@ export class ModalAddEventComponent implements OnInit {
       this.startDayForm.value.date.getTime() >
       this.endDayForm.value.date.getTime()
     ) {
-      this.daysError.set(
-        $localize`Day invalid (Start day must be before end day)`
-      );
+      this.daysError.set(`Day invalid (Start day must be before end day)`);
     } else {
       if (
         this.startDayForm.value.date.getTime() ==
@@ -174,7 +172,7 @@ export class ModalAddEventComponent implements OnInit {
           getTimeAsNumberOfMinutes(this.endTimeForm.value.time)
         ) {
           this.timeError.set(
-            $localize`Time invalid (With start day the same as end day, start time must be before end time)`
+            `Time invalid (With start day the same as end day, start time must be before end time)`
           );
         }
       }
@@ -228,11 +226,11 @@ export class ModalAddEventComponent implements OnInit {
       if (errorSupabase || dataSupabase === null) {
         if (errorSupabase?.message === 'The resource already exists') {
           this.errorImage.set(
-            $localize`The resource already exists. Please choose another image or change its name.`
+            `The resource already exists. Please choose another image or change its name.`
           );
         } else {
           this.errorImage.set(
-            $localize`There was an error uploading the image. Please try again.`
+            `There was an error uploading the image. Please try again.`
           );
         }
         return;
@@ -261,7 +259,7 @@ export class ModalAddEventComponent implements OnInit {
           next: () => {
             this.toastService.showToast({
               icon: 'success',
-              title: $localize`Event updated successfully!`,
+              title: `Event updated successfully!`,
             });
           },
           error: () => {
@@ -289,7 +287,7 @@ export class ModalAddEventComponent implements OnInit {
           next: () => {
             this.toastService.showToast({
               icon: 'success',
-              title: $localize`Event created successfully!`,
+              title: `Event created successfully!`,
             });
           },
           error: () => {

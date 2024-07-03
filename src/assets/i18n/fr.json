@@ -63,5 +63,10 @@
 
   "name": "Nom et prénom",
   "settings": "Paramètres",
-  "chooseLanguage": "Choisir la langue"
+  "chooseLanguage": "Choisir la langue",
+
+  "orderBy": "Trier par",
+  "Meetup": "Meetup",
+  "Conference": "Conférence",
+  "Workshop": "Atelier"
 }

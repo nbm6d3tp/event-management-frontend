@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 import { TCreateEvent, TEvent, TEventResponse, TFilters } from '../data/event';
 import { convertDateArrayToDateInstance } from '../helpers/dateTime';
+import { hasData } from '../helpers/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -132,9 +133,7 @@ export class EventsService {
     const newQueryParameterObject = Object.entries(filters).reduce(
       (acc, [key, value]) => ({
         ...acc,
-        ...(value != null &&
-          value != '' &&
-          value.length > 0 && { [key]: value }),
+        ...(hasData(value) && { [key]: value }),
       }),
       {}
     );

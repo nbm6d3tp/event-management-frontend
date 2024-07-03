@@ -27,6 +27,7 @@ export class RegisterComponent {
   ) {}
   selectedImage: undefined | File;
   errorImage = signal('');
+  errorBdd = signal('');
 
   form = this.fb.group({
     firstName: ['', { validators: [Validators.required] }],
@@ -52,6 +53,7 @@ export class RegisterComponent {
 
   async onSubmit() {
     this.errorImage.set('');
+    this.errorBdd.set('');
     this.form.markAllAsTouched();
 
     if (
@@ -69,11 +71,11 @@ export class RegisterComponent {
         if (errorSupabase || dataSupabase === null) {
           if (errorSupabase?.message === 'The resource already exists') {
             this.errorImage.set(
-              $localize`The resource already exists. Please choose another image or change its name.`
+              `The resource already exists. Please choose another image or change its name.`
             );
           } else {
             this.errorImage.set(
-              $localize`There was an error uploading the image. Please try again.`
+              `There was an error uploading the image. Please try again.`
             );
           }
           return;
@@ -96,12 +98,15 @@ export class RegisterComponent {
           },
           error: (error) => {
             console.error(error);
+            this.errorBdd.set('An user with this email has already existed');
           },
         });
     }
   }
 
   onFocus(input: HTMLElement) {
+    this.errorImage.set('');
+    this.errorBdd.set('');
     const formControlName = input.getAttribute('formControlName') as
       | 'firstName'
       | 'lastName'
@@ -112,7 +117,7 @@ export class RegisterComponent {
     if (formControlName) this.form.controls[formControlName].markAsUntouched();
   }
 
-  validatePassword(): ValidatorFn {
+  private validatePassword(): ValidatorFn {
     return (controls) => {
       if (!controls.parent) return null;
       const parent = controls.parent as FormGroup<{

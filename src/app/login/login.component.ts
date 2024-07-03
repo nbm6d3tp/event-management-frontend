@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs';
@@ -10,7 +10,7 @@ import { AuthenticationService } from '../services/authentication.service';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-  errorAuthenticating = false;
+  errorAuthenticating = signal(false);
   form = this.fb.group({
     email: [
       '',
@@ -40,7 +40,7 @@ export class LoginComponent {
   }
 
   onFocus(input: HTMLElement) {
-    this.errorAuthenticating = false;
+    this.errorAuthenticating.set(false);
     const formControlName = input.getAttribute('formControlName') as
       | 'email'
       | 'password'
@@ -65,7 +65,7 @@ export class LoginComponent {
             this.router.navigate([returnUrl]);
           },
           error: () => {
-            this.errorAuthenticating = true;
+            this.errorAuthenticating.set(true);
           },
         });
       // this.router.navigate(['/my-events']);

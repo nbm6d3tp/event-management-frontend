@@ -63,5 +63,10 @@
 
   "name": "姓名",
   "settings": "设置",
-  "chooseLanguage": "选择语言"
+  "chooseLanguage": "选择语言",
+
+  "orderBy": "排序方式",
+  "Meetup": "聚会",
+  "Conference": "会议",
+  "Workshop": "研讨会"
 }

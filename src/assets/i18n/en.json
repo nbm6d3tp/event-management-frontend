@@ -63,5 +63,10 @@
 
   "name": "Name",
   "settings": "Settings",
-  "chooseLanguage": "Choose language"
+  "chooseLanguage": "Choose language",
+
+  "orderBy": "Order by",
+  "Meetup": "Meetup",
+  "Conference": "Conference",
+  "Workshop": "Workshop"
 }

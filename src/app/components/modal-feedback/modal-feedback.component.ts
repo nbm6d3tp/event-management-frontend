@@ -59,7 +59,7 @@ export class ModalFeedbackComponent {
         next: () => {
           this.toastService.showToast({
             icon: 'success',
-            title: $localize`Feedback sent!`,
+            title: `Feedback sent!`,
           });
         },
         error: (error) => {
