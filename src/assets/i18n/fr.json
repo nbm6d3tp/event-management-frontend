@@ -68,5 +68,10 @@
   "orderBy": "Trier par",
   "Meetup": "Meetup",
   "Conference": "Conférence",
-  "Workshop": "Atelier"
+  "Workshop": "Atelier",
+  "eventTypes": "Types d'événement",
+  "cities": "Villes",
+  "online": "En ligne",
+  "hybrid": "Hybride",
+  "onsite": "Sur place"
 }

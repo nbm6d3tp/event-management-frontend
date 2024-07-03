@@ -13,7 +13,6 @@ import {
   TCreateTypeLocation,
   TLocationType,
   _filterGroup,
-  locationTypes,
 } from '../../data/location';
 import { TUser } from '../../data/person';
 import {
@@ -39,7 +38,6 @@ import { ToastService } from '../../services/toast.service';
 })
 export class ModalAddEventComponent implements OnInit {
   eventTypesList: TTypeEvent[] = [];
-  locationTypes = locationTypes;
   user?: TUser | null;
   placeholderCity = signal('');
   daysError = signal('');
@@ -69,7 +67,7 @@ export class ModalAddEventComponent implements OnInit {
     ),
   });
   locationTypeControl = new FormControl<TLocationType>(
-    this.data ? this.data.typeLocationName : locationTypes[0]
+    this.data ? this.data.typeLocationName : 'Onsite'
   );
   cityForm = this.fb.group({
     cityGroup: this.data ? this.data.location?.name : '',

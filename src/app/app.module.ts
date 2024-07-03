@@ -42,11 +42,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { ModalAddEventComponent } from './components/modal-add-event/modal-add-event.component';
 import { ModalDetailEventComponent } from './components/modal-detail-event/modal-detail-event.component';
 import { ModalFeedbackComponent } from './components/modal-feedback/modal-feedback.component';
-import { SelectCitiesComponent } from './components/select-cities/select-cities.component';
-import { SelectDateRangeComponent } from './components/select-date-range/select-date-range.component';
 import { SelectDateComponent } from './components/select-date/select-date.component';
-import { SelectEventTypesComponent } from './components/select-event-types/select-event-types.component';
-import { SelectLocationTypesComponent } from './components/select-location-types/select-location-types.component';
 import { SelectTimeComponent } from './components/select-time/select-time.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { StarRatingComponent } from './components/star-rating/star-rating.component';
@@ -83,10 +79,6 @@ function HttpLoaderFactory(http: HttpClient) {
     MyProfileComponent,
     CardEventComponent,
     ModalAddEventComponent,
-    SelectEventTypesComponent,
-    SelectLocationTypesComponent,
-    SelectDateRangeComponent,
-    SelectCitiesComponent,
     FileUploadComponent,
     SelectTimeComponent,
     SelectDateComponent,

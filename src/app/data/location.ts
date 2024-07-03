@@ -5,7 +5,6 @@ export type TCityGroup = {
 export type TCreateTypeLocation = 'ONSITE' | 'HYBRID' | 'ONLINE';
 
 export type TLocationType = 'Onsite' | 'Hybrid' | 'Online';
-export const locationTypes: TLocationType[] = ['Onsite', 'Hybrid', 'Online'];
 
 export const _filterGroup = (
   cityGroups: TCityGroup[],

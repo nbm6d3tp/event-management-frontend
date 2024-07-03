@@ -68,5 +68,10 @@
   "orderBy": "排序方式",
   "Meetup": "聚会",
   "Conference": "会议",
-  "Workshop": "研讨会"
+  "Workshop": "研讨会",
+  "eventTypes": "事件类型",
+  "cities": "城市",
+  "online": "在线",
+  "hybrid": "混合",
+  "onsite": "现场"
 }

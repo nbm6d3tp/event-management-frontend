@@ -24,12 +24,12 @@ export type TFeedbackResponse = Omit<TFeedback, 'date'> & {
 };
 
 export type TFilters = {
-  eventTypes: TTypeEvent[]; //array ids
+  eventTypes?: TTypeEvent[] | null; //array ids
   startDate?: string;
   endDate?: string;
-  cities: string[];
-  locationTypes: TCreateTypeLocation[]; //array ids
-  orderBy: string;
+  cities?: string[] | null;
+  locationTypes?: TCreateTypeLocation[] | null; //array ids
+  orderBy?: string | null;
 };
 
 export type TCreateEvent = Omit<

@@ -1,13 +1,85 @@
 <div class="container">
   <div class="row mx-2 my-4 justify-content-between">
     <div class="col-lg-4 col-12 col-sm-6">
-      <app-select-event-types [(selectedEventTypes)]="selectedEventTypes" />
+      <mat-form-field class="w-100 h-100">
+        <mat-label i18n="@@eventTypes">{{
+          "eventTypes" | translate
+        }}</mat-label>
+        <mat-select [formControl]="eventTypesForm" multiple>
+          @for (typeEvent of typeEventList; track typeEvent) {
+          <mat-option [value]="typeEvent">{{
+            typeEvent | translate
+          }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
     </div>
     <div class="col-lg-4 col-12 col-sm-6">
-      <app-select-date-range [(selectedDateRange)]="selectedDateRange" />
+      <mat-form-field class="w-100 h-100">
+        <mat-label>{{ "dateRange" | translate }}</mat-label>
+        <mat-date-range-input
+          [formGroup]="dateRangeForm"
+          [rangePicker]="picker"
+        >
+          <input
+            matStartDate
+            formControlName="start"
+            placeholder="{{ 'startDate' | translate }}"
+          />
+          <input
+            matEndDate
+            formControlName="end"
+            placeholder="{{ 'endDate' | translate }}"
+          />
+        </mat-date-range-input>
+        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+
+        @if (dateRangeForm.controls.start.hasError("matStartDateInvalid")) {
+        <mat-error>{{ "invalidStartDate" | translate }}</mat-error>
+        } @if (dateRangeForm.controls.end.hasError("matEndDateInvalid")) {
+        <mat-error>{{ "invalidEndDate" | translate }}</mat-error>
+        }
+      </mat-form-field>
     </div>
     <div class="col-lg-4 col-12 col-sm-6">
-      <app-select-cities [(selectedCities)]="selectedCities" />
+      <form class="w-100 h-100" [formGroup]="citiesForm">
+        <mat-form-field class="w-100">
+          <mat-label>{{ "cities" | translate }}</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="cityGroup"
+            [matAutocomplete]="autoGroup"
+            placeholder="{{ 'cities' | translate }}"
+            [value]="placeholder()"
+          />
+          <mat-autocomplete #autoGroup="matAutocomplete">
+            @for (group of filteredData | async; track group) {
+            <mat-optgroup [label]="group.letter">
+              @for (city of group.cities; track city) {
+              <mat-option>
+                <div (click)="optionClicked($event, city)">
+                  <mat-checkbox
+                    [checked]="isOptionChecked(city)"
+                    (change)="toggleSelection(city)"
+                    (click)="$event.stopPropagation()"
+                  >
+                    <!-- .includes(city) -->
+                    {{ city }}
+                  </mat-checkbox>
+                </div></mat-option
+              >
+              }
+            </mat-optgroup>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
     </div>
   </div>
   <div class="row mx-2 d-flex flex-row justify-content-between">
@@ -21,9 +93,23 @@
     <div
       class="col-lg-4 col-sm-8 col-8 d-flex align-items-baseline justify-content-lg-start justify-content-end"
     >
-      <app-select-location-types
-        [(selectedLocationTypes)]="selectedLocationTypes"
-      />
+      <mat-button-toggle-group
+        [formControl]="locationTypesForm"
+        name="locationTypes"
+        aria-label="Types Location"
+        [hideMultipleSelectionIndicator]="hideMultipleSelectionIndicator()"
+        multiple
+      >
+        <mat-button-toggle value="ONSITE">{{
+          "onsite" | translate
+        }}</mat-button-toggle>
+        <mat-button-toggle value="HYBRID">{{
+          "hybrid" | translate
+        }}</mat-button-toggle>
+        <mat-button-toggle value="ONLINE">{{
+          "online" | translate
+        }}</mat-button-toggle>
+      </mat-button-toggle-group>
     </div>
 
     <div

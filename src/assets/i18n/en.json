@@ -68,5 +68,10 @@
   "orderBy": "Order by",
   "Meetup": "Meetup",
   "Conference": "Conference",
-  "Workshop": "Workshop"
+  "Workshop": "Workshop",
+  "eventTypes": "Event types",
+  "cities": "Cities",
+  "online": "Online",
+  "hybrid": "Hybrid",
+  "onsite": "Onsite"
 }

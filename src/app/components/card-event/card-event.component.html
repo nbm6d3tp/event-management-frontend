@@ -101,8 +101,10 @@
       </div>
     </div>
     <mat-chip-set class="mb-2" aria-label="Selection">
-      <mat-chip>{{ event().typeEvent.name }}</mat-chip>
-      <mat-chip>{{ event().typeLocationName }}</mat-chip>
+      <mat-chip>{{ event().typeEvent.name | translate }}</mat-chip>
+      <mat-chip>{{
+        event().typeLocationName.toLowerCase() | translate
+      }}</mat-chip>
       <mat-chip *ngIf="event().location">{{ event().location?.name }}</mat-chip>
     </mat-chip-set>
   </div>

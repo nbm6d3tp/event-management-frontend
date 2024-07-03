@@ -68,5 +68,10 @@
   "orderBy": "Sắp xếp theo",
   "Meetup": "Gặp gỡ",
   "Conference": "Hội nghị",
-  "Workshop": "Xưởng"
+  "Workshop": "Xưởng",
+  "eventTypes": "Kiểu sự kiện",
+  "cities": "Thành phố",
+  "online": "Trực tuyến",
+  "hybrid": "Kết hợp",
+  "onsite": "Tại chỗ"
 }

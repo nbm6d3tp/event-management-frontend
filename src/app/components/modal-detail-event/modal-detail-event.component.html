@@ -1,260 +1,260 @@
 <!-- @ts-ignore -->
 <mat-dialog-content class="mat-typography mh-100 p-0 container">
   @if (isError()) {
-    <div
-      class="d-flex justify-content-center align-items-center min-vh-100 w-100 bg-light"
-    >
-      {{ "thereIsAnError" | translate }}
-    </div>
+  <div
+    class="d-flex justify-content-center align-items-center min-vh-100 w-100 bg-light"
+  >
+    {{ "thereIsAnError" | translate }}
+  </div>
   } @else if (!event) {
-    <div
-      class="d-flex justify-content-center align-items-center min-vh-100 w-100 bg-light"
-    >
-      {{ "loading" | translate }}
-    </div>
+  <div
+    class="d-flex justify-content-center align-items-center min-vh-100 w-100 bg-light"
+  >
+    {{ "loading" | translate }}
+  </div>
   } @else {
-    <div class="position-relative">
-      <div class="img-fluid">
-        <img
-          [src]="
-            event.image || 'https://placehold.co/1500x1000?text=No%20Image'
-          "
-          handleImgError
-          style="padding-bottom: -50px"
-          class="img-fluid bg-gradient"
-          alt="Event image"
-        />
+  <div class="position-relative">
+    <div class="img-fluid">
+      <img
+        [src]="event.image || 'https://placehold.co/1500x1000?text=No%20Image'"
+        handleImgError
+        style="padding-bottom: -50px"
+        class="img-fluid bg-gradient"
+        alt="Event image"
+      />
+    </div>
+
+    <button
+      (click)="onClose()"
+      style="
+        border-width: 0;
+        position: absolute;
+        top: 20px;
+        right: 15px;
+        background: none;
+      "
+    >
+      <i style="font-size: 30px" class="bi bi-x text-white"></i>
+    </button>
+
+    <div
+      style="
+        top: 90%;
+        padding-top: 10%;
+        border-top-right-radius: 10%;
+        border-top-left-radius: 10%;
+      "
+      class="container h-100 position-absolute bg-white p-4"
+    >
+      <div class="d-flex justify-content-between align-items-center">
+        <h1 class="display-4 fw-bolder text-black mb-3">
+          {{ event.title }}
+        </h1>
+        <div>
+          <button
+            *ngIf="user && canDelete(event, user)"
+            style="
+              border-radius: 50%;
+              border-width: 0;
+              margin-right: 5px;
+              width: 40px;
+              height: 40px;
+            "
+            (click)="onDelete()"
+          >
+            <i class="bi bi-trash text-danger"></i>
+          </button>
+          <button
+            (click)="onEdit()"
+            *ngIf="user && canEdit(event, user)"
+            style="
+              border-radius: 50%;
+              border-width: 0;
+              width: 40px;
+              height: 40px;
+            "
+          >
+            <i class="bi bi-pencil text-primary"></i>
+          </button>
+        </div>
       </div>
 
-      <button
-        (click)="onClose()"
-        style="
-          border-width: 0;
-          position: absolute;
-          top: 20px;
-          right: 15px;
-          background: none;
-        "
-      >
-        <i style="font-size: 30px" class="bi bi-x text-white"></i>
-      </button>
+      <div class="lead mb-3">
+        {{ event.description }}
+      </div>
 
+      <div class="mb-3" style="display: flex; align-items: center">
+        <img
+          [src]="
+            event.organizer.avatar ||
+            'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/Default_avatar_profile.jpg'
+          "
+          alt="Organisator vatar"
+          class="rounded-circle"
+          style="
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+          "
+        />
+        <div style="display: flex; flex-direction: column">
+          <div class="text-secondary">
+            {{ "eventOrganizedBy" | translate }}
+          </div>
+          <div class="fw-bolder">
+            {{
+              event.organizer.firstname
+                | getNamePerson : event.organizer.lastname
+            }}
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3" style="display: flex; align-items: center">
+        <i
+          style="font-size: 20px; margin-right: 10px"
+          class="bi bi-calendar2"
+        ></i>
+        <div class="fw-bolder">
+          {{ event.startTime | date : "MMM d, y h:mm a" }}
+        </div>
+        <i style="font-size: 20px" class="bi bi-dash"></i>
+        <div class="fw-bolder">
+          {{ event.endTime | date : "MMM d, y h:mm a" }}
+        </div>
+      </div>
       <div
-        style="
-          top: 90%;
-          padding-top: 10%;
-          border-top-right-radius: 10%;
-          border-top-left-radius: 10%;
-        "
-        class="container h-100 position-absolute bg-white p-4"
+        *ngIf="event.location"
+        class="mb-3"
+        style="display: flex; align-items: center"
       >
-        <div class="d-flex justify-content-between align-items-center">
-          <h1 class="display-4 fw-bolder text-black mb-3">
-            {{ event.title }}
-          </h1>
-          <div>
-            <button
-              *ngIf="user && canDelete(event, user)"
-              style="
-                border-radius: 50%;
-                border-width: 0;
-                margin-right: 5px;
-                width: 40px;
-                height: 40px;
-              "
-              (click)="onDelete()"
-            >
-              <i class="bi bi-trash text-danger"></i>
-            </button>
-            <button
-              (click)="onEdit()"
-              *ngIf="user && canEdit(event, user)"
-              style="
-                border-radius: 50%;
-                border-width: 0;
-                width: 40px;
-                height: 40px;
-              "
-            >
-              <i class="bi bi-pencil text-primary"></i>
-            </button>
-          </div>
+        <i
+          style="font-size: 20px; margin-right: 10px"
+          class="bi bi-geo-alt"
+        ></i>
+        <div class="fw-bolder">
+          {{ event.location.name }}
         </div>
+      </div>
 
-        <div class="lead mb-3">
-          {{ event.description }}
-        </div>
+      <mat-chip-set aria-label="Selection">
+        <mat-chip>{{ event.typeEvent.name | translate }}</mat-chip>
+        <mat-chip>{{
+          event.typeLocationName.toLowerCase() | translate
+        }}</mat-chip>
+      </mat-chip-set>
 
-        <div class="mb-3" style="display: flex; align-items: center">
-          <img
-            [src]="
-              event.organizer.avatar ||
-              'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/Default_avatar_profile.jpg'
-            "
-            alt="Organisator vatar"
-            class="rounded-circle"
-            style="
-              height: 50px;
-              width: 50px;
-              border-radius: 50%;
-              margin-right: 15px;
-            "
-          />
-          <div style="display: flex; flex-direction: column">
-            <div class="text-secondary">
-              {{ "eventOrganizedBy" | translate }}
-            </div>
-            <div class="fw-bolder">
-              {{
-                event.organizer.firstname
-                  | getNamePerson: event.organizer.lastname
-              }}
-            </div>
-          </div>
-        </div>
+      <h2 class="display-6 mt-4">{{ "participants" | translate }}</h2>
+      <div style="display: flex">
+        @for (participant of event.participants; track participant.email) {
+        <img
+          matTooltip="{{
+            participant.firstname | getNamePerson : participant.lastname
+          }}"
+          [src]="
+            participant.avatar ||
+            'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/Default_avatar_profile.jpg'
+          "
+          alt="participantvatar"
+          class="rounded-circle"
+          style="
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+          "
+        />
+        }
+      </div>
 
-        <div class="mb-3" style="display: flex; align-items: center">
-          <i
-            style="font-size: 20px; margin-right: 10px"
-            class="bi bi-calendar2"
-          ></i>
-          <div class="fw-bolder">
-            {{ event.startTime | date: "MMM d, y h:mm a" }}
-          </div>
-          <i style="font-size: 20px" class="bi bi-dash"></i>
-          <div class="fw-bolder">
-            {{ event.endTime | date: "MMM d, y h:mm a" }}
-          </div>
-        </div>
+      <h2 *ngIf="event.feedbacks" class="display-6 mt-4">
+        {{ "feedbacks" | translate }}
+      </h2>
+      <div *ngIf="event.feedbacks" class="list-group">
+        @for (feedback of event.feedbacks; track $index) {
         <div
-          *ngIf="event.location"
-          class="mb-3"
-          style="display: flex; align-items: center"
+          class="list-group-item list-group-item-action d-flex align-items-center justify-content-around"
         >
-          <i
-            style="font-size: 20px; margin-right: 10px"
-            class="bi bi-geo-alt"
-          ></i>
-          <div class="fw-bolder">
-            {{ event.location.name }}
-          </div>
-        </div>
-
-        <mat-chip-set aria-label="Selection">
-          <mat-chip>{{ event.typeEvent.name }}</mat-chip>
-          <mat-chip>{{ event.typeLocationName }}</mat-chip>
-        </mat-chip-set>
-
-        <h2 class="display-6 mt-4">{{ "participants" | translate }}</h2>
-        <div style="display: flex">
-          @for (participant of event.participants; track participant.email) {
+          <div
+            class="d-flex flex-column me-3 align-items-center justify-content-between"
+          >
             <img
-              matTooltip="{{
-                participant.firstname | getNamePerson: participant.lastname
-              }}"
               [src]="
-                participant.avatar ||
+                feedback.participant.avatar ||
                 'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/Default_avatar_profile.jpg'
               "
-              alt="participantvatar"
-              class="rounded-circle"
               style="
                 height: 50px;
                 width: 50px;
                 border-radius: 50%;
-                margin-right: 10px;
+                margin-bottom: 5px;
               "
             />
-          }
-        </div>
-
-        <h2 *ngIf="event.feedbacks" class="display-6 mt-4">
-          {{ "feedbacks" | translate }}
-        </h2>
-        <div *ngIf="event.feedbacks" class="list-group">
-          @for (feedback of event.feedbacks; track $index) {
-            <div
-              class="list-group-item list-group-item-action d-flex align-items-center justify-content-around"
-            >
-              <div
-                class="d-flex flex-column me-3 align-items-center justify-content-between"
+            <h4 class="mb-1">
+              {{
+                feedback.participant.firstname
+                  | getNamePerson : feedback.participant.lastname
+              }}
+            </h4>
+          </div>
+          <div class="d-flex flex-column align-items-start w-75">
+            <div style="display: flex; align-items: center">
+              <small>{{ feedback.date | date : "short" }}</small>
+              <button
+                *ngIf="feedback.participant.email == user?.email"
+                style="
+                  border-width: 0;
+                  width: 40px;
+                  height: 40px;
+                  background: none;
+                "
+                (click)="onDeleteFeedback()"
               >
-                <img
-                  [src]="
-                    feedback.participant.avatar ||
-                    'https://lmapqwxheetscsdyjvsi.supabase.co/storage/v1/object/public/Images/Default_avatar_profile.jpg'
-                  "
-                  style="
-                    height: 50px;
-                    width: 50px;
-                    border-radius: 50%;
-                    margin-bottom: 5px;
-                  "
-                />
-                <h4 class="mb-1">
-                  {{
-                    feedback.participant.firstname
-                      | getNamePerson: feedback.participant.lastname
-                  }}
-                </h4>
-              </div>
-              <div class="d-flex flex-column align-items-start w-75">
-                <div style="display: flex; align-items: center">
-                  <small>{{ feedback.date | date: "short" }}</small>
-                  <button
-                    *ngIf="feedback.participant.email == user?.email"
-                    style="
-                      border-width: 0;
-                      width: 40px;
-                      height: 40px;
-                      background: none;
-                    "
-                    (click)="onDeleteFeedback()"
-                  >
-                    <i class="bi bi-trash text-danger"></i>
-                  </button>
-                </div>
-                <p class="mb-1">
-                  {{ feedback.content }}
-                </p>
-                <app-star-rating [readonly]="true" [rating]="feedback.score" />
-              </div>
+                <i class="bi bi-trash text-danger"></i>
+              </button>
             </div>
-          }
+            <p class="mb-1">
+              {{ feedback.content }}
+            </p>
+            <app-star-rating [readonly]="true" [rating]="feedback.score" />
+          </div>
         </div>
-
-        <div
-          style="display: flex; justify-content: flex-end; margin-top: 20px"
-          class="me-2"
-        >
-          <button
-            *ngIf="user && canCancel(event, user)"
-            type="submit"
-            class="btn btn-outline-danger"
-            (click)="onCancel()"
-          >
-            {{ "cancel" | translate }}
-          </button>
-          <button
-            *ngIf="user && canParticipate(event, user)"
-            type="submit"
-            class="btn btn-primary"
-            (click)="onParticipate()"
-          >
-            {{ "participate" | translate }}
-          </button>
-          <button
-            *ngIf="user && canComment(event, user)"
-            type="submit"
-            class="btn btn-info"
-            (click)="onComment()"
-          >
-            {{ "comment" | translate }}
-          </button>
-        </div>
-
-        <div style="height: 25px"></div>
+        }
       </div>
+
+      <div
+        style="display: flex; justify-content: flex-end; margin-top: 20px"
+        class="me-2"
+      >
+        <button
+          *ngIf="user && canCancel(event, user)"
+          type="submit"
+          class="btn btn-outline-danger"
+          (click)="onCancel()"
+        >
+          {{ "cancel" | translate }}
+        </button>
+        <button
+          *ngIf="user && canParticipate(event, user)"
+          type="submit"
+          class="btn btn-primary"
+          (click)="onParticipate()"
+        >
+          {{ "participate" | translate }}
+        </button>
+        <button
+          *ngIf="user && canComment(event, user)"
+          type="submit"
+          class="btn btn-info"
+          (click)="onComment()"
+        >
+          {{ "comment" | translate }}
+        </button>
+      </div>
+
+      <div style="height: 25px"></div>
     </div>
+  </div>
   }
 </mat-dialog-content>
